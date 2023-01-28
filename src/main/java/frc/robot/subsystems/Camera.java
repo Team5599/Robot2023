@@ -8,7 +8,7 @@
         /____/____/___//___/    Author: Ahmed Osman
 
     This work is licensed under the terms of the MIT license.
-    Copyright (c) 2023 The Sentinels, All rights reserved.
+    Copyright (c) 2023 The Sentinels. All rights reserved.
                                                  
   ********************************************************/
 
