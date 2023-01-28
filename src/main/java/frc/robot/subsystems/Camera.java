@@ -1,16 +1,10 @@
-/********************************************************
-     ________         ____         __  _          __  
-    /_  __/ /  ___   / __/__ ___  / /_(_)__  ___ / /__
-     / / / _ \/ -_) _\ \/ -_) _ \/ __/ / _ \/ -_) (_-<
-    /_/ /_//_/\__/_/___/\__/_//_/\__/_/_//_/\__/_/___/
-          / __// __/ _ \/ _ \                     
-         /__ \/__ \\_, /\_, /   FRC Team 5599               
-        /____/____/___//___/    Author: Ahmed Osman
+/***************************************************************
+                The Sentinels - FRC Team 5599
+        Benjamin N. Cardozo High School Robotics Team
 
     This work is licensed under the terms of the MIT license.
     Copyright (c) 2023 The Sentinels. All rights reserved.
-                                                 
-  ********************************************************/
+***************************************************************/
 
 /*
  * CO-PROCESSOR USED:           Raspberry Pi Model 3B+ w/ PhotonVision
@@ -33,7 +27,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 public class Camera extends SubsystemBase {
 
-    // Initializing camera object for late use in this file
+    // Initializing camera object for later use in this file
     PhotonCamera camera = new PhotonCamera("photonvision");
 
     public Camera() {
