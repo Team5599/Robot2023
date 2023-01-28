@@ -1,11 +1,43 @@
+/********************************************************
+     ________         ____         __  _          __  
+    /_  __/ /  ___   / __/__ ___  / /_(_)__  ___ / /__
+     / / / _ \/ -_) _\ \/ -_) _ \/ __/ / _ \/ -_) (_-<
+    /_/ /_//_/\__/_/___/\__/_//_/\__/_/_//_/\__/_/___/
+          / __// __/ _ \/ _ \                     
+         /__ \/__ \\_, /\_, /   FRC Team 5599               
+        /____/____/___//___/    Author: Ahmed Osman
+
+    This work is licensed under the terms of the MIT license.
+    Copyright (c) 2023 The Sentinels, All rights reserved.
+                                                 
+  ********************************************************/
+
+/*
+ * CO-PROCESSOR USED:           Raspberry Pi Model 3B+ w/ PhotonVision
+ * CAMERA USED:                 Microsoft LifeCam HD-3000
+ * MAX RESOLUTION:              1280x720 @ 30FPS
+ * 
+ * APRILTAG DETECTION:          352x288 @ 7FPS, MJPEG
+ * REFLECTIVE TAPE DETECTION:   N/A
+ */
+
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Camera extends SubsystemBase {
-    public Camera() {
+import java.util.List;
 
+import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonTrackedTarget;
+
+public class Camera extends SubsystemBase {
+
+    // Initializing camera object for late use in this file
+    PhotonCamera camera = new PhotonCamera("photonvision");
+
+    public Camera() {
+        
     }
 
     /**
@@ -23,13 +55,47 @@ public class Camera extends SubsystemBase {
     }
 
     /**
-    * An example method querying a boolean state of the subsystem (for example, a digital sensor).
+    * Query the state of target detection.
     *
-    * @return value of some boolean subsystem state, such as a digital sensor.
+    * @return {@code true} if a target has been detected, {@code false} if nothing has been detected
     */
-    public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-        return false;
+    public boolean targetDetected() {
+
+        // Storing latest camera pipeline result in var variable.
+        var result = camera.getLatestResult();
+        // Checking for targets, stores true if detected, false if not.
+        boolean hasTargets = result.hasTargets();
+
+        if (hasTargets) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    /**
+     * Query list of all detected targets.
+     * 
+     * @return List of information about target(s) including yaw, pitch, area, and robot relative pose.
+     */
+    public List<PhotonTrackedTarget> getAllTargets() {
+
+        // Storing latest camera pipeline result in var variable.
+        var result = camera.getLatestResult();
+
+        return result.getTargets();
+    }
+    /**
+     * Query information on best detected target.
+     * 
+     * @return Target information.
+     */
+    public PhotonTrackedTarget getBestTarget() {
+
+        // Storing latest camera pipeline result in var variable.
+        var result = camera.getLatestResult();
+
+        return result.getBestTarget();
     }
 
     @Override
