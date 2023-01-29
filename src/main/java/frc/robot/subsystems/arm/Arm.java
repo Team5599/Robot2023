@@ -1,11 +1,11 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class ArmSubsystem extends SubsystemBase {
+public class Arm extends SubsystemBase {
     
-    public ArmSubsystem() {
+    public Arm() {
 
     }
 
