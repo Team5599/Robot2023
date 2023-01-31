@@ -4,11 +4,23 @@
 
 package frc.robot;
 
+// Constants
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.commands.autonomous.Autos;
-import frc.robot.subsystems.drive.Drivetrain;
+
+// Commands
+import frc.robot.commands.armmech.arm.*;
+import frc.robot.commands.armmech.intake.*;
+import frc.robot.commands.autonomous.*;
+import frc.robot.commands.drivetrain.*;
+
+// Subsystems
+import frc.robot.subsystems.arm.*;
+import frc.robot.subsystems.drive.*;
+import frc.robot.subsystems.odometry.*;
+import frc.robot.subsystems.vision.*;
+
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -19,17 +31,32 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final Drivetrain m_exampleSubsystem = new Drivetrain();
+  // The robot's subsystems and commands are defined here.
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  // Commands
+  private final ArmExtend comArmExtend = new ArmExtend(null);
+  private final ArmPivot comArmPivot = new ArmPivot(null);
+  private final ArmRetract comArmRetract = new ArmRetract(null);
+  private final IntakeClose comIntakeClose = new IntakeClose(null);
+  private final IntakeOpen comIntakeOpen = new IntakeOpen(null);
+  //private final Autos comAutos;
+  private final DrivetrainDrive comDrivetrainDrive = new DrivetrainDrive(null);
+  private final DrivetrainStop comDrivetrainStop = new DrivetrainStop(null);
+
+  // Subsystems
+  private final Arm m_Arm = new Arm();
+  private final ArmIntake m_ArmIntake = new ArmIntake();
+  private final Drivetrain m_Drivetrain = new Drivetrain();
+  private final Camera m_Camera = new Camera();
+
+  // Input Devices
+  private final CommandXboxController driver = new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final CommandJoystick operator = new CommandJoystick(OperatorConstants.kOperatorJoystickPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
-    configureBindings();
+    configureButtonBindings();
   }
 
   /**
@@ -41,23 +68,36 @@ public class RobotContainer {
    * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
    * joysticks}.
    */
-  private void configureBindings() {
+  private void configureButtonBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+    /*
     new Trigger(m_exampleSubsystem::exampleCondition)
         .onTrue(new ExampleCommand(m_exampleSubsystem));
+    */
 
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    // Placeholder triggers, delete if button not needed/used in the future
+    driver.a().whileTrue(null);
+    driver.b().whileTrue(null);
+    driver.x().whileTrue(null);
+    driver.y().whileTrue(null);
+    driver.leftStick().whileTrue(null);
+    driver.rightStick().whileTrue(null);
+    driver.leftTrigger().whileTrue(
+      new DrivetrainDrive(m_Drivetrain)
+    );
+    driver.rightTrigger().whileTrue(
+      new DrivetrainDrive(m_Drivetrain)
+    );
+    driver.back().whileTrue(null); // select
+    driver.start().whileTrue(null); // start
   }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
+    return Autos.exampleAuto(null);
   }
 }
