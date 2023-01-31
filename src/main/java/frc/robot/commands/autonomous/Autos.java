@@ -11,12 +11,11 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import frc.robot.subsystems.*;
 
 public final class Autos {
+  
   /** Example static factory for an autonomous command. */
-
-  // Commented below method exampleAuto until auton and commands are designed.
-  /*public static CommandBase exampleAuto(Object subsystem) {
-    return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
-  }*/
+  public static CommandBase exampleAuto(Object subsystem) {
+    return Commands.sequence(null);
+  }
 
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
