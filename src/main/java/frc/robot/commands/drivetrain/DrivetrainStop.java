@@ -10,7 +10,7 @@ import frc.robot.subsystems.drive.Drivetrain;
 /** An example command that uses an example subsystem. */
 public class DrivetrainStop extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final Drivetrain m_subsystem;
+  private final Drivetrain m_DrivetrainSubsystem;
 
   /**
    * Creates a new ExampleCommand.
@@ -18,7 +18,7 @@ public class DrivetrainStop extends CommandBase {
    * @param subsystem The subsystem used by this command.
    */
   public DrivetrainStop(Drivetrain subsystem) {
-    m_subsystem = subsystem;
+    m_DrivetrainSubsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }

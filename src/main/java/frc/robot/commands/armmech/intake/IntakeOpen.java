@@ -5,20 +5,20 @@
 package frc.robot.commands.armmech.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.drive.Drivetrain;
+import frc.robot.subsystems.arm.ArmIntake;
 
 /** An example command that uses an example subsystem. */
 public class IntakeOpen extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final Drivetrain m_subsystem;
+  private final ArmIntake m_ArmIntakeSubsystem;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public IntakeOpen(Drivetrain subsystem) {
-    m_subsystem = subsystem;
+  public IntakeOpen(ArmIntake subsystem) {
+    m_ArmIntakeSubsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }

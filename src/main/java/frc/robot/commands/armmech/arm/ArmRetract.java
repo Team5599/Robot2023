@@ -5,20 +5,20 @@
 package frc.robot.commands.armmech.arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.drive.Drivetrain;
+import frc.robot.subsystems.arm.Arm;
 
 /** An example command that uses an example subsystem. */
 public class ArmRetract extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final Drivetrain m_subsystem;
+  private final Arm m_ArmSubsystem;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArmRetract(Drivetrain subsystem) {
-    m_subsystem = subsystem;
+  public ArmRetract(Arm subsystem) {
+    m_ArmSubsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
