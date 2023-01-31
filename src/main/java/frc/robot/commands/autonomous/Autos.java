@@ -6,14 +6,17 @@ package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.drive.Drivetrain;
+
+// Import all subsystems for auton use
+import frc.robot.subsystems.*;
 
 public final class Autos {
   /** Example static factory for an autonomous command. */
-  public static CommandBase exampleAuto(Drivetrain subsystem) {
+
+  // Commented below method exampleAuto until auton and commands are designed.
+  /*public static CommandBase exampleAuto(Object subsystem) {
     return Commands.sequence(subsystem.exampleMethodCommand(), new ExampleCommand(subsystem));
-  }
+  }*/
 
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");
