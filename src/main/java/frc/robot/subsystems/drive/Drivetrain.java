@@ -4,20 +4,11 @@
 
 package frc.robot.subsystems.drive;
 
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.OperatorConstants;
 
 
 public class Drivetrain extends SubsystemBase {
-
-  Spark motorTR = new Spark(OperatorConstants.motorTRPort);
-  Spark motorTL = new Spark(OperatorConstants.motorTLPort);
-  Spark motorBR = new Spark(OperatorConstants.motorBRPort);
-  Spark motorBL = new Spark(OperatorConstants.motorBLPort);
-
-
   /** Creates a new ExampleSubsystem. */
   public Drivetrain() {}
 
@@ -48,7 +39,6 @@ public class Drivetrain extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
   }
 
   @Override
