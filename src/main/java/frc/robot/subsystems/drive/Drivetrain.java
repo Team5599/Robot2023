@@ -4,13 +4,33 @@
 
 package frc.robot.subsystems.drive;
 
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import frc.robot.Constants.OperatorConstants;
 
 public class Drivetrain extends SubsystemBase {
+  Spark motorBL = new Spark(OperatorConstants.motorBL);
+  Spark motorFL = new Spark(OperatorConstants.motorFL);
+  Spark motorBR = new Spark(OperatorConstants.motorBR);
+  Spark motorFR = new Spark(OperatorConstants.motorFR);
+  
+
   /** Creates a new ExampleSubsystem. */
-  public Drivetrain() {}
+  public Drivetrain() {
+
+    //invert the one of the sides so that they rotate together
+    motorBL.setInverted(true);
+    motorFL.setInverted(true);
+
+  }
+  public void setSpeed(double leftSpeed, double rightSpeed){
+    motorBL.set(leftSpeed);
+    motorBR.set(rightSpeed);
+    motorFL.set(leftSpeed);
+    motorFR.set(rightSpeed);
+  }
 
   /**
    * Example command factory method.
