@@ -9,6 +9,9 @@
 /**
  * Code to allow the robot to move.
  * 
+ * Tank Drive contains:
+ *  - 2x CIM Motors on the LEFT side (front and back)
+ *  - 2x CIM Motors on the RIGHT side (front and back)
  */
 
 package frc.robot.subsystems.drive;
