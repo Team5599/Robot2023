@@ -15,9 +15,15 @@ package frc.robot;
 public final class Constants {
 
   public static class OperatorConstants {
+    public static final double speedCap = 1; // use this variable to cap the speed of the motors. this should only ever be greater than 0 and less than or equal to 1
+
 
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorJoystickPort = 1;
 
+    public static final int motorFL = 2;
+    public static final int motorFR = 3;
+    public static final int motorBL = 4;
+    public static final int motorBR = 5;
   }
 }

@@ -20,6 +20,8 @@ import frc.robot.subsystems.odometry.*;
 import frc.robot.subsystems.vision.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -40,7 +42,7 @@ public class RobotContainer {
   private final IntakeClose comIntakeClose = new IntakeClose(null);
   private final IntakeOpen comIntakeOpen = new IntakeOpen(null);
   //private final Autos comAutos;
-  private final DrivetrainDrive comDrivetrainDrive = new DrivetrainDrive(null);
+  private final DrivetrainDrive comDrivetrainDrive = new DrivetrainDrive(null,null); // now it also needs the controller
   private final DrivetrainStop comDrivetrainStop = new DrivetrainStop(null);
 
   // Subsystems
@@ -57,6 +59,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureButtonBindings();
+    defaultCommands();
   }
 
   /**
@@ -82,14 +85,14 @@ public class RobotContainer {
     driver.y().whileTrue(null);
     driver.leftStick().whileTrue(null);
     driver.rightStick().whileTrue(null);
-    driver.leftTrigger().whileTrue(
-      new DrivetrainDrive(m_Drivetrain)
-    );
-    driver.rightTrigger().whileTrue(
-      new DrivetrainDrive(m_Drivetrain)
-    );
+    driver.leftTrigger().whileTrue(null);
+    driver.rightTrigger().whileTrue(null);
+
     driver.back().whileTrue(null); // select
     driver.start().whileTrue(null); // start
+  }
+  private void defaultCommands(){
+    m_Drivetrain.setDefaultCommand(new DrivetrainDrive(m_Drivetrain, driver));
   }
 
   /**
