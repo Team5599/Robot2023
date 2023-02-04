@@ -6,43 +6,69 @@
     Copyright (c) 2023 The Sentinels. All rights reserved.
 ***************************************************************/
 
-/**
- * Code to allow the robot to move.
- * 
- * Tank Drive contains:
- *  - 2x CIM Motors on the LEFT side (front and back)
- *  - 2x CIM Motors on the RIGHT side (front and back)
- */
-
 package com.sentinels.robot.subsystems.drive;
 
 import com.sentinels.robot.constants.Motors;
 import com.sentinels.robot.constants.Ports;
 
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+/**
+ * Code to allow the robot to move.
+ * 
+ * Tank Drive contains:
+ *  - 2x CIM Motors on the LEFT side (front and back)
+ *  - 2x CIM Motors on the RIGHT side (front and back)}
+ * 
+ * @author Ahmed Osman, Karamat Hasan
+ */
 public class Drivetrain extends SubsystemBase {
 
-  Spark motorBL = new Spark(Ports.Drivetrain.BACKLEFT);
+  // LEFT side motors
   Spark motorFL = new Spark(Ports.Drivetrain.FRONTLEFT);
-  Spark motorBR = new Spark(Ports.Drivetrain.BACKRIGHT);
+  Spark motorBL = new Spark(Ports.Drivetrain.BACKLEFT);
+  // RIGHT side motors
   Spark motorFR = new Spark(Ports.Drivetrain.FRONTRIGHT);
+  Spark motorBR = new Spark(Ports.Drivetrain.BACKRIGHT);
 
-  /** Creates a new ExampleSubsystem. */
+  MotorControllerGroup leftMotors = new MotorControllerGroup(motorFL, motorBL);
+  MotorControllerGroup rightMotors = new MotorControllerGroup(motorFR, motorBR);
+  DifferentialDrive drivetrain = new DifferentialDrive(leftMotors, rightMotors);
+
+
   public Drivetrain() {
 
-    //invert the one of the sides so that they rotate together
-    motorBL.setInverted(true);
-    motorFL.setInverted(true);
+    // Invert the one of the sides so that they rotate synonymously in one direction
+    leftMotors.setInverted(true);
 
   }
-  public void setSpeed(double leftSpeed, double rightSpeed){
-    motorFL.set(leftSpeed);
-    motorBL.set(leftSpeed);
-    motorFR.set(rightSpeed);
-    motorBR.set(rightSpeed);
+
+  /**
+   * Drive the robot!
+   * @param leftSpeed - The speed at which the left side motors should be.
+   * @param rightSpeed - The speed at which the right side motors should be.
+   */
+  public void tankDrive(int leftSpeed, int rightSpeed) {
+    drivetrain.tankDrive(leftSpeed, rightSpeed);
+  }
+
+  // Stop the motors from moving
+  public void driveStop() {
+    drivetrain.stopMotor();
+  }
+
+  /**
+   * Manually change the speed of both MotorControllerGroups {@code leftMotors} and {@code rightMotors}.
+   * @param leftSpeed - The speed at which the left side motors should be.
+   * @param rightSpeed - The speed at which the right side motors should be.
+   */
+  public void setSpeed(double leftSpeed, double rightSpeed) {
+    leftMotors.set(leftSpeed);
+    rightMotors.set(rightSpeed);
   }
 
   /**
