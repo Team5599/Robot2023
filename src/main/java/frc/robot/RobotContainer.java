@@ -4,16 +4,13 @@
 
 package frc.robot;
 
-// Constants
-import frc.robot.Constants.OperatorConstants;
+import frc.robot.constants.Ports;
 
-// Commands
 import frc.robot.commands.armmech.arm.*;
 import frc.robot.commands.armmech.intake.*;
 import frc.robot.commands.autonomous.*;
 import frc.robot.commands.drivetrain.*;
 
-// Subsystems
 import frc.robot.subsystems.arm.*;
 import frc.robot.subsystems.drive.*;
 import frc.robot.subsystems.odometry.*;
@@ -52,8 +49,8 @@ public class RobotContainer {
   private final Camera m_Camera = new Camera();
 
   // Input Devices
-  private final CommandXboxController driver = new CommandXboxController(OperatorConstants.kDriverControllerPort);
-  private final CommandJoystick operator = new CommandJoystick(OperatorConstants.kOperatorJoystickPort);
+  private final CommandXboxController driver = new CommandXboxController(Ports.Controllers.DRIVER);
+  private final CommandJoystick operator = new CommandJoystick(Ports.Controllers.OPERATOR);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {

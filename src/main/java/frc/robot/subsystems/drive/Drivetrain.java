@@ -1,21 +1,31 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+/***************************************************************
+                The Sentinels - FRC Team 5599
+        Benjamin N. Cardozo High School Robotics Team
+
+    This work is licensed under the terms of the MIT license.
+    Copyright (c) 2023 The Sentinels. All rights reserved.
+***************************************************************/
+
+/**
+ * Code to allow the robot to move.
+ * 
+ */
 
 package frc.robot.subsystems.drive;
+
+import frc.robot.constants.Motors;
+import frc.robot.constants.Ports;
 
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import frc.robot.Constants.OperatorConstants;
-
 public class Drivetrain extends SubsystemBase {
-  Spark motorBL = new Spark(OperatorConstants.motorBL);
-  Spark motorFL = new Spark(OperatorConstants.motorFL);
-  Spark motorBR = new Spark(OperatorConstants.motorBR);
-  Spark motorFR = new Spark(OperatorConstants.motorFR);
-  
+
+  Spark motorBL = new Spark(Ports.Drivetrain.BACKLEFT);
+  Spark motorFL = new Spark(Ports.Drivetrain.FRONTLEFT);
+  Spark motorBR = new Spark(Ports.Drivetrain.BACKRIGHT);
+  Spark motorFR = new Spark(Ports.Drivetrain.FRONTRIGHT);
 
   /** Creates a new ExampleSubsystem. */
   public Drivetrain() {
@@ -26,10 +36,10 @@ public class Drivetrain extends SubsystemBase {
 
   }
   public void setSpeed(double leftSpeed, double rightSpeed){
-    motorBL.set(leftSpeed);
-    motorBR.set(rightSpeed);
     motorFL.set(leftSpeed);
+    motorBL.set(leftSpeed);
     motorFR.set(rightSpeed);
+    motorBR.set(rightSpeed);
   }
 
   /**
