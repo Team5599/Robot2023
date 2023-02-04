@@ -14,10 +14,10 @@
  *  - 2x CIM Motors on the RIGHT side (front and back)
  */
 
-package frc.robot.subsystems.drive;
+package com.sentinels.robot.subsystems.drive;
 
-import frc.robot.constants.Motors;
-import frc.robot.constants.Ports;
+import com.sentinels.robot.constants.Motors;
+import com.sentinels.robot.constants.Ports;
 
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.CommandBase;

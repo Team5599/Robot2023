@@ -1,11 +1,11 @@
-package frc.robot.subsystems.arm;
+package com.sentinels.robot.subsystems.arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class Arm extends SubsystemBase {
+public class ArmIntake extends SubsystemBase {
     
-    public Arm() {
+    public ArmIntake() {
 
     }
 

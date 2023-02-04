@@ -2,10 +2,10 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.armmech.intake;
+package com.sentinels.robot.commands.armmech.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.arm.ArmIntake;
+import com.sentinels.robot.subsystems.arm.ArmIntake;
 
 /** An example command that uses an example subsystem. */
 public class IntakeClose extends CommandBase {

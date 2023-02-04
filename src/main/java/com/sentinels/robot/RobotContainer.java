@@ -2,19 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot;
+package com.sentinels.robot;
 
-import frc.robot.constants.Ports;
+import com.sentinels.robot.constants.Ports;
 
-import frc.robot.commands.armmech.arm.*;
-import frc.robot.commands.armmech.intake.*;
-import frc.robot.commands.autonomous.*;
-import frc.robot.commands.drivetrain.*;
+import com.sentinels.robot.commands.armmech.arm.*;
+import com.sentinels.robot.commands.armmech.intake.*;
+import com.sentinels.robot.commands.autonomous.*;
+import com.sentinels.robot.commands.drivetrain.*;
 
-import frc.robot.subsystems.arm.*;
-import frc.robot.subsystems.drive.*;
-import frc.robot.subsystems.odometry.*;
-import frc.robot.subsystems.vision.*;
+import com.sentinels.robot.subsystems.arm.*;
+import com.sentinels.robot.subsystems.drive.*;
+import com.sentinels.robot.subsystems.odometry.*;
+import com.sentinels.robot.subsystems.vision.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;

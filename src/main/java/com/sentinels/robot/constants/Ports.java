@@ -6,7 +6,7 @@
     Copyright (c) 2023 The Sentinels. All rights reserved.
 ***************************************************************/
 
-package frc.robot.constants;
+package com.sentinels.robot.constants;
 
 // Port numbers for controllers, subsystems/mechanisms, and sensors are defined in this file.
 

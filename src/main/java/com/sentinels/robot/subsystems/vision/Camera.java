@@ -15,7 +15,7 @@
  * REFLECTIVE TAPE DETECTION:   N/A
  */
 
-package frc.robot.subsystems.vision;
+package com.sentinels.robot.subsystems.vision;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
