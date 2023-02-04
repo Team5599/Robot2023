@@ -4,44 +4,41 @@
 
 package com.sentinels.robot.commands.drivetrain;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import com.sentinels.robot.subsystems.drive.Drivetrain;
 
-/** An example command that uses an example subsystem. */
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+
+
 public class DrivetrainDrive extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private Drivetrain m_DrivetrainSubsystem;
-  private CommandXboxController controller;
 
-  double left;
-  double right;
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
+  private Drivetrain m_Drivetrain;
+  private CommandXboxController driver;
+
+  double driverLeftY;
+  double driverRightY;
+  
   public DrivetrainDrive(Drivetrain subsystem, CommandXboxController controller) {
-    m_DrivetrainSubsystem = subsystem;
-    this.controller = controller;
+    m_Drivetrain = subsystem;
+    driver = controller;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    left = 0;
-    right = 0;
+    driverLeftY = 0;
+    driverRightY = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    left = controller.getLeftY();
-    right = controller.getRightY();
+    driverLeftY = driver.getLeftY();
+    driverRightY = driver.getRightY();
 
-    m_DrivetrainSubsystem.setSpeed(left, right);
+    m_Drivetrain.setSpeed(driverLeftY, driverRightY);
   }
 
   // Called once the command ends or is interrupted.

@@ -80,11 +80,14 @@ public class RobotContainer {
     driver.b().whileTrue(null);
     driver.x().whileTrue(null);
     driver.y().whileTrue(null);
-    driver.leftStick().whileTrue(null);
-    driver.rightStick().whileTrue(null);
+    driver.leftStick().whileTrue(
+      new DrivetrainDrive(m_Drivetrain, driver)
+    );
+    driver.rightStick().whileTrue(
+      new DrivetrainDrive(m_Drivetrain, driver)
+    );
     driver.leftTrigger().whileTrue(null);
     driver.rightTrigger().whileTrue(null);
-
     driver.back().whileTrue(null); // select
     driver.start().whileTrue(null); // start
   }

@@ -6,28 +6,32 @@
     Copyright (c) 2023 The Sentinels. All rights reserved.
 ***************************************************************/
 
-package com.sentinels.robot.constants;
-
 // Port numbers for controllers, subsystems/mechanisms, and sensors are defined in this file.
+
+package com.sentinels.robot.constants;
 
 public interface Ports {
 
     public interface Controllers {
+        // Controllers
         int DRIVER = 0;
         int OPERATOR = 1;
     }
     
     public interface Arm {
-        int MOTOR_1 = 0;
-        int MOTOR_2 = 0;
-        int MOTOR_3 = 0;
+        // Motors
+        int ARMLEFT = 0;
+        int ARMRIGHT = 0;
+        int ARMPULLEY = 0;
     }
 
     public interface ArmIntake {
+        // Pneumatics
         int PNEUMATICS = 0; // temp var name until pneumatics are known
     }
 
     public interface Drivetrain {
+        // Motors
         int FRONTLEFT = 0;
         int BACKLEFT = 0;
 
