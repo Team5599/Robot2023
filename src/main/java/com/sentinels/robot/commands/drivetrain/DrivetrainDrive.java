@@ -13,17 +13,17 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 public class DrivetrainDrive extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
-  private Drivetrain m_Drivetrain;
-  private CommandXboxController driver;
+  private final Drivetrain m_Drivetrain;
+  private final CommandXboxController driver;
 
   double driverLeftY;
   double driverRightY;
   
-  public DrivetrainDrive(Drivetrain subsystem, CommandXboxController controller) {
-    m_Drivetrain = subsystem;
-    driver = controller;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+  public DrivetrainDrive(Drivetrain drivetrain, CommandXboxController controller) {
+    this.m_Drivetrain = drivetrain;
+    this.driver = controller;
+
+    addRequirements(drivetrain);
   }
 
   @Override
@@ -38,7 +38,7 @@ public class DrivetrainDrive extends CommandBase {
     driverLeftY = driver.getLeftY();
     driverRightY = driver.getRightY();
 
-    m_Drivetrain.setSpeed(driverLeftY, driverRightY);
+    m_Drivetrain.tankDrive(driverLeftY, driverRightY);
   }
 
   // Called once the command ends or is interrupted.

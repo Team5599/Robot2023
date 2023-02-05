@@ -14,15 +14,15 @@ public interface Ports {
 
     public interface Controllers {
         // Controllers
-        int DRIVER = 0;
-        int OPERATOR = 1;
+        int DRIVER = 1;
+        int OPERATOR = 2;
     }
     
     public interface Arm {
         // Motors
         int ARMLEFT = 0;
-        int ARMRIGHT = 0;
-        int ARMPULLEY = 0;
+        int ARMRIGHT = 1;
+        int ARMPULLEY = 2;
     }
 
     public interface ArmIntake {
@@ -33,9 +33,9 @@ public interface Ports {
     public interface Drivetrain {
         // Motors
         int FRONTLEFT = 0;
-        int BACKLEFT = 0;
+        int BACKLEFT = 1;
 
-        int FRONTRIGHT = 0;
-        int BACKRIGHT = 0;
+        int FRONTRIGHT = 2;
+        int BACKRIGHT = 3;
     }
 }

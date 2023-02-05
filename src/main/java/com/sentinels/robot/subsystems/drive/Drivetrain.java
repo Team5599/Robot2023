@@ -20,9 +20,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 /**
  * Code to allow the robot to move.
  * 
- * Tank Drive contains:
- *  - 2x CIM Motors on the LEFT side (front and back)
- *  - 2x CIM Motors on the RIGHT side (front and back)}
+ * <p>Tank Drive contains:
+ * <p>- 2x CIM Motors on the LEFT side (front and back)
+ * <p>- 2x CIM Motors on the RIGHT side (front and back)
  * 
  * @author Ahmed Osman, Karamat Hasan
  */
@@ -52,7 +52,7 @@ public class Drivetrain extends SubsystemBase {
    * @param leftSpeed - The speed at which the left side motors should be.
    * @param rightSpeed - The speed at which the right side motors should be.
    */
-  public void tankDrive(int leftSpeed, int rightSpeed) {
+  public void tankDrive(double leftSpeed, double rightSpeed) {
     drivetrain.tankDrive(leftSpeed, rightSpeed);
   }
 
