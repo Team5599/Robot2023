@@ -8,13 +8,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 
 // Import all subsystems for auton use
-import com.sentinels.robot.subsystems.*;
+//import com.sentinels.robot.subsystems.*;
 
 public final class Autos {
   
   /** Example static factory for an autonomous command. */
-  public static CommandBase exampleAuto(Object subsystem) {
-    return Commands.sequence(null);
+  public static CommandBase autonomous(Object subsystem) {
+    return Commands.sequence();
   }
 
   private Autos() {
