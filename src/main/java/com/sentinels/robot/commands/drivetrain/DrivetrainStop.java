@@ -4,23 +4,20 @@
 
 package com.sentinels.robot.commands.drivetrain;
 
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import com.sentinels.robot.subsystems.drive.Drivetrain;
 
-/** An example command that uses an example subsystem. */
+import edu.wpi.first.wpilibj2.command.CommandBase;
+
+
 public class DrivetrainStop extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final Drivetrain m_DrivetrainSubsystem;
 
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
-  public DrivetrainStop(Drivetrain subsystem) {
-    m_DrivetrainSubsystem = subsystem;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+  private final Drivetrain m_Drivetrain;
+
+  public DrivetrainStop(Drivetrain drivetrain) {
+    this.m_Drivetrain = drivetrain;
+
+    addRequirements(drivetrain);
   }
 
   // Called when the command is initially scheduled.
@@ -29,13 +26,13 @@ public class DrivetrainStop extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    m_Drivetrain.driveStop();
+  }
 
-  // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}
 
-  // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     return false;
