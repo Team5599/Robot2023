@@ -18,6 +18,7 @@ import com.sentinels.robot.subsystems.vision.*;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -82,12 +83,10 @@ public class RobotContainer {
     );
     //driver.x().whileTrue(null);
     //driver.y().whileTrue(null);
-    driver.leftStick().whileTrue(
-      null//new DrivetrainDrive(m_Drivetrain, driver)
-    );
-    driver.rightStick().whileTrue(
-      null//new DrivetrainDrive(m_Drivetrain, driver)null
-    );
+
+    //driver.leftStick().whileTrue(null/*new DrivetrainDrive(m_Drivetrain, driver)*/);
+    //driver.rightStick().whileTrue(null/*new DrivetrainDrive(m_Drivetrain, driver)null*/);
+
     //driver.leftTrigger().whileTrue(null);
     //driver.rightTrigger().whileTrue(null);
     //driver.back().whileTrue(null); // select
@@ -103,6 +102,19 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
+
+    //new SequentialCommandGroup(null);
+    /*
+     * the sequential command group will have a list of all the auto commands we will need
+     * 
+     * auto commands:
+     * DrivePID(after findout the target location and the current location using the april tags, make the robot drive close enought ot the game pieces)
+     * IntakeAUTO(pick up and raise the game piece)
+     * DepositAUTO(place the game pice in the middle or high row)
+     * DrivePID(this time drive to the charging dock)
+     * BalanceAUTO(using the IMU, stay engaged on the charging dock while it tilts)
+     */
+
     return Autos.autonomous(null);
   }
 }

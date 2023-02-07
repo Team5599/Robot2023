@@ -8,6 +8,8 @@
 
 package com.sentinels.robot.subsystems.drive;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.sentinels.robot.constants.Motors;
 import com.sentinels.robot.constants.Ports;
 
@@ -28,12 +30,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Drivetrain extends SubsystemBase {
 
+
+  //, MotorType.kBrushlessCANSparkMax max = new CANSparkMax(0, MotorType.kBrushless);
   // LEFT side motors
-  Spark motorFL = new Spark(Ports.Drivetrain.FRONTLEFT);
-  Spark motorBL = new Spark(Ports.Drivetrain.BACKLEFT);
+  CANSparkMax motorFL = new CANSparkMax(Ports.Drivetrain.FRONTLEFT, MotorType.kBrushless);
+  CANSparkMax motorBL = new CANSparkMax(Ports.Drivetrain.BACKLEFT, MotorType.kBrushless);
   // RIGHT side motors
-  Spark motorFR = new Spark(Ports.Drivetrain.FRONTRIGHT);
-  Spark motorBR = new Spark(Ports.Drivetrain.BACKRIGHT);
+  CANSparkMax motorFR = new CANSparkMax(Ports.Drivetrain.FRONTRIGHT, MotorType.kBrushless);
+  CANSparkMax motorBR = new CANSparkMax(Ports.Drivetrain.BACKRIGHT, MotorType.kBrushless);
 
   MotorControllerGroup leftMotors = new MotorControllerGroup(motorFL, motorBL);
   MotorControllerGroup rightMotors = new MotorControllerGroup(motorFR, motorBR);
