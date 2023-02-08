@@ -12,6 +12,7 @@ import com.sentinels.robot.constants.Motors;
 import com.sentinels.robot.constants.Ports;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -30,15 +31,21 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Drivetrain extends SubsystemBase {
 
   // LEFT side motors
-  CANSparkMax motorFL = new CANSparkMax(Ports.Drivetrain.FRONTLEFT, MotorType.kBrushless);
-  CANSparkMax motorBL = new CANSparkMax(Ports.Drivetrain.BACKLEFT, MotorType.kBrushless);
+  private final CANSparkMax motorFL = new CANSparkMax(Ports.Drivetrain.FRONTLEFT, MotorType.kBrushless);
+  private final CANSparkMax motorBL = new CANSparkMax(Ports.Drivetrain.BACKLEFT, MotorType.kBrushless);
   // RIGHT side motors
-  CANSparkMax motorFR = new CANSparkMax(Ports.Drivetrain.FRONTRIGHT, MotorType.kBrushless);
-  CANSparkMax motorBR = new CANSparkMax(Ports.Drivetrain.BACKRIGHT, MotorType.kBrushless);
+  private final CANSparkMax motorFR = new CANSparkMax(Ports.Drivetrain.FRONTRIGHT, MotorType.kBrushless);
+  private final CANSparkMax motorBR = new CANSparkMax(Ports.Drivetrain.BACKRIGHT, MotorType.kBrushless);
 
-  MotorControllerGroup leftMotors = new MotorControllerGroup(motorFL, motorBL);
-  MotorControllerGroup rightMotors = new MotorControllerGroup(motorFR, motorBR);
-  DifferentialDrive drivetrain = new DifferentialDrive(leftMotors, rightMotors);
+  private final MotorControllerGroup leftMotors = new MotorControllerGroup(motorFL, motorBL);
+  private final MotorControllerGroup rightMotors = new MotorControllerGroup(motorFR, motorBR);
+  private final DifferentialDrive drivetrain = new DifferentialDrive(leftMotors, rightMotors);
+
+  // Built-in NEO hall sensor encoders
+  private final RelativeEncoder encoderFL = motorFL.getEncoder();
+  private final RelativeEncoder encoderBL = motorBL.getEncoder();
+  private final RelativeEncoder encoderFR = motorFR.getEncoder();
+  private final RelativeEncoder encoderBR = motorBR.getEncoder();
 
 
   public Drivetrain() {
@@ -68,6 +75,20 @@ public class Drivetrain extends SubsystemBase {
   public void setSpeed(double leftSpeed, double rightSpeed) {
     leftMotors.set(leftSpeed);
     rightMotors.set(rightSpeed);
+  }
+
+  public double getLeftPosition() {
+    return (encoderFL.getPosition() + encoderBL.getPosition() / 2.0);
+  }
+  public double getRightPosition() {
+    return (encoderFR.getPosition() + encoderBR.getPosition() / 2.0);
+  }
+
+  public double getLeftVelocity() {
+    return (encoderFL.getVelocity() + encoderBR.getVelocity() / 2.0);
+  }
+  public double getRightVelocity() {
+    return (encoderFR.getVelocity() + encoderBR.getVelocity() / 2.0);
   }
 
   /**

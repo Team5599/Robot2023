@@ -12,6 +12,7 @@ import com.sentinels.robot.constants.Ports;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,11 +29,15 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Arm extends SubsystemBase {
 
-  CANSparkMax ArmL = new CANSparkMax(Ports.Arm.ARMLEFT, MotorType.kBrushless);
-  CANSparkMax ArmR = new CANSparkMax(Ports.Arm.ARMRIGHT, MotorType.kBrushless);
-  CANSparkMax ArmPulley = new CANSparkMax(Ports.Arm.ARMPULLEY, MotorType.kBrushless);
+  private final CANSparkMax ArmL = new CANSparkMax(Ports.Arm.ARMLEFT, MotorType.kBrushless);
+  private final CANSparkMax ArmR = new CANSparkMax(Ports.Arm.ARMRIGHT, MotorType.kBrushless);
+  private final CANSparkMax ArmPulley = new CANSparkMax(Ports.Arm.ARMPULLEY, MotorType.kBrushless);
 
-  MotorControllerGroup ArmMotors = new MotorControllerGroup(ArmL, ArmR);
+  private final MotorControllerGroup ArmMotors = new MotorControllerGroup(ArmL, ArmR);
+
+  private final RelativeEncoder encoderL = ArmL.getEncoder();
+  private final RelativeEncoder encoderR = ArmL.getEncoder();
+  private final RelativeEncoder encoderPulley = ArmL.getEncoder();
 
   public Arm() {
     ArmL.setInverted(true);
@@ -51,6 +56,8 @@ public class Arm extends SubsystemBase {
           /* one-time action goes here */
         });
   }
+
+  
   // motor stall is detected by the output current of a motor
   // since both motors will be rotating together, it is assumed that they will also stall together
   // so they use the same method to check if they are stalling
@@ -102,6 +109,27 @@ public class Arm extends SubsystemBase {
   }
   public void ElevatorStop() {
     ArmPulley.set(0);
+  }
+
+
+  public double getLeftPosition() {
+    return encoderL.getPosition();
+  }
+  public double getRightPosition() {
+    return encoderR.getPosition();
+  }
+  public double getPulleyPosition() {
+    return encoderPulley.getPosition();
+  }
+
+  public double getLeftVelocity() {
+    return encoderL.getVelocity();
+  }
+  public double getRightVelocity() {
+    return encoderR.getVelocity();
+  }
+  public double getPulleyVelocity() {
+    return encoderPulley.getVelocity();
   }
 
   /**
