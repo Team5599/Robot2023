@@ -38,6 +38,7 @@ public class RobotContainer {
   private final ArmIntake m_ArmIntake = new ArmIntake();
   private final Drivetrain m_Drivetrain = new Drivetrain();
   private final Camera m_Camera = new Camera();
+  private final IMU m_IMU = new IMU();
   
   // Input Devices
   private final CommandXboxController driver = new CommandXboxController(Ports.Controllers.DRIVER);
@@ -57,7 +58,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureButtonBindings();
-    defaultCommands();
+    configureDefaultCommands();
   }
 
   /**
@@ -92,7 +93,7 @@ public class RobotContainer {
     //driver.back().whileTrue(null); // select
     //driver.start().whileTrue(null); // start
   }
-  private void defaultCommands(){
+  private void configureDefaultCommands() {
     m_Drivetrain.setDefaultCommand(new DrivetrainDrive(m_Drivetrain, driver));
   }
 

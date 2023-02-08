@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.ADIS16470_IMU;
 
 public class IMU {
 
-    ADIS16470_IMU imu = new ADIS16470_IMU();
+    private final ADIS16470_IMU imu = new ADIS16470_IMU();
     
     public IMU() {
         if (imu.isConnected() != true) {
