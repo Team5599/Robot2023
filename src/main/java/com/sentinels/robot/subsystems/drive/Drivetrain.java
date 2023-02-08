@@ -8,12 +8,11 @@
 
 package com.sentinels.robot.subsystems.drive;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.sentinels.robot.constants.Motors;
 import com.sentinels.robot.constants.Ports;
 
-import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -23,15 +22,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * Code to allow the robot to move.
  * 
  * <p>Tank Drive contains:
- * <p>- 2x CIM Motors on the LEFT side (front and back)
- * <p>- 2x CIM Motors on the RIGHT side (front and back)
+ * <p>- 2x NEO Motors on the LEFT side (front and back)
+ * <p>- 2x NEO Motors on the RIGHT side (front and back)
  * 
  * @author Ahmed Osman, Karamat Hasan
  */
 public class Drivetrain extends SubsystemBase {
 
-
-  //, MotorType.kBrushlessCANSparkMax max = new CANSparkMax(0, MotorType.kBrushless);
   // LEFT side motors
   CANSparkMax motorFL = new CANSparkMax(Ports.Drivetrain.FRONTLEFT, MotorType.kBrushless);
   CANSparkMax motorBL = new CANSparkMax(Ports.Drivetrain.BACKLEFT, MotorType.kBrushless);
@@ -45,10 +42,8 @@ public class Drivetrain extends SubsystemBase {
 
 
   public Drivetrain() {
-
     // Invert the one of the sides so that they rotate synonymously in one direction
     leftMotors.setInverted(true);
-
   }
 
   /**

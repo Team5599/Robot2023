@@ -1,25 +1,44 @@
+/***************************************************************
+                The Sentinels - FRC Team 5599
+        Benjamin N. Cardozo High School Robotics Team
+
+    This work is licensed under the terms of the MIT license.
+    Copyright (c) 2023 The Sentinels. All rights reserved.
+***************************************************************/
+
 package com.sentinels.robot.subsystems.arm;
 
+import com.sentinels.robot.constants.Ports;
+
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.sentinels.robot.constants.Ports;
-
+/**
+ * Code to allow the arm to move.
+ * 
+ * <p>Arm contains:
+ * <p>- 1x NEO Motor on the LEFT side
+ * <p>- 1x NEO Motor on the RIGHT side
+ * <p>- 1x NEO Motor in the MIDDLE for the pulley
+ * 
+ * @author Ahmed Osman, Karamat Hasan
+ */
 public class Arm extends SubsystemBase {
-  CANSparkMax ArmL = new CANSparkMax(Ports.Arm.ARMLEFT,MotorType.kBrushless);
-  CANSparkMax ArmR = new CANSparkMax(Ports.Arm.ARMRIGHT,MotorType.kBrushless);
-  CANSparkMax ArmPulley = new CANSparkMax(Ports.Arm.ARMPULLEY,MotorType.kBrushless);
-  MotorControllerGroup ArmMotors = new MotorControllerGroup(ArmL, ArmR);
-    // the left is inverted so that they rotate together. they are kept as group so that they change speeds at the same time
-    public Arm() {
-      ArmL.setInverted(true);
-      
-    }
 
-    /**
+  CANSparkMax ArmL = new CANSparkMax(Ports.Arm.ARMLEFT, MotorType.kBrushless);
+  CANSparkMax ArmR = new CANSparkMax(Ports.Arm.ARMRIGHT, MotorType.kBrushless);
+  CANSparkMax ArmPulley = new CANSparkMax(Ports.Arm.ARMPULLEY, MotorType.kBrushless);
+
+  MotorControllerGroup ArmMotors = new MotorControllerGroup(ArmL, ArmR);
+
+  public Arm() {
+    ArmL.setInverted(true);
+  }
+
+  /**
    * Example command factory method.
    *
    * @return a command
@@ -38,48 +57,52 @@ public class Arm extends SubsystemBase {
   
   // the left motors currents is the first in the index, the right motor is next in the index
   public double[] getMotorCurrents(){
-    double[] motorCurrents = {ArmL.getOutputCurrent(),ArmR.getOutputCurrent()};
-    return motorCurrents; 
+    double[] motorCurrents = { ArmL.getOutputCurrent(), ArmR.getOutputCurrent() };
+    return motorCurrents;
   }
 
   //may want to add isStalling as an interrupt to its commands
-  public boolean isStalling(){
-    boolean currentL = getMotorCurrents()[0] > 105; // according to the revrobotics neo manual, the stall current is at 105 amps
-    boolean currentR = getMotorCurrents()[1] > 105;
+  public boolean isStalling() {
+    boolean currentL = getMotorCurrents()[0] > 90; // according to the revrobotics neo manual, the stall current is at 105 amps
+    boolean currentR = getMotorCurrents()[1] > 90;
 
     //because I cannot find a to get the actual rpm of the motor, i am only checking the current in the motors
     return currentL && currentR;
   }
 
-  public void ExtendArm(){
-    if(isStalling()){
+  public void setArmSpeed(double speed) {
+    ArmMotors.set(speed);
+  }
+  public void setPulleySpeed(double speed) {
+    ArmPulley.set(speed);
+  }
+
+  public void ExtendArm() {
+    if (isStalling()) {
       return;
     }
     ArmMotors.set(0.5);
   }
-  public void RetractArm(){
-    if(isStalling()){
+  public void RetractArm() {
+    if (isStalling()) {
       return;
     }
     ArmMotors.set(-0.5);
   }
-  public void StopArm(){
+  public void StopArm() {
     ArmMotors.set(0);
   }
 
   // the pulley may also need its own stall checks
-  public void ElevatorRaise(){
+  public void ElevatorRaise() {
     ArmPulley.set(0.3);
   }
-  public void ElevatorLower(){
+  public void ElevatorLower() {
     ArmPulley.set(-0.3);
   }
-  public void ElevatorStop(){
+  public void ElevatorStop() {
     ArmPulley.set(0);
   }
-  
-   
-  
 
   /**
    * An example method querying a boolean state of the subsystem (for example, a digital sensor).
