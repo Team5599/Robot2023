@@ -67,13 +67,20 @@ public class Arm extends SubsystemBase {
     double[] motorCurrents = { ArmL.getOutputCurrent(), ArmR.getOutputCurrent() };
     return motorCurrents;
   }
+  public double[] getMotorVelocities(){
+    double[] motorVelocities = {encoderL.getVelocity(), encoderR.getVelocity() };
+    return motorVelocities;
+  }
 
   //may want to add isStalling as an interrupt to its commands
   public boolean isStalling() {
     boolean currentL = getMotorCurrents()[0] > 90; // according to the revrobotics neo manual, the stall current is at 105 amps
     boolean currentR = getMotorCurrents()[1] > 90;
 
-    //because I cannot find a to get the actual rpm of the motor, i am only checking the current in the motors
+    //boolean velocityL = ArmMotors.get() < getMotorVelocities()[0];
+
+    //neo motors are rated to reach a max rpm of 5676 and it has a Kv 473(rpm * Kv = max rpm)
+    //we need to find the expected speed with the load of the arm and then check if the motor velocity is much lower
     return currentL && currentR;
   }
 
@@ -84,17 +91,17 @@ public class Arm extends SubsystemBase {
     ArmPulley.set(speed);
   }
 
-  public void ExtendArm() {
+  public void ExtendArm(double armExtendSpeed) {
     if (isStalling()) {
       return;
     }
-    ArmMotors.set(0.5);
+    ArmMotors.set(armExtendSpeed);
   }
-  public void RetractArm() {
+  public void RetractArm(double armRetractSpeed) {
     if (isStalling()) {
       return;
     }
-    ArmMotors.set(-0.5);
+    ArmMotors.set(armRetractSpeed);
   }
   public void StopArm() {
     ArmMotors.set(0);

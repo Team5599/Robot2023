@@ -45,9 +45,9 @@ public class RobotContainer {
   private final CommandJoystick operator = new CommandJoystick(Ports.Controllers.OPERATOR);
 
   // Commands
-  private final ArmExtend comArmExtend = new ArmExtend(m_Arm);
+  private final ArmExtend comArmExtend = new ArmExtend(m_Arm, operator);
   private final ArmPivot comArmPivot = new ArmPivot(m_Arm);
-  private final ArmRetract comArmRetract = new ArmRetract(m_Arm);
+  private final ArmRetract comArmRetract = new ArmRetract(m_Arm, operator);
   private final IntakeClose comIntakeClose = new IntakeClose(m_ArmIntake);
   private final IntakeOpen comIntakeOpen = new IntakeOpen(m_ArmIntake);
   //private final Autos comAutos;
@@ -82,9 +82,12 @@ public class RobotContainer {
     driver.b().whileTrue(
       new DrivetrainStop(m_Drivetrain)
     );
+    // the drivers stick inputs are don in the default commands method, and there is not point for any other button
+
+
     //driver.x().whileTrue(null);
     //driver.y().whileTrue(null);
-
+    
     //driver.leftStick().whileTrue(null/*new DrivetrainDrive(m_Drivetrain, driver)*/);
     //driver.rightStick().whileTrue(null/*new DrivetrainDrive(m_Drivetrain, driver)null*/);
 
@@ -92,6 +95,11 @@ public class RobotContainer {
     //driver.rightTrigger().whileTrue(null);
     //driver.back().whileTrue(null); // select
     //driver.start().whileTrue(null); // start
+
+
+    //operator 
+    operator.axisGreaterThan(2, 0).whileTrue(comArmExtend);
+    operator.axisLessThan(2, 0).whileTrue(comArmExtend);
   }
   private void configureDefaultCommands() {
     m_Drivetrain.setDefaultCommand(new DrivetrainDrive(m_Drivetrain, driver));
