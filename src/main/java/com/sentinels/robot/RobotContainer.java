@@ -46,8 +46,10 @@ public class RobotContainer {
 
   // Commands
   private final ArmExtend comArmExtend = new ArmExtend(m_Arm, operator);
-  private final ArmPivot comArmPivot = new ArmPivot(m_Arm);
   private final ArmRetract comArmRetract = new ArmRetract(m_Arm, operator);
+  private final ArmPivot comArmPivot = new ArmPivot(m_Arm, operator);
+  
+  
   private final IntakeClose comIntakeClose = new IntakeClose(m_ArmIntake);
   private final IntakeOpen comIntakeOpen = new IntakeOpen(m_ArmIntake);
   //private final Autos comAutos;
@@ -82,7 +84,8 @@ public class RobotContainer {
     driver.b().whileTrue(
       new DrivetrainStop(m_Drivetrain)
     );
-    // the drivers stick inputs are don in the default commands method, and there is not point for any other button
+    // the drivers stick inputs are don in the default commands method, and there is not point for any other button\
+    
 
 
     //driver.x().whileTrue(null);
@@ -98,8 +101,15 @@ public class RobotContainer {
 
 
     //operator 
-    operator.axisGreaterThan(2, 0).whileTrue(comArmExtend);
-    operator.axisLessThan(2, 0).whileTrue(comArmExtend);
+    operator.axisGreaterThan(2, 0).whileTrue(comArmPivot);//pulley pivoting
+    operator.axisLessThan(2, 0).whileTrue(comArmPivot);
+
+
+    operator.axisGreaterThan(4, 0).whileTrue(comArmRetract);//arm retraction and extension
+    operator.axisLessThan(4,0).whileTrue(comArmExtend);
+
+    operator.button(1).whileTrue(null);//intake
+
   }
   private void configureDefaultCommands() {
     m_Drivetrain.setDefaultCommand(new DrivetrainDrive(m_Drivetrain, driver));

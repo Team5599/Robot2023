@@ -21,9 +21,9 @@ public class ArmExtend extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ArmExtend(Arm subsystem,CommandJoystick armExtendSpeed) {
+  public ArmExtend(Arm subsystem, CommandJoystick armExtendSpeed) {
     m_ArmSubsystem = subsystem;
-    this.armExtendSpeed = armExtendSpeed.getY();// this may need to be inverted
+    this.armExtendSpeed = armExtendSpeed.getRawAxis(2);// this may need to be inverted
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
   }
