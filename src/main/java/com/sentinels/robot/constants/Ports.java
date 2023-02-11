@@ -20,9 +20,9 @@ public interface Ports {
     
     public interface Arm {
         // Motors
-        int ARMLEFT = 0;
-        int ARMRIGHT = 1;
-        int ARMPULLEY = 2;
+        int ARMLEFT = 4;
+        int ARMRIGHT = 5;
+        int ARMPULLEY = 6;
     }
 
     public interface ArmIntake {

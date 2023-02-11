@@ -38,6 +38,7 @@ public class RobotContainer {
   private final ArmIntake m_ArmIntake = new ArmIntake();
   private final Drivetrain m_Drivetrain = new Drivetrain();
   private final Camera m_Camera = new Camera();
+  private final Limelight m_Limelight = new Limelight();
   private final IMU m_IMU = new IMU();
   
   // Input Devices
@@ -108,7 +109,7 @@ public class RobotContainer {
     operator.axisGreaterThan(4, 0).whileTrue(comArmRetract);//arm retraction and extension
     operator.axisLessThan(4,0).whileTrue(comArmExtend);
 
-    operator.button(1).whileTrue(null);//intake
+    //operator.button(1).whileTrue(null);//intake
 
   }
   private void configureDefaultCommands() {
