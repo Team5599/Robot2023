@@ -9,11 +9,13 @@
 package com.sentinels.robot.subsystems.arm;
 
 import com.sentinels.robot.constants.Ports;
-
+import com.sentinels.robot.util.RoboRIO;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
+
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -108,6 +110,7 @@ public class Arm extends SubsystemBase {
     ArmPulley.set(0);
   }
 
+  // POSITION METHODS
 
   public double getLeftPosition() {
     return encoderL.getPosition();
@@ -119,6 +122,8 @@ public class Arm extends SubsystemBase {
     return encoderPulley.getPosition();
   }
 
+  // VELOCITY METHODS (RPM)
+
   public double getLeftVelocity() {
     return encoderL.getVelocity();
   }
@@ -129,19 +134,32 @@ public class Arm extends SubsystemBase {
     return encoderPulley.getVelocity();
   }
 
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-  public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
+  // VOLTAGE METHODS (V)
+
+  public double getLeftVoltage() {
+    return (ArmL.get() * RoboRIO.getBatteryVoltage());
   }
+  public double getRightVoltage() {
+    return (ArmR.get() * RoboRIO.getBatteryVoltage());
+  }
+  public double getPulleyVoltage() {
+    return (ArmPulley.get() * RoboRIO.getBatteryVoltage());
+  }
+
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Arm Left Motor Voltage (V)", getLeftVoltage());
+    SmartDashboard.putNumber("Arm Right Motor Voltage (V)", getRightVoltage());
+    SmartDashboard.putNumber("Arm Pulley Motor Voltage (V)", getPulleyVoltage());
+
+    SmartDashboard.putNumber("Arm Left Motor Position (Rotations)", getLeftPosition());
+    SmartDashboard.putNumber("Arm Right Motor Position (Rotations)", getRightPosition());
+    SmartDashboard.putNumber("Arm Pulley Motor Position (Rotations)", getPulleyPosition());
+
+    SmartDashboard.putNumber("Arm Left Motor Velocity (RPM)", getLeftVelocity());
+    SmartDashboard.putNumber("Arm Right Motor Velocity (RPM)", getRightVelocity());
+    SmartDashboard.putNumber("Arm Pulley Motor Velocity (RPM)", getRightVelocity());
   }
 
   @Override

@@ -10,12 +10,15 @@ package com.sentinels.robot.subsystems.drive;
 
 import com.sentinels.robot.constants.Motors;
 import com.sentinels.robot.constants.Ports;
+import com.sentinels.robot.util.RoboRIO;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -33,6 +36,7 @@ public class Drivetrain extends SubsystemBase {
   // LEFT side motors
   private final CANSparkMax motorFL = new CANSparkMax(Ports.Drivetrain.FRONTLEFT, MotorType.kBrushless);
   private final CANSparkMax motorBL = new CANSparkMax(Ports.Drivetrain.BACKLEFT, MotorType.kBrushless);
+  
   // RIGHT side motors
   private final CANSparkMax motorFR = new CANSparkMax(Ports.Drivetrain.FRONTRIGHT, MotorType.kBrushless);
   private final CANSparkMax motorBR = new CANSparkMax(Ports.Drivetrain.BACKRIGHT, MotorType.kBrushless);
@@ -77,12 +81,16 @@ public class Drivetrain extends SubsystemBase {
     rightMotors.set(rightSpeed);
   }
 
+  // POSITION FUNCTIONS
+
   public double getLeftPosition() {
     return (encoderFL.getPosition() + encoderBL.getPosition() / 2.0);
   }
   public double getRightPosition() {
     return (encoderFR.getPosition() + encoderBR.getPosition() / 2.0);
   }
+
+  // VELOCITY FUNCTIONS
 
   public double getLeftVelocity() {
     return (encoderFL.getVelocity() + encoderBR.getVelocity() / 2.0);
@@ -91,33 +99,26 @@ public class Drivetrain extends SubsystemBase {
     return (encoderFR.getVelocity() + encoderBR.getVelocity() / 2.0);
   }
 
-  /**
-   * Example command factory method.
-   *
-   * @return a command
-   */
-  public CommandBase exampleMethodCommand() {
-    // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          /* one-time action goes here */
-        });
+  // VOLTAGE FUNCTIONS
+
+  public double getLeftVoltage() {
+    return (leftMotors.get() * RoboRIO.getBatteryVoltage());
+  }
+  public double getRightVoltage() {
+    return (rightMotors.get() * RoboRIO.getBatteryVoltage());
   }
 
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-  public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
-  }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Drivetrain Left Motors Voltage (V)", getLeftVoltage());
+    SmartDashboard.putNumber("Drivetrain Right Motors Voltage (V)", getRightVoltage());
+
+    SmartDashboard.putNumber("Drivetrain Left Motors Position (Rotations)", getLeftPosition());
+    SmartDashboard.putNumber("Drivetrain Right Motors Position (Rotations)", getRightPosition());
+
+    SmartDashboard.putNumber("Drivetrain Left Motors Velocity (RPM)", getLeftVelocity());
+    SmartDashboard.putNumber("Drivetrain Right Motors Velocity (RPM)", getRightVelocity());
   }
 
   @Override
