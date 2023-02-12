@@ -19,7 +19,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -43,6 +42,7 @@ public class Drivetrain extends SubsystemBase {
 
   private final MotorControllerGroup leftMotors = new MotorControllerGroup(motorFL, motorBL);
   private final MotorControllerGroup rightMotors = new MotorControllerGroup(motorFR, motorBR);
+
   private final DifferentialDrive drivetrain = new DifferentialDrive(leftMotors, rightMotors);
 
   // Built-in NEO hall sensor encoders
@@ -53,6 +53,18 @@ public class Drivetrain extends SubsystemBase {
 
 
   public Drivetrain() {
+    // Resetting motor settings to default factory settings
+    motorFL.restoreFactoryDefaults();
+    motorBL.restoreFactoryDefaults();
+    motorFR.restoreFactoryDefaults();
+    motorBR.restoreFactoryDefaults();
+
+    // Zeroing encoder positions
+    encoderFL.setPosition(0);
+    encoderBL.setPosition(0);
+    encoderFR.setPosition(0);
+    encoderBR.setPosition(0);
+
     // Invert the one of the sides so that they rotate synonymously in one direction
     leftMotors.setInverted(true);
   }

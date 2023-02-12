@@ -14,8 +14,8 @@ public interface Ports {
 
     public interface Controllers {
         // Controllers
-        int DRIVER = 1;
-        int OPERATOR = 2;
+        int DRIVER = 0;
+        int OPERATOR = 1;
     }
     
     public interface Arm {

@@ -49,8 +49,6 @@ public class RobotContainer {
   private final ArmExtend comArmExtend = new ArmExtend(m_Arm, operator);
   private final ArmRetract comArmRetract = new ArmRetract(m_Arm, operator);
   private final ArmPivot comArmPivot = new ArmPivot(m_Arm, operator);
-  
-  
   private final IntakeClose comIntakeClose = new IntakeClose(m_ArmIntake);
   private final IntakeOpen comIntakeOpen = new IntakeOpen(m_ArmIntake);
   //private final Autos comAutos;
