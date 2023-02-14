@@ -4,12 +4,19 @@
 
 package com.sentinels.robot.commands.autonomous.Driving.SeperateDrive;
 
+import com.sentinels.robot.subsystems.drive.Drivetrain;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutonTurn extends CommandBase {
   /** Creates a new AutonTurn. */
-  public AutonTurn() {
+  private final Drivetrain drivetrain;
+  //NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
+
+  public AutonTurn(Drivetrain drivetrain) {
+    this.drivetrain = drivetrain;
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(drivetrain);
   }
 
   // Called when the command is initially scheduled.

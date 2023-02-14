@@ -29,4 +29,15 @@ public class Limelight extends SubsystemBase {
         SmartDashboard.putNumber("LimelightY", y);
         SmartDashboard.putNumber("LimelightArea", area);
     }
+
+    public NetworkTableEntry getTx(){
+        return table.getEntry("tx");
+    }
+    public NetworkTableEntry getTa(){
+        return table.getEntry("ta");
+    }
+
+    public double getDistance(){
+        return 0.0;
+    }
 }

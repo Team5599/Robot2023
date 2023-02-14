@@ -6,6 +6,7 @@ package com.sentinels.robot.commands.autonomous.Driving;
 
 import com.sentinels.robot.subsystems.drive.Drivetrain;
 import com.sentinels.robot.subsystems.vision.Camera;
+import com.sentinels.robot.subsystems.vision.Limelight;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -13,24 +14,27 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class AutonCombinedDrive extends CommandBase {
   
   private final Drivetrain drivetrain;
-  private final Camera camera;
-  //private final PIDController directionController;
-  //private final PIDController distanceController;
+  private final Limelight limelight;
+  private final PIDController directionController;
+  private final PIDController distanceController;
 
-  public AutonCombinedDrive(Drivetrain drivetrain, Camera camera) {
+  public AutonCombinedDrive(Drivetrain drivetrain, Limelight limelight) {
     this.drivetrain = drivetrain;
-    this.camera = camera;
+    this.limelight = limelight;
+    distanceController = new PIDController(0, 0, 0);
     //distanceController.setSetpoint(); //this should be a distance that brings the robot near the gamepiece but not too close for intake
-    //distanceController = new PIDController(0, 0, 0)
 
+    directionController = new PIDController(0, 0, 0);
     //directionController.setSetpoint(0);
-    //directionController = new PIDController(0, 0, 0)
-    addRequirements(drivetrain, camera);
+    addRequirements(drivetrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    distanceController.reset();
+    directionController.reset();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
