@@ -5,23 +5,32 @@
 package com.sentinels.robot.commands.autonomous.Driving.SeperateDrive;
 
 import com.sentinels.robot.subsystems.drive.Drivetrain;
+import com.sentinels.robot.subsystems.vision.Limelight;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutonTurn extends CommandBase {
   /** Creates a new AutonTurn. */
   private final Drivetrain drivetrain;
+  private final Limelight limelight;
+
+  private final PIDController directionController;
   //NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
-  public AutonTurn(Drivetrain drivetrain) {
+  public AutonTurn(Drivetrain drivetrain, Limelight limelight) {
     this.drivetrain = drivetrain;
-    // Use addRequirements() here to declare subsystem dependencies.
+    this.limelight = limelight;
+    directionController = new PIDController(0, 0, 0);
     addRequirements(drivetrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    directionController.reset();
+    
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override

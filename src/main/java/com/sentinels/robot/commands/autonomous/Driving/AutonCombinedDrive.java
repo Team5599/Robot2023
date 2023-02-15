@@ -18,6 +18,8 @@ public class AutonCombinedDrive extends CommandBase {
   private final PIDController directionController;
   private final PIDController distanceController;
 
+  public double distance;
+
   public AutonCombinedDrive(Drivetrain drivetrain, Limelight limelight) {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
@@ -34,6 +36,9 @@ public class AutonCombinedDrive extends CommandBase {
   public void initialize() {
     distanceController.reset();
     directionController.reset();
+    distance = limelight.getDistance();
+    distanceController.setSetpoint(distance-1);
+    distanceController.setSetpoint(0);//stop somewhere right before the gamepiece for intake
   }
 
   // Called every time the scheduler runs while the command is scheduled.
