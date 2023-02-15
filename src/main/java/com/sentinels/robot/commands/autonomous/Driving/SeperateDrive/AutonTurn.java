@@ -21,7 +21,7 @@ public class AutonTurn extends CommandBase {
   public AutonTurn(Drivetrain drivetrain, Limelight limelight) {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
-    directionController = new PIDController(0, 0, 0);
+    directionController = new PIDController(0.1, 0.1, 0.1);
     addRequirements(drivetrain);
   }
 
@@ -31,10 +31,11 @@ public class AutonTurn extends CommandBase {
     directionController.reset();
     
   }
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    
+  }
 
   // Called once the command ends or is interrupted.
   @Override

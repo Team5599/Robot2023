@@ -31,6 +31,14 @@ public class AutonDriveDistance extends CommandBase {
     distanceController = new PIDController(2,0.4, 0.4);
     addRequirements(drivetrain);
   }
+  // overload for setpoint and distance measurement
+  public AutonDriveDistance(Drivetrain drivetrain, Limelight limelight, double setpoint) {
+    this.drivetrain = drivetrain;
+    this.limelight = limelight;
+    distanceController = new PIDController(2,0.4, 0.4);
+    distanceController.setSetpoint(setpoint);
+    addRequirements(drivetrain);
+  }
   public double getSetpoint(){
     return limelight.getDistance();
   }
@@ -39,14 +47,18 @@ public class AutonDriveDistance extends CommandBase {
   @Override
   public void initialize() {
     distanceController.reset();
-    distance = limelight.getDistance();
-    distanceController.setSetpoint(distance-1);//stop somewhere right before the gamepiece for intake
+    System.out.println(distanceController.getSetpoint());
+    if (!(distanceController.getSetpoint() == 0.0)){
+      distance = limelight.getDistance();
+      distanceController.setSetpoint(distance-1);//stop somewhere right before the gamepiece for intake, arbitrary for now
+    }
+    
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //distanceController.ca
+    drivetrain.tankDrive(distanceController.calculate(distance), distanceController.calculate(distance));
   }
 
   // Called once the command ends or is interrupted.
