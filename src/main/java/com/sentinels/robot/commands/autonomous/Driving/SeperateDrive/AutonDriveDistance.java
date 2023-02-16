@@ -19,7 +19,7 @@ public class AutonDriveDistance extends CommandBase {
 
   private final PIDController distanceController;
 
-  public double distance;
+  public double setpoint;
   //Links for tmrw
   // https://docs.limelightvision.io/en/latest/cs_aimandrange.html
   // https://docs.limelightvision.io/en/latest/getting_started.html
@@ -49,8 +49,9 @@ public class AutonDriveDistance extends CommandBase {
     distanceController.reset();
     System.out.println(distanceController.getSetpoint());
     if (!(distanceController.getSetpoint() == 0.0)){
-      distance = limelight.getDistance();
-      distanceController.setSetpoint(distance-1);//stop somewhere right before the gamepiece for intake, arbitrary for now
+      double distance = limelight.getDistance();
+      setpoint = distance-1;
+    distanceController.setSetpoint(setpoint);//stop somewhere right before the gamepiece for intake, arbitrary for now
     }
     
   }
@@ -58,7 +59,10 @@ public class AutonDriveDistance extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.tankDrive(distanceController.calculate(distance), distanceController.calculate(distance));
+    drivetrain.tankDrive(
+      distanceController.calculate(drivetrain.getLeftPosition(),setpoint), 
+      distanceController.calculate(drivetrain.getRightPosition(),setpoint)
+    );
   }
 
   // Called once the command ends or is interrupted.
