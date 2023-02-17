@@ -10,8 +10,9 @@ package com.sentinels.robot.subsystems.odometry;
 
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16448_IMU.IMUAxis;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-public class IMU {
+public class IMU extends SubsystemBase{
 
     private final ADIS16470_IMU imu = new ADIS16470_IMU();
     
