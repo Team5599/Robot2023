@@ -36,7 +36,7 @@ public class AutonCombinedDrive extends CommandBase {
   public void initialize() {
     distanceController.reset();
     directionController.reset();
-    distance = limelight.getDistance();
+    //distance = limelight.getDistance();
     distanceController.setSetpoint(distance-1);
     distanceController.setSetpoint(0);//stop somewhere right before the gamepiece for intake
   }
