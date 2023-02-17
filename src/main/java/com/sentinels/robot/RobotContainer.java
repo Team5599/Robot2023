@@ -9,9 +9,7 @@ import com.sentinels.robot.constants.Ports;
 import com.sentinels.robot.commands.armmech.arm.*;
 import com.sentinels.robot.commands.armmech.intake.*;
 import com.sentinels.robot.commands.autonomous.*;
-import com.sentinels.robot.commands.autonomous.Driving.AutonCombinedDrive;
 import com.sentinels.robot.commands.autonomous.Driving.SeperateDrive.AutonDriveDistance;
-import com.sentinels.robot.commands.autonomous.Driving.SeperateDrive.AutonTurn;
 import com.sentinels.robot.commands.drivetrain.*;
 
 import com.sentinels.robot.subsystems.arm.*;
@@ -112,7 +110,8 @@ public class RobotContainer {
     operator.axisGreaterThan(4, 0).whileTrue(comArmRetract);//arm retraction and extension
     operator.axisLessThan(4,0).whileTrue(comArmExtend);
 
-    //operator.button(1).whileTrue(null);//intake
+    //operator.button(5).whileTrue(null);// intake command calls
+    //operator.button(4).whileTrue(null);//
 
   }
   private void configureDefaultCommands() {
@@ -139,6 +138,10 @@ public class RobotContainer {
      */
 
     //return Autos.autonomous(null);
-    return new AutonDriveDistance(m_Drivetrain, m_Limelight, 1);
+
+    return new SequentialCommandGroup(
+      new AutonDriveDistance(m_Drivetrain, m_Limelight, 1)
+      //new Auton
+    );
   }
 }

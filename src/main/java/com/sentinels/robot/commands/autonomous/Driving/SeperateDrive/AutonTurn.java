@@ -29,21 +29,26 @@ public class AutonTurn extends CommandBase {
   @Override
   public void initialize() {
     directionController.reset();
-    
+    //double angle = limelight.getTx(); //needs a way to return Tx as a double instead of newtworktableentry
   }
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
+    drivetrain.tankDrive(directionController.calculate(/*current angle in here */0), /*current angle in here */0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    drivetrain.driveStop();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(directionController.atSetpoint()){
+      return true;
+    }
     return false;
   }
 }
