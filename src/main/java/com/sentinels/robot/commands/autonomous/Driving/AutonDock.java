@@ -4,12 +4,23 @@
 
 package com.sentinels.robot.commands.autonomous.Driving;
 
+import com.sentinels.robot.subsystems.drive.Drivetrain;
+import com.sentinels.robot.subsystems.odometry.IMU;
+import com.sentinels.robot.subsystems.vision.Limelight;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutonDock extends CommandBase {
+  private final Drivetrain drivetrain;
+  private final Limelight limelight;
+  private final IMU imu;
+
   /** Creates a new AutonDock. */
-  public AutonDock() {
-    // Use addRequirements() here to declare subsystem dependencies.
+  public AutonDock(Drivetrain drivetrain, Limelight limelight, IMU imu) {
+    this.drivetrain = drivetrain;
+    this.limelight = limelight;
+    this.imu = imu;
+    addRequirements(drivetrain);// might need the IMU in here
   }
 
   // Called when the command is initially scheduled.

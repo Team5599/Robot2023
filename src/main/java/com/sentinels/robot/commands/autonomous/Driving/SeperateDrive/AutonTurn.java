@@ -5,23 +5,28 @@
 package com.sentinels.robot.commands.autonomous.Driving.SeperateDrive;
 
 import com.sentinels.robot.subsystems.drive.Drivetrain;
+import com.sentinels.robot.subsystems.odometry.IMU;
 import com.sentinels.robot.subsystems.vision.Limelight;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutonTurn extends CommandBase {
   /** Creates a new AutonTurn. */
   private final Drivetrain drivetrain;
   private final Limelight limelight;
+  //private final IMU imu;
 
   private final PIDController directionController;
+  double SetAngle;// the angle from us to the game piece
   //NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
   public AutonTurn(Drivetrain drivetrain, Limelight limelight) {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
-    directionController = new PIDController(0.1, 0.1, 0.1);
+    //this.imu = imu;
+    directionController = new PIDController(0.3, 0.1, 0.1);
     addRequirements(drivetrain);
   }
 
@@ -29,18 +34,24 @@ public class AutonTurn extends CommandBase {
   @Override
   public void initialize() {
     directionController.reset();
-    //double angle = limelight.getTx(); //needs a way to return Tx as a double instead of newtworktableentry
+    SetAngle = limelight.getTx(); 
+    directionController.setSetpoint(SetAngle);
+    
+    //double radiusW = 3.0; //radius of the wheel
+    //double halfWidthR = 13.5;//half of width of the robot
   }
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.tankDrive(directionController.calculate(/*current angle in here */0), /*current angle in here */0);
+    double motorSpeed = directionController.calculate(limelight.getTx());
+    drivetrain.tankDrive(motorSpeed, -motorSpeed); //does this give you the speed its going?
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     drivetrain.driveStop();
+    //andThen(new AutonDriveDistance(drivetrain, limelight));
   }
 
   // Returns true when the command should end.
