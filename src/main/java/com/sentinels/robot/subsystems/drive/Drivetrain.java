@@ -108,7 +108,16 @@ public class Drivetrain extends SubsystemBase {
     return (encoderFL.getVelocity() + encoderBR.getVelocity() / 2.0);
   }
   public double getRightVelocity() {
-    return (encoderFR.getVelocity() + encoderBR.getVelocity() / 2.0);
+    System.out.println(encoderFR.getVelocity());
+    System.out.println(encoderBR.getVelocity());
+    return -(encoderFR.getVelocity() + encoderBR.getVelocity() / 2.0);
+  }
+
+  public double getRightFrontVel() {
+    return -(encoderFR.getVelocity());
+  }
+  public double getRightBackVel() {
+    return -(encoderBR.getVelocity());
   }
 
   // VOLTAGE FUNCTIONS
@@ -131,6 +140,8 @@ public class Drivetrain extends SubsystemBase {
 
     SmartDashboard.putNumber("Drivetrain Left Motors Velocity (RPM)", getLeftVelocity());
     SmartDashboard.putNumber("Drivetrain Right Motors Velocity (RPM)", getRightVelocity());
+    SmartDashboard.putNumber("Drivetrain Right Front Motor Vel", getRightFrontVel());
+    SmartDashboard.putNumber("Drivetrain Right Back Motor Vel", getRightBackVel());
   }
 
   @Override
