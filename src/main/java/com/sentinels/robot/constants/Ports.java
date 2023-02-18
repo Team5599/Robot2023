@@ -6,7 +6,28 @@
     Copyright (c) 2023 The Sentinels. All rights reserved.
 ***************************************************************/
 
-// Port numbers for controllers, subsystems/mechanisms, and sensors are defined in this file.
+// Port numbers for controllers/gamepads, subsystem/mechanism motor controllers, and sensors are defined in this file.
+
+/**
+ * ROBOT MOTOR CONTROL LAYOUT
+ * 
+ *  - D = Drivetrain Motors / Motor Controllers
+ *  - A = Arm Motors / Motor Controllers
+ *  - I = Intake Motors / Motor Controllers
+ * 
+ *       ___   ___   ___   ___
+ *      | 1 | | 2 | | 3 | | 4 |
+ *      |___| |___| |___| |___|
+ *        D     D     A     I
+ *            __________
+ *  BACK     |   PDP    |        FRONT >>>>
+ *           |__________|
+ *                                 ________
+ *       ___   ___   ___   ___    |        |
+ *      | 5 | | 6 | | 7 | | 8 |   |roboRIO |
+ *      |___| |___| |___| |___|   |________|
+ *        D     D     A     P
+ */
 
 package com.sentinels.robot.constants;
 
