@@ -1,6 +1,10 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+/***************************************************************
+                The Sentinels - FRC Team 5599
+        Benjamin N. Cardozo High School Robotics Team
+
+    This work is licensed under the terms of the MIT license.
+    Copyright (c) 2023 The Sentinels. All rights reserved.
+***************************************************************/
 
 package com.sentinels.robot;
 
@@ -18,115 +22,81 @@ import com.sentinels.robot.subsystems.drive.*;
 import com.sentinels.robot.subsystems.odometry.*;
 import com.sentinels.robot.subsystems.vision.*;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-/**
- * This class is where the bulk of the robot should be declared. Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
- * subsystems, commands, and trigger mappings) should be declared here.
- */
+
 public class RobotContainer {
   // The robot's subsystems and commands are defined here.
 
   // Subsystems
-  private final Arm m_Arm = new Arm();
-  private final ArmIntake m_ArmIntake = new ArmIntake();
-  private final Drivetrain m_Drivetrain = new Drivetrain();
-  private final Camera m_Camera = new Camera();
-  private final Limelight m_Limelight = new Limelight();
-  private final IMU m_IMU = new IMU();
+  private final Arm arm = new Arm();
+  private final ArmIntake armIntake = new ArmIntake();
+  private final Drivetrain drivetrain = new Drivetrain();
+  private final Camera camera = new Camera();
+  private final Limelight limelight = new Limelight();
+  private final IMU imu = new IMU();
   
   // Input Devices
   private final CommandXboxController driver = new CommandXboxController(Ports.Controllers.DRIVER);
   private final CommandJoystick operator = new CommandJoystick(Ports.Controllers.OPERATOR);
 
-  // Commands
-  private final ArmExtend comArmExtend = new ArmExtend(m_Arm, operator);
-  private final ArmRetract comArmRetract = new ArmRetract(m_Arm, operator);
-  private final ArmPivot comArmPivot = new ArmPivot(m_Arm, operator);
-  
-  
-  private final IntakeClose comIntakeClose = new IntakeClose(m_ArmIntake);
-  private final IntakeOpen comIntakeOpen = new IntakeOpen(m_ArmIntake);
-  //private final Autos comAutos;
-  private final DrivetrainDrive comDrivetrainDrive = new DrivetrainDrive(m_Drivetrain, driver); // now it also needs the controller
-  private final DrivetrainStop comDrivetrainStop = new DrivetrainStop(m_Drivetrain);
-  
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
+  // Autonomous
+  private static SendableChooser<Command> autonChooser = new SendableChooser<>();
+
+
   public RobotContainer() {
-    // Configure the trigger bindings
     configureButtonBindings();
     configureDefaultCommands();
+    configureAutonCommands(); 
+
+    DriverStation.silenceJoystickConnectionWarning(true);
   }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
+  // BUTTON BINDINGS
+
   private void configureButtonBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    /*
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
-    */
+    configureDriverBindings();
+    configureOperatorBindings();
+  }
 
-    // Placeholder triggers, delete if button not needed/used in the future
-    //driver.a().whileTrue(null);
-    driver.b().whileTrue(
-      new DrivetrainStop(m_Drivetrain)
-    );
-    // the drivers stick inputs are don in the default commands method, and there is not point for any other button\
-    
+  private void configureDriverBindings() {
+    driver.b().whileTrue(new DrivetrainStop(drivetrain));
+  }
 
+  private void configureOperatorBindings() {
+    operator.axisGreaterThan(2, 0).whileTrue(new ArmPivot(arm, operator));//pulley pivoting
+    operator.axisLessThan(2, 0).whileTrue(new ArmPivot(arm, operator));
 
-    //driver.x().whileTrue(null);
-    //driver.y().whileTrue(null);
-    
-    //driver.leftStick().whileTrue(null/*new DrivetrainDrive(m_Drivetrain, driver)*/);
-    //driver.rightStick().whileTrue(null/*new DrivetrainDrive(m_Drivetrain, driver)null*/);
+    operator.axisGreaterThan(4, 0).whileTrue(new ArmExtend(arm, operator));//arm retraction and extension
+    operator.axisLessThan(4,0).whileTrue(new ArmExtend(arm, operator));
 
-    //driver.leftTrigger().whileTrue(null);
-    //driver.rightTrigger().whileTrue(null);
-    //driver.back().whileTrue(null); // select
-    //driver.start().whileTrue(null); // start
+    operator.button(1).whileTrue(new IntakeOpen(armIntake));
+  }
 
+  // COMMAND DEFAULTS
 
-    //operator 
-    operator.axisGreaterThan(2, 0).whileTrue(comArmPivot);//pulley pivoting
-    operator.axisLessThan(2, 0).whileTrue(comArmPivot);
+  private void configureDefaultCommands() {
+    drivetrain.setDefaultCommand(new DrivetrainDrive(drivetrain, driver));
+  }
 
-
-    operator.axisGreaterThan(4, 0).whileTrue(comArmRetract);//arm retraction and extension
-    operator.axisLessThan(4,0).whileTrue(comArmExtend);
-
+ 
     //operator.button(5).whileTrue(null);// intake command calls
     //operator.button(4).whileTrue(null);//
 
-  }
-  private void configureDefaultCommands() {
-    m_Drivetrain.setDefaultCommand(new DrivetrainDrive(m_Drivetrain, driver));
+  private void configureAutonCommands() {
+    autonChooser.addOption("Disabled", null);
+
+
+    SmartDashboard.putData("Autonomous", autonChooser);
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   * @return the command to run in autonomous
-   */
   public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-
-    //new SequentialCommandGroup(null);
     /*
      * the sequential command group will have a list of all the auto commands we will need
      * 
@@ -146,5 +116,8 @@ public class RobotContainer {
       //new AutonDriveDistance(m_Drivetrain, m_Limelight)
       //new Auton
     );
+
+     return autonChooser.getSelected();
+
   }
 }

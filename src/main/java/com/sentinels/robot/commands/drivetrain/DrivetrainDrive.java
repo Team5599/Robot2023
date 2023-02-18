@@ -38,6 +38,7 @@ public class DrivetrainDrive extends CommandBase {
     driverLeftY = driver.getLeftY();
     driverRightY = driver.getRightY();
 
+    // Make both input values negative due to Y-axis up being negative
     m_Drivetrain.tankDrive(driverLeftY, driverRightY);
   }
 

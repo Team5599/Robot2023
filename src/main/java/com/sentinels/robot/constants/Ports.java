@@ -14,28 +14,30 @@ public interface Ports {
 
     public interface Controllers {
         // Controllers
-        int DRIVER = 1;
-        int OPERATOR = 2;
+        int DRIVER = 0;
+        int OPERATOR = 1;
     }
     
     public interface Arm {
         // Motors
-        int ARMLEFT = 4;
-        int ARMRIGHT = 5;
-        int ARMPULLEY = 6;
+        int ARMLEFT = 7;
+        int ARMRIGHT = 3;
+        int ARMPULLEY = 8;
     }
 
     public interface ArmIntake {
         // Pneumatics
-        int PNEUMATICS = 0; // temp var name until pneumatics are known
+        int PNEUMATICS = 10; // temp var name until pneumatics are known
+        // Motors
+        int INTAKEPIVOT = 4;
     }
 
     public interface Drivetrain {
         // Motors
-        int FRONTLEFT = 0;
-        int BACKLEFT = 1;
+        int FRONTLEFT = 5;
+        int BACKLEFT = 6;
 
-        int FRONTRIGHT = 2;
-        int BACKRIGHT = 3;
+        int FRONTRIGHT = 1;
+        int BACKRIGHT = 2;
     }
 }
