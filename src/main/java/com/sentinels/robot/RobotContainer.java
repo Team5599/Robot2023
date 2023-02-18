@@ -13,6 +13,8 @@ import com.sentinels.robot.constants.Ports;
 import com.sentinels.robot.commands.armmech.arm.*;
 import com.sentinels.robot.commands.armmech.intake.*;
 import com.sentinels.robot.commands.autonomous.*;
+import com.sentinels.robot.commands.autonomous.Driving.SeperateDrive.AutonDriveDistance;
+import com.sentinels.robot.commands.autonomous.Driving.SeperateDrive.AutonTurn;
 import com.sentinels.robot.commands.drivetrain.*;
 
 import com.sentinels.robot.subsystems.arm.*;
@@ -24,6 +26,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -83,8 +86,13 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(new DrivetrainDrive(drivetrain, driver));
   }
 
+ 
+    //operator.button(5).whileTrue(null);// intake command calls
+    //operator.button(4).whileTrue(null);//
+
   private void configureAutonCommands() {
     autonChooser.addOption("Disabled", null);
+
 
     SmartDashboard.putData("Autonomous", autonChooser);
   }
@@ -100,6 +108,17 @@ public class RobotContainer {
      * DrivePID(this time drive to the charging dock)
      * BalanceAUTO(using the IMU, stay engaged on the charging dock while it tilts)
      */
-     return autonChooser.getSelected();
+
+    //return Autos.autonomous(null);
+
+    return new SequentialCommandGroup(
+      new AutonDriveDistance(drivetrain, limelight, 1 , true)
+      //new AutonTurn(m_Drivetrain, m_Limelight, m_IMU),
+      //new AutonDriveDistance(m_Drivetrain, m_Limelight)
+      //new Auton
+    );
+
+    //return autonChooser.getSelected();
+
   }
 }
