@@ -18,7 +18,7 @@ public class DrivetrainDrive extends CommandBase {
 
   double driverLeftY;
   double driverRightY;
-  
+
   public DrivetrainDrive(Drivetrain drivetrain, CommandXboxController controller) {
     this.m_Drivetrain = drivetrain;
     this.driver = controller;
@@ -39,7 +39,7 @@ public class DrivetrainDrive extends CommandBase {
     driverRightY = driver.getRightY();
 
     // Make both input values negative due to Y-axis up being negative
-    m_Drivetrain.tankDrive(driverLeftY, driverRightY);
+    m_Drivetrain.tankDrive(0.8 * driverLeftY,0.8 * driverRightY);
   }
 
   // Called once the command ends or is interrupted.
