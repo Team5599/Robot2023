@@ -108,7 +108,7 @@ public class Drivetrain extends SubsystemBase {
   // VELOCITY FUNCTIONS
 
   public double getLeftVelocity() {
-    return (encoderFL.getVelocity() + encoderBR.getVelocity() / 2.0);
+    return (encoderFL.getVelocity() + encoderBL.getVelocity() / 2.0);
   }
   public double getRightVelocity() {
     System.out.println(encoderFR.getVelocity());
