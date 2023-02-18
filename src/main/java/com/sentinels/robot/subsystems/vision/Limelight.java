@@ -13,9 +13,7 @@ public class Limelight extends SubsystemBase {
     NetworkTableEntry ty = table.getEntry("ty");
     NetworkTableEntry ta = table.getEntry("ta");
 
-    public Limelight() {
-        NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
-    }
+    public Limelight() { }
 
     @Override
     public void periodic() {
@@ -31,19 +29,16 @@ public class Limelight extends SubsystemBase {
     }
     
     // these will return -191 if there is no game piece present
-    public double getTx(){//gets xoffset angle
+    public double getTx() {//gets xoffset angle
         return table.getEntry("tx").getDouble(200);// 200 since it is not an angle that can be returned
     }
 
-    public double getTa(){
+    public double getTa() {
         return table.getEntry("ta").getDouble(-200);
     }
 
-    // public double getDistance(){       
-    //     return 0.0;
-    // }
     public double ParllaxDistance(double angle1, double angle2){
-        double distance = Math.sin(angle1)/Math.sin(angle2 - angle1);
+        double distance = Math.sin(angle1) / Math.sin(angle2 - angle1);
         return distance;
     }
 }

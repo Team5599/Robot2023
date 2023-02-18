@@ -22,7 +22,7 @@ public class AutonTurn extends CommandBase {
   double SetAngle;// the angle from us to the game piece
   //NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
 
-  public AutonTurn(Drivetrain drivetrain, Limelight limelight) {
+  public AutonTurn(Drivetrain drivetrain, Limelight limelight, IMU imu) {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
     //this.imu = imu;

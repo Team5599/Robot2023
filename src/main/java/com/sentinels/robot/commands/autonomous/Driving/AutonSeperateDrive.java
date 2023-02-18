@@ -7,6 +7,7 @@ package com.sentinels.robot.commands.autonomous.Driving;
 import com.sentinels.robot.commands.autonomous.Driving.SeperateDrive.AutonDriveDistance;
 import com.sentinels.robot.commands.autonomous.Driving.SeperateDrive.AutonTurn;
 import com.sentinels.robot.subsystems.drive.Drivetrain;
+import com.sentinels.robot.subsystems.odometry.IMU;
 import com.sentinels.robot.subsystems.vision.Limelight;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -17,11 +18,18 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 //Seperate Drive is where it turns and then drives a given distance forward
 
+
+// this may get deleted
+
 public class AutonSeperateDrive extends SequentialCommandGroup {
   /** Creates a new AutonSeperateDrive. */
-  public AutonSeperateDrive(Drivetrain drivetrain, Limelight limelight, double setpoint, boolean bool) {
+  public AutonSeperateDrive(Drivetrain drivetrain, Limelight limelight, IMU imu, double setpoint, boolean bool) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new AutonDriveDistance(drivetrain, limelight, setpoint, bool));
+    addCommands(
+      new AutonDriveDistance(drivetrain, limelight, setpoint, bool),
+      new AutonTurn(drivetrain, limelight, imu),
+      new AutonDriveDistance(drivetrain, limelight)
+    );
   }
 }

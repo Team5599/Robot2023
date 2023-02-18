@@ -49,6 +49,7 @@ public class RobotContainer {
 
   // Autonomous
   private static SendableChooser<Command> autonChooser = new SendableChooser<>();
+  public static double distance;
 
 
   public RobotContainer() {
@@ -85,15 +86,11 @@ public class RobotContainer {
   private void configureDefaultCommands() {
     drivetrain.setDefaultCommand(new DrivetrainDrive(drivetrain, driver));
   }
-
- 
     //operator.button(5).whileTrue(null);// intake command calls
     //operator.button(4).whileTrue(null);//
 
   private void configureAutonCommands() {
     autonChooser.addOption("Disabled", null);
-
-
     SmartDashboard.putData("Autonomous", autonChooser);
   }
 
@@ -112,9 +109,9 @@ public class RobotContainer {
     //return Autos.autonomous(null);
 
     return new SequentialCommandGroup(
-      new AutonDriveDistance(drivetrain, limelight, 1 , true)
-      //new AutonTurn(m_Drivetrain, m_Limelight, m_IMU),
-      //new AutonDriveDistance(m_Drivetrain, m_Limelight)
+      new AutonDriveDistance(drivetrain, limelight, 1 , true),
+      new AutonTurn(drivetrain, limelight, imu),
+      new AutonDriveDistance(drivetrain, limelight)
       //new Auton
     );
 

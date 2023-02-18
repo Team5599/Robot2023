@@ -4,8 +4,7 @@
 
 package com.sentinels.robot.commands.autonomous.Driving.SeperateDrive;
 
-import javax.swing.text.StyledEditorKit.BoldAction;
-
+import com.sentinels.robot.RobotContainer;
 import com.sentinels.robot.subsystems.drive.Drivetrain;
 import com.sentinels.robot.subsystems.vision.Camera;
 import com.sentinels.robot.subsystems.vision.Limelight;
@@ -27,7 +26,7 @@ public class AutonDriveDistance extends CommandBase {
   public double angle1;
   public double angle2;
 
-  public static double distance;// distance to gamepiece
+  public double distance;// distance to gamepiece
   //Links for tmrw
   // https://docs.limelightvision.io/en/latest/cs_aimandrange.html
   // https://docs.limelightvision.io/en/latest/getting_started.html
@@ -59,10 +58,7 @@ public class AutonDriveDistance extends CommandBase {
   public void initialize() {
     distanceController.reset();
     if (parallaxEnable == false){ 
-      
-
-      
-      setpoint = distance-1;
+      setpoint = RobotContainer.distance-1;
     }
     else{
       angle1 = limelight.getTx();
@@ -85,9 +81,8 @@ public class AutonDriveDistance extends CommandBase {
     drivetrain.driveStop();
     if(parallaxEnable == true){
       angle2 = limelight.getTx();
-      distance = limelight.ParllaxDistance(angle1, angle2);
-      //might use andThen() to send the distance to another constructor 
-      andThen(new AutonTurn(drivetrain, limelight));
+      RobotContainer.distance = limelight.ParllaxDistance(angle1, angle2);
+      
     }
     
   }
