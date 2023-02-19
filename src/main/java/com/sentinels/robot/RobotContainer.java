@@ -19,6 +19,7 @@ import com.sentinels.robot.commands.drivetrain.*;
 
 import com.sentinels.robot.subsystems.arm.*;
 import com.sentinels.robot.subsystems.drive.*;
+import com.sentinels.robot.subsystems.intake.ArmIntake;
 import com.sentinels.robot.subsystems.odometry.*;
 import com.sentinels.robot.subsystems.vision.*;
 

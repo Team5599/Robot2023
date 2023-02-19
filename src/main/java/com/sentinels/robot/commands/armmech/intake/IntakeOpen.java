@@ -4,8 +4,9 @@
 
 package com.sentinels.robot.commands.armmech.intake;
 
+import com.sentinels.robot.subsystems.intake.ArmIntake;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import com.sentinels.robot.subsystems.arm.ArmIntake;
 
 /** An example command that uses an example subsystem. */
 public class IntakeOpen extends CommandBase {
