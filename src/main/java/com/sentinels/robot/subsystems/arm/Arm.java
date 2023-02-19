@@ -63,39 +63,26 @@ public class Arm extends SubsystemBase {
   // motor stall is detected by the output current of a motor
   // since both motors will be rotating together, it is assumed that they will also stall together
   // so they use the same method to check if they are stalling
-  
-  // the left motors currents is the first in the index, the right motor is next in the index
-  public double[] getMotorCurrents(){
-    double[] motorCurrents = { ArmL.getOutputCurrent(), ArmR.getOutputCurrent() };
-    return motorCurrents;
-  }
-  public double[] getMotorVelocities(){
-    double[] motorVelocities = {encoderL.getVelocity(), encoderR.getVelocity() };
-    return motorVelocities;
-  }
 
   //may want to add isStalling as an interrupt to its commands
+  /*
   public boolean isStalling() {
     boolean currentL = getMotorCurrents()[0] > 90; // according to the revrobotics neo manual, the stall current is at 105 amps
     boolean currentR = getMotorCurrents()[1] > 90;
     //neo motors are rated to reach a max rpm of 5676 and it has a Kv 473(rpm * Kv = max rpm)
     //we need to find the expected speed with the load of the arm and then check if the motor velocity is much lower
     return currentL && currentR;
-  }
+  }*/
 
   public void setArmSpeed(double speed) {
     ArmMotors.set(speed);
   }
   public void ExtendArm(double armExtendSpeed) {
-    if (isStalling()) {
-      return;
-    }
+    //if (isStalling()) { return; }
     ArmMotors.set(armExtendSpeed);
   }
   public void RetractArm(double armRetractSpeed) {
-    if (isStalling()) {
-      return;
-    }
+    //if (isStalling()) { return; }
     ArmMotors.set(armRetractSpeed);
   }
   public void StopArm() {
