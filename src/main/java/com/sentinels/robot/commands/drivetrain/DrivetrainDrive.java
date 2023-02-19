@@ -5,6 +5,7 @@
 package com.sentinels.robot.commands.drivetrain;
 
 import com.sentinels.robot.subsystems.drive.Drivetrain;
+import com.sentinels.robot.constants.Settings;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -38,8 +39,7 @@ public class DrivetrainDrive extends CommandBase {
     driverLeftY = driver.getLeftY();
     driverRightY = driver.getRightY();
 
-    // Make both input values negative due to Y-axis up being negative
-    m_Drivetrain.tankDrive(0.8 * driverLeftY,0.8 * driverRightY);
+    m_Drivetrain.tankDrive(driverLeftY * Settings.Drivetrain.DRIVESPEEDCAP, driverRightY * Settings.Drivetrain.DRIVESPEEDCAP);
   }
 
   // Called once the command ends or is interrupted.

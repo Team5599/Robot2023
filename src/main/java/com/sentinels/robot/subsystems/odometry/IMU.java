@@ -51,7 +51,7 @@ public class IMU extends SubsystemBase {
         newAngle = angle;
         oldAngle = newAngle;
 
-        return newAngle - oldAngle;
+        return (newAngle - oldAngle);
     }
 }
    

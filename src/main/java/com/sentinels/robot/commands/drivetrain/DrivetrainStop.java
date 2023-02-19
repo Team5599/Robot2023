@@ -1,6 +1,10 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+/***************************************************************
+                The Sentinels - FRC Team 5599
+        Benjamin N. Cardozo High School Robotics Team
+
+    This work is licensed under the terms of the MIT license.
+    Copyright (c) 2023 The Sentinels. All rights reserved.
+***************************************************************/
 
 package com.sentinels.robot.commands.drivetrain;
 

@@ -14,6 +14,7 @@
  *  - D = Drivetrain Motors / Motor Controllers
  *  - A = Arm Motors / Motor Controllers
  *  - I = Intake Motors / Motor Controllers
+ *  - P = Pulley Motors / Motor Controllers
  * 
  *       ___   ___   ___   ___
  *      | 1 | | 2 | | 3 | | 4 |
