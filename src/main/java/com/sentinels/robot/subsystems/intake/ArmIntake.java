@@ -19,13 +19,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ArmIntake extends SubsystemBase {
 
-  private final CANSparkMax motorPivot = new CANSparkMax(Ports.ArmIntake.INTAKEPIVOT, null);
+  //private final CANSparkMax motorPivot = new CANSparkMax(Ports.ArmIntake.INTAKEPIVOT, null);
     
   public ArmIntake() {
 
   }
 
-    /**
+  /**
    * Example command factory method.
    *
    * @return a command
