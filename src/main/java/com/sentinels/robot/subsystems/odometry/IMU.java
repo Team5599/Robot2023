@@ -43,7 +43,6 @@ public class IMU extends SubsystemBase {
 
     @Override
     public void periodic() {
-        System.out.println(getDeltaAngle(getPitch()));
         SmartDashboard.putNumber("Change in IMU pitch: ", getDeltaAngle(getPitch()));
     }
 
