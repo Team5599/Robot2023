@@ -2,10 +2,25 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
+      "/LiveWindow/Limelight": "Subsystem",
+      "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
+      "/LiveWindow/Ungrouped/DigitalInput[27]": "Digital Input",
+      "/LiveWindow/Ungrouped/MotorControllerGroup[1]": "Motor Controller",
+      "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
+      "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/SmartDashboard/Autonomous": "String Chooser",
-      "/SmartDashboard/Field": "Field2d"
+      "/SmartDashboard/Control Scheme": "String Chooser",
+      "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/SendableChooser[1]": "String Chooser"
     },
     "windows": {
+      "/SmartDashboard/Control Scheme": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Field": {
         "Robot": {
           "arrowColor": [
@@ -36,7 +51,10 @@
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
-        "Field": {
+        "Control Scheme": {
+          "open": true
+        },
+        "SendableChooser[1]": {
           "open": true
         },
         "open": true

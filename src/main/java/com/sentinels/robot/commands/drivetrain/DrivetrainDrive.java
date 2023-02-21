@@ -15,17 +15,20 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 public class DrivetrainDrive extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
-  private final Drivetrain m_Drivetrain;
+  private final Drivetrain drivetrain;
   private final CommandXboxController driver;
 
-  double driverLeftY;
-  double driverRightY;
+  private double driverLeftY;
+  private double driverRightY;
+  private double driverLeftX;
+  private Boolean arcadeDriveActive;
 
   private final SlewRateLimiter limiter = new SlewRateLimiter(0.4);
 
-  public DrivetrainDrive(Drivetrain drivetrain, CommandXboxController controller) {
-    this.m_Drivetrain = drivetrain;
+  public DrivetrainDrive(Drivetrain drivetrain, CommandXboxController controller, Boolean arcadeDriveActive) {
+    this.drivetrain = drivetrain;
     this.driver = controller;
+    this.arcadeDriveActive = arcadeDriveActive;
 
     addRequirements(drivetrain);
   }
@@ -41,8 +44,14 @@ public class DrivetrainDrive extends CommandBase {
   public void execute() {
     driverLeftY = limiter.calculate(driver.getLeftY());
     driverRightY = limiter.calculate(driver.getRightY());
+    driverLeftX = limiter.calculate(driver.getLeftX());
 
-    m_Drivetrain.tankDrive(driverLeftY * Settings.Drivetrain.DRIVESPEEDCAP, driverRightY * Settings.Drivetrain.DRIVESPEEDCAP);
+    if (arcadeDriveActive) {
+      drivetrain.arcadeDrive(driverRightY * Settings.Drivetrain.DRIVESPEEDCAP, driverLeftX * Settings.Drivetrain.DRIVESPEEDCAP);
+    }
+    else {
+      drivetrain.tankDrive(driverLeftY * Settings.Drivetrain.DRIVESPEEDCAP, driverRightY * Settings.Drivetrain.DRIVESPEEDCAP);
+    }
   }
 
   // Called once the command ends or is interrupted.

@@ -20,8 +20,6 @@ public class AutonTurn extends CommandBase {
 
   private final PIDController directionController;
   double SetAngle;// the angle from us to the game piece
-  //NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
-
   public AutonTurn(Drivetrain drivetrain, Limelight limelight, IMU imu) {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
@@ -44,7 +42,7 @@ public class AutonTurn extends CommandBase {
   @Override
   public void execute() {
     double motorSpeed = directionController.calculate(limelight.getTx());
-    drivetrain.tankDrive(motorSpeed, -motorSpeed); //does this give you the speed its going?
+    drivetrain.tankDrive(motorSpeed, -motorSpeed); 
   }
 
   // Called once the command ends or is interrupted.
