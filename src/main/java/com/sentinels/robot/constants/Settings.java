@@ -8,6 +8,9 @@
 
 package com.sentinels.robot.constants;
 
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.util.Units;
+
 public interface Settings {
 
     public interface Drivetrain {
@@ -19,6 +22,8 @@ public interface Settings {
         double WHEEL_TRACK_WIDTH = 22.9; // inches
         double CENTER_MOMENT_INERTIA = 5.1349; // kg/m^2
         int GEARBOX_NUM_MOTORS = 2;
+        
+        DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(Units.inchesToMeters(Drivetrain.WHEEL_TRACK_WIDTH));
     }
 
 }

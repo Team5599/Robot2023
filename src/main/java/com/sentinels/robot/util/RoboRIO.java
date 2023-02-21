@@ -22,6 +22,10 @@ public class RoboRIO {
         return RobotController.getBatteryVoltage();
     }
 
+    public static double getInputVoltage() {
+        return RobotController.getInputVoltage();
+    }
+
     public static boolean isBrownedOut() {
         return RobotController.isBrownedOut();
     }

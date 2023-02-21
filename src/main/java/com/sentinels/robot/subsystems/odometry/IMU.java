@@ -11,13 +11,12 @@ package com.sentinels.robot.subsystems.odometry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
-import edu.wpi.first.wpilibj.ADIS16448_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class IMU extends SubsystemBase {
 
-    private final ADIS16470_IMU imu = new ADIS16470_IMU();
+    public static final ADIS16470_IMU imu = new ADIS16470_IMU();
 
     private double newAngle;
     private double oldAngle;

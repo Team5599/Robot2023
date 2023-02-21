@@ -10,23 +10,35 @@ package com.sentinels.robot.subsystems.drive;
 
 import com.sentinels.robot.constants.Motors;
 import com.sentinels.robot.constants.Ports;
+import com.sentinels.robot.constants.Settings;
 import com.sentinels.robot.util.RoboRIO;
+import com.sentinels.robot.subsystems.odometry.IMU;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.ADIS16470_IMU;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.simulation.ADIS16470_IMUSim;
+import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
 
 /**
  * Code to allow the robot to move.
  * 
  * <p>Tank Drive contains:
- * <p>- 2x NEO Motors on the LEFT side (front and back)
- * <p>- 2x NEO Motors on the RIGHT side (front and back)
+ * <p>- 2x NEO Motors w/ encoders on the LEFT side (front and back)
+ * <p>- 2x NEO Motors w/ encoders on the RIGHT side (front and back)
+ * <p>- ADIS16470 IMU connected to roboRIO SPI port
  * 
  * @author Ahmed Osman, Karamat Hasan
  */
@@ -51,6 +63,23 @@ public class Drivetrain extends SubsystemBase {
   private final RelativeEncoder encoderFR = motorFR.getEncoder();
   private final RelativeEncoder encoderBR = motorBR.getEncoder();
 
+  private final ADIS16470_IMU imu = new ADIS16470_IMU();
+
+  private final DifferentialDrivePoseEstimator odometry = new DifferentialDrivePoseEstimator(
+    Settings.Drivetrain.KINEMATICS, getHeading(), getLeftPosition(), getRightPosition(), new Pose2d()
+  );
+
+  // SIMULATION
+
+  private final Encoder sEncoderL = new Encoder(1, 2);
+  private final Encoder sEncoderR = new Encoder(5, 6);
+
+  private final EncoderSim simEncoderL = new EncoderSim(sEncoderL);
+  private final EncoderSim simEncoderR = new EncoderSim(sEncoderR);
+
+  private final ADIS16470_IMUSim imuSim = new ADIS16470_IMUSim(imu);
+  
+  private Field2d field = new Field2d();
 
   public Drivetrain() {
     // Resetting motor settings to default factory settings
@@ -67,6 +96,11 @@ public class Drivetrain extends SubsystemBase {
 
     // Invert the one of the sides so that they rotate synonymously in one direction
     leftMotors.setInverted(true);
+    
+    simEncoderL.setDistancePerPulse(2 * Math.PI * (Settings.Drivetrain.WHEEL_DIAMETER / 2) / 42);
+    simEncoderR.setDistancePerPulse(2 * Math.PI * (Settings.Drivetrain.WHEEL_DIAMETER / 2) / 42);
+
+    SmartDashboard.putData("Field", field);
   }
 
   /**
@@ -124,6 +158,11 @@ public class Drivetrain extends SubsystemBase {
     return (rightMotors.get() * RoboRIO.getBatteryVoltage());
   }
 
+  // IMU FUNCTIONS
+
+  public Rotation2d getHeading() {
+    return new Rotation2d(-imu.getAngle());
+  }
 
   @Override
   public void periodic() {
@@ -135,10 +174,31 @@ public class Drivetrain extends SubsystemBase {
 
     SmartDashboard.putNumber("Drivetrain Left Motors Velocity (RPM)", getLeftVelocity());
     SmartDashboard.putNumber("Drivetrain Right Motors Velocity (RPM)", getRightVelocity());
+
+    // This will get the simulated sensor readings that we set
+    // in the previous article while in simulation, but will use
+    // real values on the robot itself.
+    odometry.update(getHeading(), simEncoderL.getDistance(), simEncoderR.getDistance());
+    field.setRobotPose(odometry.getEstimatedPosition());
   }
 
   @Override
   public void simulationPeriodic() {
-    // This method will be called once per scheduler run during simulation
+    // Set the inputs to the system. Note that we need to convert
+    // the [-1, 1] PWM signal to voltage by multiplying it by the
+    // robot controller voltage.
+    SimDrivetrain.simDrivetrain.setInputs(leftMotors.get() * RoboRIO.getInputVoltage(), rightMotors.get() * RoboRIO.getInputVoltage());
+  
+    // Advance the model by 20 ms. Note that if you are running this
+    // subsystem in a separate thread or have changed the nominal timestep
+    // of TimedRobot, this value needs to match it.
+    SimDrivetrain.simDrivetrain.update(0.02);
+  
+    // Update all of our sensors.
+    simEncoderL.setDistance(SimDrivetrain.simDrivetrain.getLeftPositionMeters());
+    simEncoderL.setRate(SimDrivetrain.simDrivetrain.getLeftVelocityMetersPerSecond());
+    simEncoderR.setDistance(SimDrivetrain.simDrivetrain.getRightPositionMeters());
+    simEncoderR.setRate(SimDrivetrain.simDrivetrain.getRightVelocityMetersPerSecond());
+    imuSim.setGyroAngleX(-SimDrivetrain.simDrivetrain.getHeading().getDegrees());
   }
 }

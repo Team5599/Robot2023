@@ -2,13 +2,41 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/SmartDashboard/Autonomous": "String Chooser"
+      "/SmartDashboard/Autonomous": "String Chooser",
+      "/SmartDashboard/Field": "Field2d"
+    },
+    "windows": {
+      "/SmartDashboard/Field": {
+        "Robot": {
+          "arrowColor": [
+            0.0,
+            255.0,
+            232.49998474121094,
+            255.0
+          ],
+          "length": 0.8204200267791748,
+          "style": "Line",
+          "weight": 3.0
+        },
+        "bottom": 544,
+        "height": 8.013679504394531,
+        "image": "images/2023-field.png",
+        "left": 46,
+        "right": 1088,
+        "top": 36,
+        "units": "inches",
+        "width": 16.541748046875,
+        "window": {
+          "name": "Charged Up 2023 Field Robot Simulation (SmartDashboard)",
+          "visible": true
+        }
+      }
     }
   },
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
-        "Autonomous": {
+        "Field": {
           "open": true
         },
         "open": true
