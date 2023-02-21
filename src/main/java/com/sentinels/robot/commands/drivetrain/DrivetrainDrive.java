@@ -7,6 +7,7 @@ package com.sentinels.robot.commands.drivetrain;
 import com.sentinels.robot.subsystems.drive.Drivetrain;
 import com.sentinels.robot.constants.Settings;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -19,6 +20,8 @@ public class DrivetrainDrive extends CommandBase {
 
   double driverLeftY;
   double driverRightY;
+
+  private final SlewRateLimiter limiter = new SlewRateLimiter(0.4);
 
   public DrivetrainDrive(Drivetrain drivetrain, CommandXboxController controller) {
     this.m_Drivetrain = drivetrain;
@@ -36,8 +39,8 @@ public class DrivetrainDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    driverLeftY = driver.getLeftY();
-    driverRightY = driver.getRightY();
+    driverLeftY = limiter.calculate(driver.getLeftY());
+    driverRightY = limiter.calculate(driver.getRightY());
 
     m_Drivetrain.tankDrive(driverLeftY * Settings.Drivetrain.DRIVESPEEDCAP, driverRightY * Settings.Drivetrain.DRIVESPEEDCAP);
   }
