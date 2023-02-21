@@ -20,13 +20,13 @@ public class AutonDriveDistance extends CommandBase {
 
   private final PIDController distanceController;
 
-  public double setpoint;
-  public boolean parallaxEnable;
+  private double setpoint;
+  private boolean parallaxEnable;
 
-  public double angle1;
-  public double angle2;
-
-  public double distance;// distance to gamepiece
+  private double angle1;
+  private double angle2;
+  
+  private double distance;// distance to gamepiece
   //Links for tmrw
   // https://docs.limelightvision.io/en/latest/cs_aimandrange.html
   // https://docs.limelightvision.io/en/latest/getting_started.html
@@ -82,9 +82,7 @@ public class AutonDriveDistance extends CommandBase {
     if(parallaxEnable == true){
       angle2 = limelight.getTx();
       RobotContainer.distance = limelight.ParllaxDistance(angle1, angle2);
-      
     }
-    
   }
 
   // Returns true when the command should end.

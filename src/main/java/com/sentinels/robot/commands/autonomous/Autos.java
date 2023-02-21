@@ -4,17 +4,56 @@
 
 package com.sentinels.robot.commands.autonomous;
 
+//import com.sentinels.robot.constants.Ports.Arm;
+import com.sentinels.robot.subsystems.drive.Drivetrain;
+import com.sentinels.robot.subsystems.odometry.IMU;
+import com.sentinels.robot.subsystems.vision.Limelight;
+import com.sentinels.robot.Robot;
+import com.sentinels.robot.subsystems.arm.Arm;
+import com.sentinels.robot.subsystems.intake.ArmIntake;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
 // Import all subsystems for auton use
 //import com.sentinels.robot.subsystems.*;
 
 public final class Autos {
-  
   /** Example static factory for an autonomous command. */
-  public static CommandBase autonomous(Object subsystem) {
-    return Commands.sequence();
+
+  private final Drivetrain drivetrain;
+  private final Arm arm;
+  private final ArmIntake intake;
+  private final IMU imu;
+  private final Limelight limelight;
+
+  public static CommandBase autonomous(Drivetrain drivetrain, Arm arm, ArmIntake intake, IMU imu, Limelight limelight) {
+    return Commands.sequence(
+      
+    );
+  }
+  public static CommandBase RamseteTest(Drivetrain drivetrain, Arm arm, IMU imu, Limelight limelight){
+    
+    return Commands.sequence(
+      new RamseteCommand(
+        Robot.trajectory, 
+        null, 
+        null, 
+        null, 
+        null, 
+        null, 
+        null, 
+        null, 
+        null, 
+        null
+      )
+
+    );
+  }
+
+  public void setRamsete(){
+    
   }
 
   private Autos() {

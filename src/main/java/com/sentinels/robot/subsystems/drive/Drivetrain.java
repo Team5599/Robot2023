@@ -89,10 +89,7 @@ public class Drivetrain extends SubsystemBase {
     motorBR.restoreFactoryDefaults();
 
     // Zeroing encoder positions
-    encoderFL.setPosition(0);
-    encoderBL.setPosition(0);
-    encoderFR.setPosition(0);
-    encoderBR.setPosition(0);
+    resetEncoders();
 
     // Invert the one of the sides so that they rotate synonymously in one direction
     leftMotors.setInverted(true);
@@ -111,6 +108,14 @@ public class Drivetrain extends SubsystemBase {
   public void tankDrive(double leftSpeed, double rightSpeed) {
     drivetrain.tankDrive(leftSpeed, rightSpeed);
   }
+  public void arcadeDrive(double xSpeed, double rotation) {
+    drivetrain.arcadeDrive(xSpeed, rotation);
+  }
+  public void voltageDrive(double leftVoltage, double rightVoltage){
+    leftMotors.setVoltage(leftVoltage);
+    rightMotors.setVoltage(rightVoltage);
+    drivetrain.feed();
+  }
 
   // Stop the motors from moving
   public void driveStop() {
@@ -126,9 +131,6 @@ public class Drivetrain extends SubsystemBase {
     leftMotors.set(leftSpeed);
     rightMotors.set(rightSpeed);
   }
-
-  //PID
-  
 
   // POSITION FUNCTIONS
 
@@ -157,12 +159,36 @@ public class Drivetrain extends SubsystemBase {
   public double getRightVoltage() {
     return (rightMotors.get() * RoboRIO.getBatteryVoltage());
   }
+  public void setMaxOutput(double maxOutput){
+    drivetrain.setMaxOutput(maxOutput);
+  }
 
-  // IMU FUNCTIONS
+  // RESET ENCODERS
+  
+  public void resetEncoders(){
+    encoderFL.setPosition(0);
+    encoderBL.setPosition(0);
+    encoderFR.setPosition(0);
+    encoderBR.setPosition(0);
+  }
+
+  // IMU FUNCTIONS + TRAJECTORY 
 
   public Rotation2d getHeading() {
     return new Rotation2d(-imu.getAngle());
   }
+  public double getTurnRate(){
+    return -imu.getRate();
+  }
+  public void zeroImu(){
+    imu.reset();
+  }
+
+  // see line 102 of docs
+
+  // public void resetOdometry(){
+  //   resetEncoders();
+  // }
 
   @Override
   public void periodic() {
