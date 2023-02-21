@@ -12,6 +12,9 @@ import com.sentinels.robot.Robot;
 import com.sentinels.robot.subsystems.arm.Arm;
 import com.sentinels.robot.subsystems.intake.ArmIntake;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -38,22 +41,22 @@ public final class Autos {
     return Commands.sequence(
       new RamseteCommand(
         Robot.trajectory, 
+        drivetrain::getPose, 
+        new RamseteController(0,0), //b and zeta, not sure what they are tbh
+        new SimpleMotorFeedforward(0, 0),//voltages here 
         null, 
+        drivetrain::getWheelSpeeds, 
+        new PIDController(0, 0, 0), 
+        new PIDController(0, 0, 0), 
         null, 
-        null, 
-        null, 
-        null, 
-        null, 
-        null, 
-        null, 
-        null
+        drivetrain
       )
 
     );
   }
 
   public void setRamsete(){
-    
+
   }
 
   private Autos() {

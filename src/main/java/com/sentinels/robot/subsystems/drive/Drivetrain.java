@@ -13,7 +13,7 @@ import com.sentinels.robot.constants.Ports;
 import com.sentinels.robot.constants.Settings;
 import com.sentinels.robot.util.RoboRIO;
 import com.sentinels.robot.subsystems.odometry.IMU;
-
+import com.fasterxml.jackson.databind.node.POJONode;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -21,9 +21,11 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive.WheelSpeeds;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -151,6 +153,12 @@ public class Drivetrain extends SubsystemBase {
     return -(encoderFR.getVelocity() + encoderBR.getVelocity() / 2.0);
   }
 
+  public DifferentialDriveWheelSpeeds getWheelSpeeds(){
+    double AvgLeftVel = (getLeftVelocity() * 2 * Math.PI * (Settings.Drivetrain.WHEEL_DIAMETER / 2))/ 2;
+    double AvgRightVel = (getRightVelocity() * 2 * Math.PI * (Settings.Drivetrain.WHEEL_DIAMETER / 2))/ 2;
+    return new DifferentialDriveWheelSpeeds(AvgLeftVel, AvgRightVel);
+  }
+
   // VOLTAGE FUNCTIONS
 
   public double getLeftVoltage() {
@@ -182,6 +190,9 @@ public class Drivetrain extends SubsystemBase {
   }
   public void zeroImu(){
     imu.reset();
+  }
+  public Pose2d getPose(){
+    return odometry.getEstimatedPosition();
   }
 
   // see line 102 of docs
