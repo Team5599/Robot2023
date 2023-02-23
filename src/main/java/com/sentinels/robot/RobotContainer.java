@@ -109,8 +109,8 @@ public class RobotContainer {
 
   private void configureAutonCommands() {
     autonChooser.addOption("Disabled", null);
-    //autonChooser.addOption("Auton test", new AutonDock(drivetrain, limelight, imu));
-    autonChooser.addOption("test", Autos.RamseteTest(drivetrain, arm, imu, limelight));
+    autonChooser.addOption("Auton test", Autos.autonomous(drivetrain, arm, armIntake, imu, limelight));
+    //autonChooser.addOption("test", Autos.RamseteTest(drivetrain, arm, imu, limelight));
     SmartDashboard.putData("Autonomous", autonChooser);
   }
 

@@ -154,9 +154,9 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds(){
-    double AvgLeftVel = (getLeftVelocity() * 2 * Math.PI * (Settings.Drivetrain.WHEEL_DIAMETER / 2))/ 2;
-    double AvgRightVel = (getRightVelocity() * 2 * Math.PI * (Settings.Drivetrain.WHEEL_DIAMETER / 2))/ 2;
-    return new DifferentialDriveWheelSpeeds(AvgLeftVel, AvgRightVel);
+    double AvgLeftVel = 0.254 * (getLeftVelocity() * 2 * Math.PI * (Settings.Drivetrain.WHEEL_DIAMETER / 2)) / 60;
+    double AvgRightVel = 0.254 * (getRightVelocity() * 2 * Math.PI * (Settings.Drivetrain.WHEEL_DIAMETER / 2)) / 60;
+    return new DifferentialDriveWheelSpeeds(AvgLeftVel, AvgRightVel);// in m/s
   }
 
   // VOLTAGE FUNCTIONS

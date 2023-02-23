@@ -1,4 +1,11 @@
 {
+  "HALProvider": {
+    "Timing": {
+      "window": {
+        "visible": false
+      }
+    }
+  },
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
@@ -16,6 +23,11 @@
       "/SmartDashboard/SendableChooser[1]": "String Chooser"
     },
     "windows": {
+      "/SmartDashboard/Autonomous": {
+        "window": {
+          "visible": true
+        }
+      },
       "/SmartDashboard/Control Scheme": {
         "window": {
           "visible": true
@@ -51,6 +63,9 @@
   "NetworkTables": {
     "transitory": {
       "SmartDashboard": {
+        "Autonomous": {
+          "open": true
+        },
         "Control Scheme": {
           "open": true
         },
