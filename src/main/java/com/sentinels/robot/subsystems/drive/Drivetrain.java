@@ -13,7 +13,9 @@ import com.sentinels.robot.constants.Ports;
 import com.sentinels.robot.constants.Settings;
 import com.sentinels.robot.util.RoboRIO;
 import com.sentinels.robot.subsystems.odometry.IMU;
-import com.fasterxml.jackson.databind.node.POJONode;
+
+import java.util.List;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -21,7 +23,12 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
@@ -31,7 +38,6 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.simulation.ADIS16470_IMUSim;
-import edu.wpi.first.wpilibj.simulation.AnalogGyroSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 
 /**
@@ -80,6 +86,8 @@ public class Drivetrain extends SubsystemBase {
   private final EncoderSim simEncoderR = new EncoderSim(sEncoderR);
 
   private final ADIS16470_IMUSim imuSim = new ADIS16470_IMUSim(imu);
+
+  private final Trajectory trajectory;
   
   private Field2d field = new Field2d();
 
@@ -96,8 +104,20 @@ public class Drivetrain extends SubsystemBase {
     // Invert the one of the sides so that they rotate synonymously in one direction
     leftMotors.setInverted(true);
     
-    simEncoderL.setDistancePerPulse(2 * Math.PI * (Settings.Drivetrain.WHEEL_DIAMETER / 2) / 42);
-    simEncoderR.setDistancePerPulse(2 * Math.PI * (Settings.Drivetrain.WHEEL_DIAMETER / 2) / 42);
+    simEncoderL.setDistancePerPulse(2 * Math.PI * (Settings.Drivetrain.kWheelDiameter / 2) / 42);
+    simEncoderR.setDistancePerPulse(2 * Math.PI * (Settings.Drivetrain.kWheelDiameter / 2) / 42);
+
+    // Create the trajectory to follow in autonomous. It is best to initialize
+    // trajectories here to avoid wasting time in autonomous.
+    trajectory =
+        TrajectoryGenerator.generateTrajectory(
+            new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+            new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
+            new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
+
+    // Push the trajectory to Field2d.
+    field.getObject("traj").setTrajectory(trajectory);
 
     SmartDashboard.putData("Field", field);
   }
@@ -154,8 +174,8 @@ public class Drivetrain extends SubsystemBase {
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds(){
-    double AvgLeftVel = 0.254 * (getLeftVelocity() * 2 * Math.PI * (Settings.Drivetrain.WHEEL_DIAMETER / 2)) / 60;
-    double AvgRightVel = 0.254 * (getRightVelocity() * 2 * Math.PI * (Settings.Drivetrain.WHEEL_DIAMETER / 2)) / 60;
+    double AvgLeftVel = 0.254 * (getLeftVelocity() * 2 * Math.PI * (Settings.Drivetrain.kWheelDiameter / 2)) / 60;
+    double AvgRightVel = 0.254 * (getRightVelocity() * 2 * Math.PI * (Settings.Drivetrain.kWheelDiameter / 2)) / 60;
     return new DifferentialDriveWheelSpeeds(AvgLeftVel, AvgRightVel);// in m/s
   }
 
@@ -185,13 +205,13 @@ public class Drivetrain extends SubsystemBase {
   public Rotation2d getHeading() {
     return new Rotation2d(-imu.getAngle());
   }
-  public double getTurnRate(){
+  public double getTurnRate() {
     return -imu.getRate();
   }
-  public void zeroImu(){
+  public void zeroIMU() {
     imu.reset();
   }
-  public Pose2d getPose(){
+  public Pose2d getPose() {
     return odometry.getEstimatedPosition();
   }
 
