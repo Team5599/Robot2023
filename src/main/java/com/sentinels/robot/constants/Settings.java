@@ -14,16 +14,16 @@ import edu.wpi.first.math.util.Units;
 public interface Settings {
 
     public interface Drivetrain {
-        double DRIVESPEEDCAP = 0.8;
+        double kDriveSpeedCap = 0.8;
 
-        double GEAR_RATIO = 8.45; // 8.45:1 Ratio
-        double DRIVEBASE_KG = 22.6796; // 50 lbs.
-        double WHEEL_DIAMETER = 6; // inches
-        double WHEEL_TRACK_WIDTH = 22.9; // inches
-        double CENTER_MOMENT_INERTIA = 5.1349; // kg/m^2
-        int GEARBOX_NUM_MOTORS = 2;
+        double kGearRatio = 8.45; // 8.45:1 Ratio
+        double kDriveBaseWeight = 22.6796; // 50 lbs.
+        double kWheelDiameter = 6; // inches
+        double kWheelTrackWidth = 22.9; // inches
+        double kCenterMomentInertia = 5.1349; // kg/m^2
+        int kGearboxMotorCount = 2;
         
-        DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(Units.inchesToMeters(Drivetrain.WHEEL_TRACK_WIDTH));
+        DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(Units.inchesToMeters(Drivetrain.kWheelTrackWidth));
     }
 
 }

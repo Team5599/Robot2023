@@ -12,12 +12,12 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class SimDrivetrain extends SubsystemBase {
 
     static final DifferentialDrivetrainSim simDrivetrain = new DifferentialDrivetrainSim(
-        DCMotor.getNEO(Settings.Drivetrain.GEARBOX_NUM_MOTORS),
-        Settings.Drivetrain.GEAR_RATIO,
-        Settings.Drivetrain.CENTER_MOMENT_INERTIA,
-        Settings.Drivetrain.DRIVEBASE_KG,
-        Units.inchesToMeters(Settings.Drivetrain.WHEEL_DIAMETER / 2),
-        Units.inchesToMeters(Settings.Drivetrain.WHEEL_TRACK_WIDTH),
+        DCMotor.getNEO(Settings.Drivetrain.kGearboxMotorCount),
+        Settings.Drivetrain.kGearRatio,
+        Settings.Drivetrain.kCenterMomentInertia,
+        Settings.Drivetrain.kDriveBaseWeight,
+        Units.inchesToMeters(Settings.Drivetrain.kWheelDiameter / 2),
+        Units.inchesToMeters(Settings.Drivetrain.kWheelTrackWidth),
         VecBuilder.fill(0.001, 0.001, 0.001, 0.05, 0.05, 0.005, 0.005)
     );
 }

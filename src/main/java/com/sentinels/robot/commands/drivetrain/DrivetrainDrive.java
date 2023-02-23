@@ -47,10 +47,10 @@ public class DrivetrainDrive extends CommandBase {
     driverLeftX = limiter.calculate(driver.getLeftX());
 
     if (arcadeDriveActive) {
-      drivetrain.arcadeDrive(driverRightY * Settings.Drivetrain.DRIVESPEEDCAP, driverLeftX * Settings.Drivetrain.DRIVESPEEDCAP);
+      drivetrain.arcadeDrive(driverRightY * Settings.Drivetrain.kDriveSpeedCap, driverLeftX * Settings.Drivetrain.kDriveSpeedCap);
     }
     else {
-      drivetrain.tankDrive(driverLeftY * Settings.Drivetrain.DRIVESPEEDCAP, driverRightY * Settings.Drivetrain.DRIVESPEEDCAP);
+      drivetrain.tankDrive(driverLeftY * Settings.Drivetrain.kDriveSpeedCap, driverRightY * Settings.Drivetrain.kDriveSpeedCap);
     }
   }
 

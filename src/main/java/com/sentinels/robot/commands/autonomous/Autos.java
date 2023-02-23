@@ -9,6 +9,7 @@ import com.sentinels.robot.subsystems.drive.Drivetrain;
 import com.sentinels.robot.subsystems.odometry.IMU;
 import com.sentinels.robot.subsystems.vision.Limelight;
 import com.sentinels.robot.Robot;
+import com.sentinels.robot.constants.Settings;
 import com.sentinels.robot.subsystems.arm.Arm;
 import com.sentinels.robot.subsystems.intake.ArmIntake;
 
@@ -39,18 +40,18 @@ public final class Autos {
   public static CommandBase RamseteTest(Drivetrain drivetrain, Arm arm, IMU imu, Limelight limelight){
     
     return Commands.sequence(
-      new RamseteCommand(
+      /*new RamseteCommand(
         Robot.trajectory, 
         drivetrain::getPose, 
         new RamseteController(0,0), //b and zeta, not sure what they are tbh
         new SimpleMotorFeedforward(0, 0),//voltages here 
-        null, 
+        Settings.Drivetrain.KINEMATICS, 
         drivetrain::getWheelSpeeds, 
         new PIDController(0, 0, 0), 
         new PIDController(0, 0, 0), 
         null, 
         drivetrain
-      )
+      )*/
 
     );
   }
