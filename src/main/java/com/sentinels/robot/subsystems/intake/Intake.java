@@ -10,14 +10,15 @@ package com.sentinels.robot.subsystems.intake;
 
 import com.sentinels.robot.constants.Ports;
 import com.sentinels.robot.util.RoboRIO;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
@@ -45,6 +46,14 @@ public class Intake extends SubsystemBase {
     solenoid.set(DoubleSolenoid.Value.kOff);
   }
 
+  public void intakeConstrict() {
+    solenoid.set(Value.kForward);
+  }
+  
+  public void intakeRetract() {
+    solenoid.set(Value.kReverse);
+  }
+
   // ENCODER + MOTOR INFO METHODS
 
   public double getPivotVoltage() {
@@ -57,12 +66,17 @@ public class Intake extends SubsystemBase {
     return encoderPivot.getVelocity();
   }
 
+  public String getSolenoidState() {
+    return solenoid.get().toString();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Intake Pivot Motor Position", getPivotPosition());
-    SmartDashboard.putNumber("Intake Pivot Motor Velocity (RPM)", getPivotVelocity());
-    SmartDashboard.putNumber("Intake Pivot Motor Voltage (V)", getPivotVoltage());
+    SmartDashboard.putString("Intake/Solenoid Piston State", getSolenoidState());
+    SmartDashboard.putNumber("Intake/Pivot Motor Position", getPivotPosition());
+    SmartDashboard.putNumber("Intake/Pivot Motor Velocity (RPM)", getPivotVelocity());
+    SmartDashboard.putNumber("Intake/Pivot Motor Voltage (V)", getPivotVoltage());
   }
 
   @Override
