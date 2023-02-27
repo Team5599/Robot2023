@@ -98,6 +98,9 @@ public class Drivetrain extends SubsystemBase {
     motorFR.restoreFactoryDefaults();
     motorBR.restoreFactoryDefaults();
 
+    // Zeroing and calibrating IMU
+    zeroIMU();
+
     // Zeroing encoder positions
     resetEncoders();
 
@@ -210,6 +213,7 @@ public class Drivetrain extends SubsystemBase {
   }
   public void zeroIMU() {
     imu.reset();
+    imu.calibrate();
   }
   public Pose2d getPose() {
     return odometry.getEstimatedPosition();
