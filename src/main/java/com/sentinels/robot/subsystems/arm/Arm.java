@@ -44,21 +44,6 @@ public class Arm extends SubsystemBase {
   public Arm() {
     ArmL.setInverted(true);
   }
-
-  /**
-   * Example command factory method.
-   *
-   * @return a command
-   */
-  public CommandBase exampleMethodCommand() {
-    // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          /* one-time action goes here */
-        });
-  }
-
   
   // motor stall is detected by the output current of a motor
   // since both motors will be rotating together, it is assumed that they will also stall together
@@ -136,17 +121,17 @@ public class Arm extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Arm Left Motor Voltage (V)", getLeftVoltage());
-    SmartDashboard.putNumber("Arm Right Motor Voltage (V)", getRightVoltage());
-    SmartDashboard.putNumber("Arm Pulley Motor Voltage (V)", getPulleyVoltage());
+    SmartDashboard.putNumber("Arm/Left Motor Voltage (V)", getLeftVoltage());
+    SmartDashboard.putNumber("Arm/Right Motor Voltage (V)", getRightVoltage());
+    SmartDashboard.putNumber("Arm/Pulley Motor Voltage (V)", getPulleyVoltage());
 
-    SmartDashboard.putNumber("Arm Left Motor Position (Rotations)", getLeftPosition());
-    SmartDashboard.putNumber("Arm Right Motor Position (Rotations)", getRightPosition());
-    SmartDashboard.putNumber("Arm Pulley Motor Position (Rotations)", getPulleyPosition());
+    SmartDashboard.putNumber("Arm/Left Motor Position (Rotations)", getLeftPosition());
+    SmartDashboard.putNumber("Arm/Right Motor Position (Rotations)", getRightPosition());
+    SmartDashboard.putNumber("Arm/Pulley Motor Position (Rotations)", getPulleyPosition());
 
-    SmartDashboard.putNumber("Arm Left Motor Velocity (RPM)", getLeftVelocity());
-    SmartDashboard.putNumber("Arm Right Motor Velocity (RPM)", getRightVelocity());
-    SmartDashboard.putNumber("Arm Pulley Motor Velocity (RPM)", getRightVelocity());
+    SmartDashboard.putNumber("Arm/Left Motor Velocity (RPM)", getLeftVelocity());
+    SmartDashboard.putNumber("Arm/Right Motor Velocity (RPM)", getRightVelocity());
+    SmartDashboard.putNumber("Arm/Pulley Motor Velocity (RPM)", getRightVelocity());
   }
 
   @Override

@@ -170,7 +170,7 @@ public class Drivetrain extends SubsystemBase {
   }
   public double getRightVelocity() {
     // negate so both velocities are positive
-    return -(encoderFR.getVelocity() + encoderBR.getVelocity() / 2.0);
+    return (encoderFR.getVelocity() + encoderBR.getVelocity() / 2.0);
   }
 
   public DifferentialDriveWheelSpeeds getWheelSpeeds(){
@@ -182,7 +182,7 @@ public class Drivetrain extends SubsystemBase {
   // VOLTAGE FUNCTIONS
 
   public double getLeftVoltage() {
-    return (leftMotors.get() * RoboRIO.getBatteryVoltage());
+    return -(leftMotors.get() * RoboRIO.getBatteryVoltage());
   }
   public double getRightVoltage() {
     return (rightMotors.get() * RoboRIO.getBatteryVoltage());
@@ -223,14 +223,14 @@ public class Drivetrain extends SubsystemBase {
 
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("Drivetrain Left Motors Voltage (V)", getLeftVoltage());
-    SmartDashboard.putNumber("Drivetrain Right Motors Voltage (V)", getRightVoltage());
+    SmartDashboard.putNumber("Drivetrain/Left Motors Voltage (V)", getLeftVoltage());
+    SmartDashboard.putNumber("Drivetrain/Right Motors Voltage (V)", getRightVoltage());
 
-    SmartDashboard.putNumber("Drivetrain Left Motors Position (Rotations)", getLeftPosition());
-    SmartDashboard.putNumber("Drivetrain Right Motors Position (Rotations)", getRightPosition());
+    SmartDashboard.putNumber("Drivetrain/Left Motors Position (Rotations)", getLeftPosition());
+    SmartDashboard.putNumber("Drivetrain/Right Motors Position (Rotations)", getRightPosition());
 
-    SmartDashboard.putNumber("Drivetrain Left Motors Velocity (RPM)", getLeftVelocity());
-    SmartDashboard.putNumber("Drivetrain Right Motors Velocity (RPM)", getRightVelocity());
+    SmartDashboard.putNumber("Drivetrain/Left Motors Velocity (RPM)", getLeftVelocity());
+    SmartDashboard.putNumber("Drivetrain/Right Motors Velocity (RPM)", getRightVelocity());
 
     // This will get the simulated sensor readings that we set
     // in the previous article while in simulation, but will use

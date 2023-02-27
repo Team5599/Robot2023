@@ -23,9 +23,9 @@ public class Limelight extends SubsystemBase {
         double area = ta.getDouble(0.0);
 
         //post to smart dashboard periodically
-        SmartDashboard.putNumber("LimelightX", x);
-        SmartDashboard.putNumber("LimelightY", y);
-        SmartDashboard.putNumber("LimelightArea", area);
+        SmartDashboard.putNumber("Limelight/tX", x);
+        SmartDashboard.putNumber("Limelight/tY", y);
+        SmartDashboard.putNumber("Limelight/tA", area);
     }
     
     // these will return -191 if there is no game piece present
