@@ -13,6 +13,7 @@ import com.sentinels.robot.commands.autonomous.Driving.AutonDock;
 import com.sentinels.robot.commands.autonomous.Driving.SeperateDrive.AutonDriveDistance;
 import com.sentinels.robot.subsystems.arm.Arm;
 import com.sentinels.robot.subsystems.intake.ArmIntake;
+import com.sentinels.robot.constants.Arena;
 import com.sentinels.robot.constants.Settings;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -44,25 +45,25 @@ public final class Autos {
 
   //theres an error here that doesnt let me simulate the code
 
-  // public static CommandBase RamseteTest(Drivetrain drivetrain, Arm arm, IMU imu, Limelight limelight){
-  //   return Commands.sequence(
-  //     new RamseteCommand(
-  //       Robot.trajectory, 
-  //       drivetrain::getPose, 
-  //       new RamseteController(0.5,0.5), //b and zeta, not sure what they are tbh
-  //       new SimpleMotorFeedforward(0, 0, 0),//voltages here 
-  //       Settings.Drivetrain.KINEMATICS, 
-  //       drivetrain::getWheelSpeeds, 
-  //       new PIDController(2, 0, 0),//both of these are arbitrary, set these later 
-  //       new PIDController(2, 0, 0), 
-  //       drivetrain::voltageDrive, 
-  //       drivetrain
-  //     ).andThen(
-  //       () -> drivetrain.voltageDrive(0, 0)
-  //     )
+  public static CommandBase RamseteTest(Drivetrain drivetrain, Arm arm, IMU imu, Limelight limelight){
+    return Commands.sequence(
+      new RamseteCommand(
+        Arena.Trajectories.TestTrajectory, 
+        drivetrain::getPose, 
+        new RamseteController(0.5,0.5), //b and zeta, not sure what they are tbh
+        new SimpleMotorFeedforward(5, 5, 4),//voltages here, arbitrary numbers here for now
+        Settings.Drivetrain.KINEMATICS, 
+        drivetrain::getWheelSpeeds, 
+        new PIDController(2, 0, 0),//both of these are arbitrary, set these later 
+        new PIDController(2, 0, 0), 
+        drivetrain::voltageDrive, 
+        drivetrain
+      ).andThen(
+        () -> drivetrain.voltageDrive(0, 0)
+      )
 
-  //   );
-  // }
+    );
+  }
 
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");

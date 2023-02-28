@@ -8,6 +8,7 @@
 
 package com.sentinels.robot.subsystems.drive;
 
+import com.sentinels.robot.constants.Arena;
 import com.sentinels.robot.constants.Motors;
 import com.sentinels.robot.constants.Ports;
 import com.sentinels.robot.constants.Settings;
@@ -117,10 +118,10 @@ public class Drivetrain extends SubsystemBase {
             new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
             List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
             new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
-            new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
+            Arena.Trajectories.kConfig);
 
     // Push the trajectory to Field2d.
-    field.getObject("traj").setTrajectory(trajectory);
+    // field.getObject("traj").setTrajectory(trajectory);
 
     SmartDashboard.putData("Field", field);
   }
@@ -133,7 +134,7 @@ public class Drivetrain extends SubsystemBase {
   public void tankDrive(double leftSpeed, double rightSpeed) {
     drivetrain.tankDrive(leftSpeed, rightSpeed);
   }
-  public void arcadeDrive(double xSpeed, double rotation) {
+  public void arcadeDrive(double xSpeed, double rotation) {  
     drivetrain.arcadeDrive(xSpeed, rotation);
   }
   public void voltageDrive(double leftVoltage, double rightVoltage){
