@@ -11,6 +11,7 @@ import com.sentinels.robot.subsystems.vision.Limelight;
 import com.sentinels.robot.Robot;
 import com.sentinels.robot.commands.autonomous.Driving.AutonDock;
 import com.sentinels.robot.commands.autonomous.Driving.SeperateDrive.AutonDriveDistance;
+import com.sentinels.robot.commands.drivetrain.DrivetrainVoltageDrive;
 import com.sentinels.robot.subsystems.arm.Arm;
 import com.sentinels.robot.subsystems.intake.ArmIntake;
 import com.sentinels.robot.constants.Arena;
@@ -56,7 +57,8 @@ public final class Autos {
         drivetrain::getWheelSpeeds, 
         new PIDController(2, 0, 0),//both of these are arbitrary, set these later 
         new PIDController(2, 0, 0), 
-        drivetrain::voltageDrive, 
+        //drivetrain::voltageDrive, 
+        drivetrain::tankDrive,
         drivetrain
       ).andThen(
         () -> drivetrain.voltageDrive(0, 0)
@@ -64,6 +66,13 @@ public final class Autos {
 
     );
   }
+
+  public static CommandBase voltageTest(Drivetrain drivetrain){
+    return Commands.sequence(
+      new DrivetrainVoltageDrive(drivetrain)
+    );
+  }
+  
 
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");

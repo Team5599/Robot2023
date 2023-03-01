@@ -1,5 +1,10 @@
 {
   "HALProvider": {
+    "RoboRIO": {
+      "RoboRIO Input": {
+        "open": true
+      }
+    },
     "Timing": {
       "window": {
         "visible": false
@@ -65,6 +70,9 @@
     "transitory": {
       "SmartDashboard": {
         "Autonomous": {
+          "open": true
+        },
+        "Drivetrain": {
           "open": true
         },
         "SendableChooser[1]": {
