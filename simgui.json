@@ -61,12 +61,15 @@
     }
   },
   "NetworkTables": {
+    "Persistent Values": {
+      "open": false
+    },
+    "Retained Values": {
+      "open": false
+    },
     "transitory": {
       "SmartDashboard": {
-        "Autonomous": {
-          "open": true
-        },
-        "Control Scheme": {
+        "Drivetrain": {
           "open": true
         },
         "SendableChooser[1]": {

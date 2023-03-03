@@ -9,7 +9,8 @@
 package com.sentinels.robot.subsystems.intake;
 
 import com.sentinels.robot.constants.Ports;
-
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -20,16 +21,25 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ArmIntake extends SubsystemBase {
 
   //private final CANSparkMax motorPivot = new CANSparkMax(Ports.ArmIntake.INTAKEPIVOT, null);
-    
-  public ArmIntake() {
+  private final WPI_TalonFX armPivot = new WPI_TalonFX(Ports.ArmIntake.INTAKEPIVOT);
+  private final WPI_CANCoder encoderPivot = new WPI_CANCoder(Ports.ArmIntake.INTAKEPIVOT);
 
+  public ArmIntake() {
   }
 
-  /**
-   * Example command factory method.
-   *
-   * @return a command
-   */
+  // may need a pid controller?
+  public void setSpeed(double speed){
+    armPivot.set(speed);
+  }
+
+  public void getSpeed(){
+    armPivot.get();
+  }
+  public double getVelocity(){
+    return armPivot.getSelectedSensorVelocity();
+  }
+  
+
   public CommandBase exampleMethodCommand() {
     // Inline construction of command goes here.
     // Subsystem::RunOnce implicitly requires `this` subsystem.
@@ -39,19 +49,9 @@ public class ArmIntake extends SubsystemBase {
         });
   }
 
-  /**
-   * An example method querying a boolean state of the subsystem (for example, a digital sensor).
-   *
-   * @return value of some boolean subsystem state, such as a digital sensor.
-   */
-  public boolean exampleCondition() {
-    // Query some boolean state, such as a digital sensor.
-    return false;
-  }
-
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    
   }
 
   @Override

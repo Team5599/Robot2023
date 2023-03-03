@@ -12,6 +12,7 @@ import com.sentinels.robot.subsystems.vision.Limelight;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutonDriveDistance extends CommandBase {
@@ -48,7 +49,7 @@ public class AutonDriveDistance extends CommandBase {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
     this.parallaxEnable = parallaxEnable;
-    distanceController = new PIDController(2,0.4, 0.4);
+    distanceController = new PIDController(0.5,0.4, 0.4);
     distanceController.setSetpoint(setpoint);
     addRequirements(drivetrain);
   }
@@ -65,13 +66,17 @@ public class AutonDriveDistance extends CommandBase {
     }
     distanceController.setSetpoint(setpoint);//stop somewhere right before the gamepiece for intake, arbitrary for now
   }
+  //@Override
+  public void periodic(){
+    SmartDashboard.putNumber("PID info", distanceController.getPositionError());
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     drivetrain.tankDrive(
-      distanceController.calculate(drivetrain.getLeftPosition(),setpoint), 
-      distanceController.calculate(drivetrain.getRightPosition(),setpoint)
+      -distanceController.calculate(drivetrain.getLeftPosition(),setpoint), 
+      -distanceController.calculate(drivetrain.getRightPosition(),setpoint)
     );
   }
 

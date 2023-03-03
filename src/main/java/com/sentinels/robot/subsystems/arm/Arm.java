@@ -10,8 +10,10 @@ package com.sentinels.robot.subsystems.arm;
 
 import com.sentinels.robot.constants.Ports;
 import com.sentinels.robot.util.RoboRIO;
-
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.ctre.phoenix.sensors.WPI_CANCoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -33,14 +35,21 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Arm extends SubsystemBase {
 
-  private final TalonFX ArmPullL = new TalonFX(Ports.Arm.ARMLEFTPULLEY);
-  private final TalonFX ArmPullR = new TalonFX(Ports.Arm.ARMRIGHTPULLEY);
-  private final TalonFX ArmCascade = new TalonFX(Ports.Arm.ARMCASCADE);
+  //private final TalonFX armTest = new TalonFX(2);
+  private final WPI_TalonFX ArmPullL = new WPI_TalonFX(Ports.Arm.ARMLEFTPULLEY);
+  private final WPI_TalonFX ArmPullR = new WPI_TalonFX(Ports.Arm.ARMRIGHTPULLEY);
+  private final WPI_TalonFX ArmCascade = new WPI_TalonFX(Ports.Arm.ARMCASCADE);
 
-  private final MotorControllerGroup ArmMotors = new MotorControllerGroup(ArmPullL, ArmPullR);
 
+  private final WPI_CANCoder encoderL = new WPI_CANCoder(Ports.Arm.ARMLEFTPULLEY);
+  private final WPI_CANCoder encoderR = new WPI_CANCoder(Ports.Arm.ARMRIGHTPULLEY);
+  private final WPI_CANCoder encoderCascade = new WPI_CANCoder(Ports.Arm.ARMCASCADE);
+
+
+
+  private final MotorControllerGroup ArmMotors = new MotorControllerGroup(ArmPullL,ArmPullR);
   public Arm() {
-    ArmL.setInverted(true);
+    ArmPullL.setInverted(true);
   }
   
   // motor stall is detected by the output current of a motor
@@ -74,22 +83,23 @@ public class Arm extends SubsystemBase {
 
   // the pulley may also need its own stall checks
   public void setPulley(double velocity) {
-    ArmPulley.set(velocity);
+    ArmCascade.set(velocity);
   }
   public void ElevatorStop() {
-    ArmPulley.set(0);
+    ArmCascade.set(0);
   }
 
   // POSITION METHODS
 
   public double getLeftPosition() {
     return encoderL.getPosition();
+    // return encoderL.getPosition();
   }
   public double getRightPosition() {
     return encoderR.getPosition();
   }
   public double getPulleyPosition() {
-    return encoderPulley.getPosition();
+    return encoderCascade.getPosition();
   }
 
   // VELOCITY METHODS (RPM)
@@ -101,19 +111,19 @@ public class Arm extends SubsystemBase {
     return encoderR.getVelocity();
   }
   public double getPulleyVelocity() {
-    return encoderPulley.getVelocity();
+    return encoderCascade.getVelocity();
   }
 
   // VOLTAGE METHODS (V)
 
   public double getLeftVoltage() {
-    return (ArmL.get() * RoboRIO.getBatteryVoltage());
+    return (ArmPullL.get() * RoboRIO.getBatteryVoltage());
   }
   public double getRightVoltage() {
-    return (ArmR.get() * RoboRIO.getBatteryVoltage());
+    return (ArmPullR.get() * RoboRIO.getBatteryVoltage());
   }
   public double getPulleyVoltage() {
-    return (ArmPulley.get() * RoboRIO.getBatteryVoltage());
+    return (ArmCascade.get() * RoboRIO.getBatteryVoltage());
   }
 
 
