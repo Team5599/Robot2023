@@ -42,9 +42,9 @@ public interface Ports {
     
     public interface Arm {
         // Motors
-        int ARMLEFT = 7;
-        int ARMRIGHT = 3;
-        int ARMPULLEY = 8;
+        int ARMLEFTPULLEY = 7;
+        int ARMRIGHTPULLEY = 3;
+        int ARMCASCADE = 8;
     }
 
     public interface ArmIntake {

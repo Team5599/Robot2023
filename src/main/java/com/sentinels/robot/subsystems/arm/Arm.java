@@ -10,6 +10,8 @@ package com.sentinels.robot.subsystems.arm;
 
 import com.sentinels.robot.constants.Ports;
 import com.sentinels.robot.util.RoboRIO;
+
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
@@ -23,23 +25,19 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * Code to allow the arm to move.
  * 
  * <p>Arm contains:
- * <p>- 1x NEO Motor on the LEFT side
- * <p>- 1x NEO Motor on the RIGHT side
- * <p>- 1x NEO Motor in the MIDDLE for the pulley
+ * <p>- 1x Falcon 500 Motor on the LEFT side pulley
+ * <p>- 1x Falcon 500 Motor on the RIGHT side pulley
+ * <p>- 1x Falcon 500 Motor on the arm for cascade (extend, retract)
  * 
  * @author Ahmed Osman, Karamat Hasan
  */
 public class Arm extends SubsystemBase {
 
-  private final CANSparkMax ArmL = new CANSparkMax(Ports.Arm.ARMLEFT, MotorType.kBrushless);
-  private final CANSparkMax ArmR = new CANSparkMax(Ports.Arm.ARMRIGHT, MotorType.kBrushless);
-  private final CANSparkMax ArmPulley = new CANSparkMax(Ports.Arm.ARMPULLEY, MotorType.kBrushless);
+  private final TalonFX ArmPullL = new TalonFX(Ports.Arm.ARMLEFTPULLEY);
+  private final TalonFX ArmPullR = new TalonFX(Ports.Arm.ARMRIGHTPULLEY);
+  private final TalonFX ArmCascade = new TalonFX(Ports.Arm.ARMCASCADE);
 
-  private final MotorControllerGroup ArmMotors = new MotorControllerGroup(ArmL, ArmR);
-
-  private final RelativeEncoder encoderL = ArmL.getEncoder();
-  private final RelativeEncoder encoderR = ArmL.getEncoder();
-  private final RelativeEncoder encoderPulley = ArmL.getEncoder();
+  private final MotorControllerGroup ArmMotors = new MotorControllerGroup(ArmPullL, ArmPullR);
 
   public Arm() {
     ArmL.setInverted(true);
