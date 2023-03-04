@@ -10,17 +10,13 @@ package com.sentinels.robot.subsystems.arm;
 
 import com.sentinels.robot.constants.Ports;
 import com.sentinels.robot.util.RoboRIO;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
+
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
@@ -35,21 +31,24 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Arm extends SubsystemBase {
 
-  //private final TalonFX armTest = new TalonFX(2);
-  private final WPI_TalonFX ArmPullL = new WPI_TalonFX(Ports.Arm.ARMLEFTPULLEY);
-  private final WPI_TalonFX ArmPullR = new WPI_TalonFX(Ports.Arm.ARMRIGHTPULLEY);
-  private final WPI_TalonFX ArmCascade = new WPI_TalonFX(Ports.Arm.ARMCASCADE);
-
+  private final WPI_TalonFX armPullL = new WPI_TalonFX(Ports.Arm.ARMLEFTPULLEY);
+  private final WPI_TalonFX armPullR = new WPI_TalonFX(Ports.Arm.ARMRIGHTPULLEY);
+  private final WPI_TalonFX armCascade = new WPI_TalonFX(Ports.Arm.ARMCASCADE);
 
   private final WPI_CANCoder encoderL = new WPI_CANCoder(Ports.Arm.ARMLEFTPULLEY);
   private final WPI_CANCoder encoderR = new WPI_CANCoder(Ports.Arm.ARMRIGHTPULLEY);
   private final WPI_CANCoder encoderCascade = new WPI_CANCoder(Ports.Arm.ARMCASCADE);
 
+  private final MotorControllerGroup armPivotMotors = new MotorControllerGroup(armPullL, armPullR);
 
-
-  private final MotorControllerGroup ArmMotors = new MotorControllerGroup(ArmPullL,ArmPullR);
   public Arm() {
-    ArmPullL.setInverted(true);
+    armPullL.setNeutralMode(NeutralMode.Brake);
+    armPullR.setNeutralMode(NeutralMode.Brake);
+    armCascade.setNeutralMode(NeutralMode.Brake);
+
+    resetEncoders();
+    
+    armPullL.setInverted(true);
   }
   
   // motor stall is detected by the output current of a motor
@@ -66,80 +65,82 @@ public class Arm extends SubsystemBase {
     return currentL && currentR;
   }*/
 
-  public void setArmSpeed(double speed) {
-    ArmMotors.set(speed);
+  public void PivotArm(double speed) {
+    armPivotMotors.set(speed);
   }
-  public void ExtendArm(double armExtendSpeed) {
-    //if (isStalling()) { return; }
-    ArmMotors.set(armExtendSpeed);
-  }
-  public void RetractArm(double armRetractSpeed) {
-    //if (isStalling()) { return; }
-    ArmMotors.set(armRetractSpeed);
-  }
+
   public void StopArm() {
-    ArmMotors.set(0);
+    armPivotMotors.stopMotor();
   }
 
-  // the pulley may also need its own stall checks
-  public void setPulley(double velocity) {
-    ArmCascade.set(velocity);
-  }
-  public void ElevatorStop() {
-    ArmCascade.set(0);
+  public void CascadeArm(double speed) {
+    //if (isStalling()) { return; }
+    armCascade.set(speed);
   }
 
-  // POSITION METHODS
+  public void StopCascade() {
+    armCascade.stopMotor();
+  }
+
+  public void resetEncoders() {
+    encoderL.configFactoryDefault();
+    encoderR.configFactoryDefault();
+    encoderCascade.configFactoryDefault();
+
+    encoderL.setPosition(0);
+    encoderR.setPosition(0);
+    encoderCascade.setPosition(0);
+  }
+
+  // POSITION METHODS (degrees)
 
   public double getLeftPosition() {
     return encoderL.getPosition();
-    // return encoderL.getPosition();
   }
   public double getRightPosition() {
     return encoderR.getPosition();
   }
-  public double getPulleyPosition() {
+  public double getCascadePosition() {
     return encoderCascade.getPosition();
   }
 
-  // VELOCITY METHODS (RPM)
+  // VELOCITY METHODS (RPM) (converted deg/sec to rpm)
 
   public double getLeftVelocity() {
-    return encoderL.getVelocity();
+    return (encoderL.getVelocity() * 6.0);
   }
   public double getRightVelocity() {
-    return encoderR.getVelocity();
+    return (encoderR.getVelocity() * 6.0);
   }
-  public double getPulleyVelocity() {
-    return encoderCascade.getVelocity();
+  public double getCascadeVelocity() {
+    return (encoderCascade.getVelocity() * 6.0);
   }
 
   // VOLTAGE METHODS (V)
 
   public double getLeftVoltage() {
-    return (ArmPullL.get() * RoboRIO.getBatteryVoltage());
+    return (armPullL.get() * RoboRIO.getBatteryVoltage());
   }
   public double getRightVoltage() {
-    return (ArmPullR.get() * RoboRIO.getBatteryVoltage());
+    return (armPullR.get() * RoboRIO.getBatteryVoltage());
   }
-  public double getPulleyVoltage() {
-    return (ArmCascade.get() * RoboRIO.getBatteryVoltage());
+  public double getCascadeVoltage() {
+    return (armCascade.get() * RoboRIO.getBatteryVoltage());
   }
-
 
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Arm/Left Motor Voltage (V)", getLeftVoltage());
     SmartDashboard.putNumber("Arm/Right Motor Voltage (V)", getRightVoltage());
-    SmartDashboard.putNumber("Arm/Pulley Motor Voltage (V)", getPulleyVoltage());
+    SmartDashboard.putNumber("Arm/Cascade Motor Voltage (V)", getCascadeVoltage());
 
-    SmartDashboard.putNumber("Arm/Left Motor Position (Rotations)", getLeftPosition());
-    SmartDashboard.putNumber("Arm/Right Motor Position (Rotations)", getRightPosition());
-    SmartDashboard.putNumber("Arm/Pulley Motor Position (Rotations)", getPulleyPosition());
+    SmartDashboard.putNumber("Arm/Left Motor Position (Degrees)", getLeftPosition());
+    SmartDashboard.putNumber("Arm/Right Motor Position (Degrees)", getRightPosition());
+    SmartDashboard.putNumber("Arm/Cascade Motor Position (Degrees)", getCascadePosition());
 
     SmartDashboard.putNumber("Arm/Left Motor Velocity (RPM)", getLeftVelocity());
     SmartDashboard.putNumber("Arm/Right Motor Velocity (RPM)", getRightVelocity());
-    SmartDashboard.putNumber("Arm/Pulley Motor Velocity (RPM)", getRightVelocity());
+    SmartDashboard.putNumber("Arm/Cascade Motor Velocity (RPM)", getCascadeVelocity());
   }
 
   @Override
