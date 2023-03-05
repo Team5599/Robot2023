@@ -13,9 +13,6 @@ public class SparkMAXsim extends CANSparkMax{
      * Wrapper class for SparMAX
      * near identical copy
      * https://github.com/ligerbots/InfiniteRecharge2020/blob/infiniteSimulator/src/main/java/frc/robot/simulation/SparkMaxWrapper.java
-     * 
-     * 
-     * 
      */
     private SimDevice SparkSim;
     private SimDouble SparkSIMspeed;
