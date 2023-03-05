@@ -8,7 +8,6 @@ package com.sentinels.robot.commands.autonomous;
 import com.sentinels.robot.subsystems.drive.Drivetrain;
 import com.sentinels.robot.subsystems.odometry.IMU;
 import com.sentinels.robot.subsystems.vision.Limelight;
-import com.sentinels.robot.Robot;
 import com.sentinels.robot.commands.autonomous.Driving.AutonDock;
 import com.sentinels.robot.commands.autonomous.Driving.SeperateDrive.AutonDriveDistance;
 import com.sentinels.robot.commands.drivetrain.DrivetrainVoltageDrive;
@@ -39,31 +38,28 @@ public final class Autos {
   private final Limelight limelight;
 
   public static CommandBase autonomous(Drivetrain drivetrain, Arm arm, ArmIntake intake, IMU imu, Limelight limelight) {
+    //TODO: does not work with 1.5, works with 1.8 though. setpoints might quantized
     return Commands.sequence(
-      new AutonDriveDistance(drivetrain, limelight, 1.5 , false)
+      new AutonDriveDistance(drivetrain, limelight, 1.8 , false)
     );
   }
-
-  //theres an error here that doesnt let me simulate the code
-
+  //TODO: ramsete controller oftenly has insane voltage spikes, find a way to stop them to keep the robot safe
   public static CommandBase RamseteTest(Drivetrain drivetrain, Arm arm, IMU imu, Limelight limelight){
     return Commands.sequence(
       new RamseteCommand(
-        Arena.Trajectories.TestTrajectory, 
+        Arena.Trajectories.SimpleTrajectory, 
         drivetrain::getPose, 
-        new RamseteController(0.5,0.5), //b and zeta, not sure what they are tbh
-        new SimpleMotorFeedforward(5, 5, 4),//voltages here, arbitrary numbers here for now
+        new RamseteController(0.2,0.5), //b and zeta, not sure what they are tbh
+        new SimpleMotorFeedforward(2, 2, 2),//voltages here, arbitrary numbers here for now
         Settings.Drivetrain.KINEMATICS, 
         drivetrain::getWheelSpeeds, 
         new PIDController(2, 0, 0),//both of these are arbitrary, set these later 
         new PIDController(2, 0, 0), 
-        //drivetrain::voltageDrive, 
-        drivetrain::tankDrive,
+        drivetrain::voltageDrive,
         drivetrain
       ).andThen(
         () -> drivetrain.voltageDrive(0, 0)
       )
-
     );
   }
 

@@ -6,12 +6,12 @@ package com.sentinels.robot.commands.autonomous.Driving.SeperateDrive;
 
 import com.sentinels.robot.RobotContainer;
 import com.sentinels.robot.subsystems.drive.Drivetrain;
-import com.sentinels.robot.subsystems.vision.Camera;
 import com.sentinels.robot.subsystems.vision.Limelight;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutonDriveDistance extends CommandBase {
@@ -26,7 +26,7 @@ public class AutonDriveDistance extends CommandBase {
   private double angle1;
   private double angle2;
   
-  private double distance;// distance to gamepiece
+  //private double distance;// distance to gamepiece
   //Links for tmrw
   // https://docs.limelightvision.io/en/latest/cs_aimandrange.html
   // https://docs.limelightvision.io/en/latest/getting_started.html
@@ -35,10 +35,12 @@ public class AutonDriveDistance extends CommandBase {
 
   //can also handle distance measurement with parallax
 
+
+  //TODO: real encoders may not actually work
   public AutonDriveDistance(Drivetrain drivetrain, Limelight limelight) {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
-    distanceController = new PIDController(2,0.4, 0.4);
+    distanceController = new PIDController(2,2, 4);
     parallaxEnable = false;
     addRequirements(drivetrain);
   }
@@ -48,37 +50,37 @@ public class AutonDriveDistance extends CommandBase {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
     this.parallaxEnable = parallaxEnable;
-    distanceController = new PIDController(2,0.4, 0.4);
-    distanceController.setSetpoint(setpoint);
+    this.setpoint = setpoint;
+    distanceController = new PIDController(2,2, 4);
+    distanceController.setSetpoint(setpoint + (drivetrain.getLeftPosition()+ drivetrain.getRightPosition())/2);
     addRequirements(drivetrain);
   }
 
-  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    SmartDashboard.putNumber("PID/error", distanceController.getPositionError());
+    SmartDashboard.putNumber("PID/Setpoint", distanceController.getSetpoint());
+    distanceController.setSetpoint(setpoint + (drivetrain.getLeftPosition()+ drivetrain.getRightPosition())/2);
     distanceController.reset();
     if (parallaxEnable == false){ 
-      setpoint = RobotContainer.distance-1;
+      //setpoint = RobotContainer.distance-1;
     }
     else{
-      angle1 = limelight.getTx();
+      //angle1 = limelight.getTx();
     }
-    distanceController.setSetpoint(setpoint);//stop somewhere right before the gamepiece for intake, arbitrary for now
+    // distanceController.setSetpoint(setpoint);//stop somewhere right before the gamepiece for intake, arbitrary for now
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     drivetrain.tankDrive(
-      distanceController.calculate(drivetrain.getLeftPosition(),setpoint), 
-      distanceController.calculate(drivetrain.getRightPosition(),setpoint)
+      MathUtil.clamp(distanceController.calculate(drivetrain.getLeftPosition()), -.5, .5),
+      MathUtil.clamp(distanceController.calculate(drivetrain.getRightPosition()), -.5, .5) 
     );
-
-    // drivetrain.voltageDrive(
-    //   distanceController.calculate(drivetrain.getLeftPosition()),
-    //   distanceController.calculate(drivetrain.getRightPosition())
-    // );
-
+    
+    SmartDashboard.putNumber("PID/error", distanceController.getPositionError());
+    SmartDashboard.putNumber("PID/distanceController Left Calculation", distanceController.calculate(drivetrain.getLeftPosition()));
+    SmartDashboard.putNumber("PID/distanceController Right Calculation", distanceController.calculate(drivetrain.getRightPosition()));
   }
 
   // Called once the command ends or is interrupted.
@@ -94,6 +96,9 @@ public class AutonDriveDistance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if(RobotBase.isSimulation()&& Math.abs(distanceController.getPositionError()) > 10 + distanceController.getSetpoint()){
+      return true;
+    }
     if(distanceController.atSetpoint()){
       return true;
     }

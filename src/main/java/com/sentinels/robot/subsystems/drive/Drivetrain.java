@@ -9,10 +9,10 @@
 package com.sentinels.robot.subsystems.drive;
 
 import com.sentinels.robot.constants.Arena;
-import com.sentinels.robot.constants.Motors;
 import com.sentinels.robot.constants.Ports;
 import com.sentinels.robot.constants.Settings;
 import com.sentinels.robot.util.RoboRIO;
+import com.sentinels.robot.util.SparkMAXsim;
 
 import java.util.List;
 
@@ -20,21 +20,27 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.simulation.ADIS16470_IMUSim;
+import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
 
 /**
@@ -70,9 +76,7 @@ public class Drivetrain extends SubsystemBase {
 
   private final ADIS16470_IMU imu = new ADIS16470_IMU();
 
-  private final DifferentialDrivePoseEstimator odometry = new DifferentialDrivePoseEstimator(
-    Settings.Drivetrain.KINEMATICS, getHeading(), getLeftPosition(), getRightPosition(), new Pose2d()
-  );
+
 
   // SIMULATION
 
@@ -88,6 +92,11 @@ public class Drivetrain extends SubsystemBase {
   
   private Field2d field = new Field2d();
 
+  private DifferentialDrivetrainSim TestDrivetrain;
+  private final DifferentialDrivePoseEstimator odometry = new DifferentialDrivePoseEstimator(
+    Settings.Drivetrain.KINEMATICS, getHeading(), getLeftPosition(), getRightPosition(), new Pose2d()
+  );
+
   public Drivetrain() {
     // Resetting motor settings to default factory settings
     motorFL.restoreFactoryDefaults();
@@ -96,7 +105,7 @@ public class Drivetrain extends SubsystemBase {
     motorBR.restoreFactoryDefaults();
 
     // Set a max output to avoid damage
-    setMaxOutput(11.5);
+    setMaxOutput(0.95);
     
     // Zeroing and calibrating IMU
     zeroIMU();
@@ -110,7 +119,16 @@ public class Drivetrain extends SubsystemBase {
     simEncoderL.setDistancePerPulse(2 * Math.PI * (Settings.Drivetrain.kWheelDiameter / 2) / 42);
     simEncoderR.setDistancePerPulse(2 * Math.PI * (Settings.Drivetrain.kWheelDiameter / 2) / 42);
 
-    
+    TestDrivetrain = new DifferentialDrivetrainSim(
+        DCMotor.getNEO(Settings.Drivetrain.kGearboxMotorCount),
+        Settings.Drivetrain.kGearRatio,
+        Settings.Drivetrain.kCenterMomentInertia,
+        Settings.Drivetrain.kDriveBaseWeight,
+        Units.inchesToMeters(Settings.Drivetrain.kWheelDiameter / 2),
+        Units.inchesToMeters(Settings.Drivetrain.kWheelTrackWidth),
+        VecBuilder.fill(0.001, 0.001, 0.001, 0.05, 0.05, 0.005, 0.005)
+    );
+
     // Create the trajectory to follow in autonomous. It is best to initialize
     // trajectories here to avoid wasting time in autonomous.
     trajectory =
@@ -121,7 +139,9 @@ public class Drivetrain extends SubsystemBase {
             Arena.Trajectories.kConfig);
 
     // Push the trajectory to Field2d.
-    field.getObject("traj").setTrajectory(trajectory);
+    //field.getObject("traj").setTrajectory(trajectory);
+
+    field.getObject("simpler trajectory").setTrajectory(Arena.Trajectories.SimpleTrajectory);
     SmartDashboard.putData("Field", field);
   }
 
@@ -137,6 +157,8 @@ public class Drivetrain extends SubsystemBase {
     drivetrain.arcadeDrive(xSpeed, rotation);
   }
   public void voltageDrive(double leftVoltage, double rightVoltage){
+    MathUtil.clamp(leftVoltage, -RoboRIO.getBatteryVoltage() , RoboRIO.getBatteryVoltage());
+    MathUtil.clamp(rightVoltage, -RoboRIO.getBatteryVoltage() , RoboRIO.getBatteryVoltage());
     leftMotors.setVoltage(leftVoltage);
     rightMotors.setVoltage(rightVoltage);
 
@@ -146,32 +168,34 @@ public class Drivetrain extends SubsystemBase {
     drivetrain.stopMotor();
   }
 
-  /**
-   * Manually change the speed of both MotorControllerGroups {@code leftMotors} and {@code rightMotors}.
-   * @param leftSpeed - The speed at which the left side motors should be.
-   * @param rightSpeed - The speed at which the right side motors should be.
-   */
-  public void setSpeed(double leftSpeed, double rightSpeed) {
-    leftMotors.set(leftSpeed);
-    rightMotors.set(rightSpeed);
-  }
-
   // POSITION FUNCTIONS
 
   public double getLeftPosition() {
+    if(RobotBase.isSimulation()){
+      return simEncoderL.getDistance();
+    }
     return (encoderFL.getPosition() + encoderBL.getPosition() / 2.0);
   }
   public double getRightPosition() {
+    if(RobotBase.isSimulation()){
+      return simEncoderR.getDistance();
+    }
     return (encoderFR.getPosition() + encoderBR.getPosition() / 2.0);
   }
 
   // VELOCITY FUNCTIONS
-
+    // Because Relative Encoders only update if the robot is real, were only using the simEncoders while simulating
   public double getLeftVelocity() {
+    if (RobotBase.isSimulation()){
+      return simEncoderL.getRate();
+    }
     return (encoderFL.getVelocity() + encoderBL.getVelocity() / 2.0);
   }
   public double getRightVelocity() {
     // negate so both velocities are positive
+    if (RobotBase.isSimulation()){
+      return simEncoderR.getRate();
+    }
     return (encoderFR.getVelocity() + encoderBR.getVelocity() / 2.0);
   }
 
@@ -233,15 +257,10 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Drivetrain/Left get:", leftMotors.get());
     SmartDashboard.putNumber("Drivetrain/Right get:", rightMotors.get());
     
-    // Odometry
-    SmartDashboard.putNumber("Drivetrain/Odometry", getPose().getRotation().getDegrees());
     // This will get the simulated sensor readings that we set
     // in the previous article while in simulation, but will use
     // real values on the robot itself.
-    
     odometry.update(getHeading(), simEncoderL.getDistance(), simEncoderR.getDistance());
-    field.setRobotPose(getPose());
-
   }
 
   @Override
@@ -249,17 +268,19 @@ public class Drivetrain extends SubsystemBase {
     // Set the inputs to the system. Note that we need to convert
     // the [-1, 1] PWM signal to voltage by multiplying it by the
     // robot controller voltage.
-    SimDrivetrain.simDrivetrain.setInputs(leftMotors.get() * RoboRIO.getInputVoltage(), rightMotors.get() * RoboRIO.getInputVoltage());    
+    TestDrivetrain.setInputs(leftMotors.get() * RoboRIO.getInputVoltage(), rightMotors.get() * RoboRIO.getInputVoltage());    
     // Advance the model by 20 ms. Note that if you are running this
     // subsystem in a separate thread or have changed the nominal timestep
     // of TimedRobot, this value needs to match it.
-    SimDrivetrain.simDrivetrain.update(.02);
+    TestDrivetrain.update(.02);
   
     // Update all of our sensors.
-    simEncoderL.setDistance(SimDrivetrain.simDrivetrain.getLeftPositionMeters());
-    simEncoderL.setRate(SimDrivetrain.simDrivetrain.getLeftVelocityMetersPerSecond());
-    simEncoderR.setDistance(SimDrivetrain.simDrivetrain.getRightPositionMeters());
-    simEncoderR.setRate(SimDrivetrain.simDrivetrain.getRightVelocityMetersPerSecond());
-    imuSim.setGyroAngleX(-SimDrivetrain.simDrivetrain.getHeading().getDegrees());
+    simEncoderL.setDistance(TestDrivetrain.getLeftPositionMeters());
+    simEncoderL.setRate(TestDrivetrain.getLeftVelocityMetersPerSecond());
+    simEncoderR.setDistance(TestDrivetrain.getRightPositionMeters());
+    simEncoderR.setRate(TestDrivetrain.getRightVelocityMetersPerSecond());
+    
+    imuSim.setGyroAngleX(MathUtil.inputModulus(TestDrivetrain.getHeading().getDegrees(), -180, 180));
+    field.setRobotPose(TestDrivetrain.getPose());
   }
 }

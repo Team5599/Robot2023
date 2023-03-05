@@ -29,8 +29,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -83,6 +81,7 @@ public class RobotContainer {
     arcadeDriveActive = controlChooser.getSelected();
 
     driver.b().whileTrue(new DrivetrainStop(drivetrain));
+    //driver.x().whileTrue(new )
   }
 
   private void configureOperatorBindings() {
@@ -112,7 +111,7 @@ public class RobotContainer {
     autonChooser.addOption("Auton test", Autos.autonomous(drivetrain, arm, armIntake, imu, limelight));
     autonChooser.addOption("Ramsete test", Autos.RamseteTest(drivetrain, arm, imu, limelight));
     autonChooser.addOption("voltage drive test", Autos.voltageTest(drivetrain));
-    autonChooser.setDefaultOption("voltage drive test", Autos.voltageTest(drivetrain));
+    autonChooser.setDefaultOption("Auton test", Autos.autonomous(drivetrain, arm, armIntake, imu, limelight));
     SmartDashboard.putData("Autonomous", autonChooser);
   }
 

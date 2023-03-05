@@ -5,7 +5,6 @@
 package com.sentinels.robot.commands.autonomous.Driving.Unused;
 
 import com.sentinels.robot.subsystems.drive.Drivetrain;
-import com.sentinels.robot.subsystems.vision.Camera;
 import com.sentinels.robot.subsystems.vision.Limelight;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -24,8 +23,7 @@ public class AutonCombinedDrive extends CommandBase {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
     distanceController = new PIDController(0, 0, 0);
-    //distanceController.setSetpoint(); //this should be a distance that brings the robot near the gamepiece but not too close for intake
-
+    //distanceController.setSetpoint(); //this should be a distance that brings the robot near the gamepiece but not too close for intake 
     directionController = new PIDController(0, 0, 0);
     //directionController.setSetpoint(0);
     addRequirements(drivetrain);

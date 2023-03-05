@@ -10,10 +10,6 @@ package com.sentinels.robot.subsystems.intake;
 
 import com.sentinels.robot.constants.Ports;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 

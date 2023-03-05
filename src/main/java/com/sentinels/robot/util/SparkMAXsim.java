@@ -1,12 +1,9 @@
-package com.sentinels.robot.subsystems.drive;
-import java.net.CacheRequest;
+package com.sentinels.robot.util;
 
 import com.revrobotics.CANSparkMax;
-import com.sentinels.robot.util.RoboRIO;
 
 import edu.wpi.first.hal.SimDevice;
 import edu.wpi.first.hal.SimDouble;
-import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 
 public class SparkMAXsim extends CANSparkMax{
     /*

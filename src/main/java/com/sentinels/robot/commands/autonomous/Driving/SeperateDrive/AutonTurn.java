@@ -9,7 +9,6 @@ import com.sentinels.robot.subsystems.odometry.IMU;
 import com.sentinels.robot.subsystems.vision.Limelight;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutonTurn extends CommandBase {
