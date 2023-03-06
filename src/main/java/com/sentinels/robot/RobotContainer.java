@@ -20,7 +20,7 @@ import com.sentinels.robot.commands.drivetrain.*;
 //subsystem imports
 import com.sentinels.robot.subsystems.arm.*;
 import com.sentinels.robot.subsystems.drive.*;
-import com.sentinels.robot.subsystems.intake.ArmIntake;
+import com.sentinels.robot.subsystems.intake.Intake;
 import com.sentinels.robot.subsystems.odometry.*;
 import com.sentinels.robot.subsystems.vision.*;
 
@@ -41,7 +41,7 @@ public class RobotContainer {
 
   // Subsystems
   private final Arm arm = new Arm();
-  private final ArmIntake armIntake = new ArmIntake();
+  private final Intake armIntake = new Intake();
   private final Drivetrain drivetrain = new Drivetrain();
   private final Camera camera = new Camera();
   private final Limelight limelight = new Limelight();

@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
       Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON); 
       trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
     } catch (Exception e) {
-      DriverStation.reportError("UNABLE TO OPEN TRAJECTORY" + trajectoryJSON, e.getStackTrace());
+      DriverStation.reportError("Unable to open trajectory located at \"" + trajectoryJSON + "\"", e.getStackTrace());
     }
   }
 
