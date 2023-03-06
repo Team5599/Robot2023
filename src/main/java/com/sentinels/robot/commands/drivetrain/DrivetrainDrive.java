@@ -49,7 +49,7 @@ public class DrivetrainDrive extends CommandBase {
     driverRightY = limiterR.calculate(driver.getRightY());
     if(RobotBase.isSimulation()){
       driverLeftY = driver.getLeftY();
-      driverLeftX = driver.getRightY();
+      driverRightY = driver.getRightY();
     }
 
     periodic();

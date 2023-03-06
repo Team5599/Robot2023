@@ -38,9 +38,9 @@ public final class Autos {
   private final Limelight limelight;
 
   public static CommandBase autonomous(Drivetrain drivetrain, Arm arm, ArmIntake intake, IMU imu, Limelight limelight) {
-    //TODO: does not work with 1.5, works with 1.8 though. setpoints might quantized
+    //TODO: does not work with 1.5, works with 1.8 though. setpoints can only be multiples of 0.45
     return Commands.sequence(
-      new AutonDriveDistance(drivetrain, limelight, 1.8 , false)
+      new AutonDriveDistance(drivetrain, limelight, 4.5, false)
     );
   }
   //TODO: ramsete controller oftenly has insane voltage spikes, find a way to stop them to keep the robot safe

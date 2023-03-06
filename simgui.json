@@ -127,7 +127,8 @@
         "Drivetrain": {
           "Relative Encoders": {
             "open": true
-          }
+          },
+          "open": true
         },
         "Field": {
           "open": true

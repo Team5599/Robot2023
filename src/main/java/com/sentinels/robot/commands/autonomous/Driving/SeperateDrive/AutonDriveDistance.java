@@ -18,7 +18,8 @@ public class AutonDriveDistance extends CommandBase {
   private final Drivetrain drivetrain;
   private final Limelight limelight;
 
-  private final PIDController distanceController;
+  private final PIDController distanceControllerL;
+  private final PIDController distanceControllerR;
 
   private double setpoint;
   private boolean parallaxEnable;
@@ -40,7 +41,8 @@ public class AutonDriveDistance extends CommandBase {
   public AutonDriveDistance(Drivetrain drivetrain, Limelight limelight) {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
-    distanceController = new PIDController(2,2, 4);
+    distanceControllerL = new PIDController(2,2, 4);
+    distanceControllerR = new PIDController(2, 2, 4);
     parallaxEnable = false;
     addRequirements(drivetrain);
   }
@@ -51,17 +53,24 @@ public class AutonDriveDistance extends CommandBase {
     this.limelight = limelight;
     this.parallaxEnable = parallaxEnable;
     this.setpoint = setpoint;
-    distanceController = new PIDController(2,2, 4);
-    distanceController.setSetpoint(setpoint + (drivetrain.getLeftPosition()+ drivetrain.getRightPosition())/2);
+    distanceControllerL = new PIDController(3,2, 4);
+    distanceControllerR = new PIDController(3, 2, 4);
+    distanceControllerL.setSetpoint(setpoint + drivetrain.getLeftPosition());
+    distanceControllerR.setSetpoint(setpoint + drivetrain.getRightPosition());
     addRequirements(drivetrain);
   }
 
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("PID/error", distanceController.getPositionError());
-    SmartDashboard.putNumber("PID/Setpoint", distanceController.getSetpoint());
-    distanceController.setSetpoint(setpoint + (drivetrain.getLeftPosition()+ drivetrain.getRightPosition())/2);
-    distanceController.reset();
+    SmartDashboard.putNumber("PID/error Left", distanceControllerL.getPositionError());
+    SmartDashboard.putNumber("PID/error Right", distanceControllerR.getPositionError());
+    SmartDashboard.putNumber("PID/Left Setpoint", distanceControllerL.getSetpoint());
+    SmartDashboard.putNumber("PID/Right Setpoint", distanceControllerR.getSetpoint());
+    distanceControllerL.setSetpoint(setpoint + drivetrain.getLeftPosition());
+    distanceControllerR.setSetpoint(setpoint + drivetrain.getRightPosition());
+    distanceControllerL.reset();
+    distanceControllerR.reset();
+
     if (parallaxEnable == false){ 
       //setpoint = RobotContainer.distance-1;
     }
@@ -74,13 +83,14 @@ public class AutonDriveDistance extends CommandBase {
   @Override
   public void execute() {
     drivetrain.tankDrive(
-      MathUtil.clamp(distanceController.calculate(drivetrain.getLeftPosition()), -.5, .5),
-      MathUtil.clamp(distanceController.calculate(drivetrain.getRightPosition()), -.5, .5) 
+      MathUtil.clamp(distanceControllerL.calculate(drivetrain.getLeftPosition()), -.5, .5),
+      MathUtil.clamp(distanceControllerR.calculate(drivetrain.getRightPosition()), -.5, .5) 
     );
     
-    SmartDashboard.putNumber("PID/error", distanceController.getPositionError());
-    SmartDashboard.putNumber("PID/distanceController Left Calculation", distanceController.calculate(drivetrain.getLeftPosition()));
-    SmartDashboard.putNumber("PID/distanceController Right Calculation", distanceController.calculate(drivetrain.getRightPosition()));
+    SmartDashboard.putNumber("PID/error Left", distanceControllerL.getPositionError());
+    SmartDashboard.putNumber("PID/error Right", distanceControllerR.getPositionError());
+    SmartDashboard.putNumber("PID/distanceController Left Calculation", distanceControllerL.calculate(drivetrain.getLeftPosition()));
+    SmartDashboard.putNumber("PID/distanceController Right Calculation", distanceControllerR.calculate(drivetrain.getRightPosition()));
   }
 
   // Called once the command ends or is interrupted.
@@ -96,10 +106,10 @@ public class AutonDriveDistance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(RobotBase.isSimulation()&& Math.abs(distanceController.getPositionError()) > 10 + distanceController.getSetpoint()){
+    if(RobotBase.isSimulation()&& Math.abs(distanceControllerL.getPositionError()) > 10 + distanceControllerL.getSetpoint()){
       return true;
     }
-    if(distanceController.atSetpoint()){
+    if(distanceControllerL.atSetpoint() || distanceControllerR.atSetpoint()){
       return true;
     }
     return false;
