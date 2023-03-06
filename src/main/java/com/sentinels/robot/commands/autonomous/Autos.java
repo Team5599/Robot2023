@@ -44,16 +44,25 @@ public final class Autos {
     );
   }
   //TODO: ramsete controller oftenly has insane voltage spikes, find a way to stop them to keep the robot safe
+  //https://docs.wpilib.org/en/stable/docs/software/advanced-controls/trajectories/troubleshooting.html
   public static CommandBase RamseteTest(Drivetrain drivetrain, Arm arm, IMU imu, Limelight limelight){
     return Commands.sequence(
       new RamseteCommand(
         Arena.Trajectories.SimpleTrajectory, 
         drivetrain::getPose, 
-        new RamseteController(0.2,0.5), //b and zeta, not sure what they are tbh
-        new SimpleMotorFeedforward(2, 2, 2),//voltages here, arbitrary numbers here for now
+
+        //Ramsete controlle original values: 0.2, 0.5
+        new RamseteController(0.2,0.5), //b and zeta (how much it turns), larger values = smaller turn (think of the turns as the size of a arc)
+
+        //SimpleMotorFeedforward original values: 2, 2, 2
+        new SimpleMotorFeedforward(1, 3, 2),//voltages here, arbitrary numbers here for now
         Settings.Drivetrain.KINEMATICS, 
         drivetrain::getWheelSpeeds, 
-        new PIDController(2, 0, 0),//both of these are arbitrary, set these later 
+
+        // PID 1 Left controller original values: 2, 0, 0
+        new PIDController(2, 0, 0),//both of these are arbitrary, set these later
+        //values for both controllers should be the same
+        // PID 2 Right controller original values: 2, 0, 0
         new PIDController(2, 0, 0), 
         drivetrain::voltageDrive,
         drivetrain

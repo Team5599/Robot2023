@@ -76,8 +76,6 @@ public class Drivetrain extends SubsystemBase {
 
   private final ADIS16470_IMU imu = new ADIS16470_IMU();
 
-
-
   // SIMULATION
 
   private final Encoder sEncoderL = new Encoder(1, 2);
@@ -112,6 +110,13 @@ public class Drivetrain extends SubsystemBase {
 
     // Zeroing encoder positions
     resetEncoders();
+
+    // Set velocity and position factors
+
+    encoderFL.setPositionConversionFactor(2 * Math.PI * Units.inchesToMeters(3));
+    encoderBL.setPositionConversionFactor(2 * Math.PI * Units.inchesToMeters(3));
+    encoderFR.setPositionConversionFactor(2 * Math.PI * Units.inchesToMeters(3));
+    encoderBR.setPositionConversionFactor(2 * Math.PI * Units.inchesToMeters(3));
 
     // Invert the one of the sides so that they rotate synonymously in one direction
     leftMotors.setInverted(true);
@@ -174,13 +179,13 @@ public class Drivetrain extends SubsystemBase {
     if(RobotBase.isSimulation()){
       return simEncoderL.getDistance();
     }
-    return (encoderFL.getPosition() + encoderBL.getPosition() / 2.0);
+    return Settings.Drivetrain.kWheelCircumference * (encoderFL.getPosition() + encoderBL.getPosition() / 2.0);
   }
   public double getRightPosition() {
     if(RobotBase.isSimulation()){
       return simEncoderR.getDistance();
     }
-    return (encoderFR.getPosition() + encoderBR.getPosition() / 2.0);
+    return Settings.Drivetrain.kWheelCircumference * (encoderFR.getPosition() + encoderBR.getPosition() / 2.0);
   }
 
   // VELOCITY FUNCTIONS
@@ -189,20 +194,21 @@ public class Drivetrain extends SubsystemBase {
     if (RobotBase.isSimulation()){
       return simEncoderL.getRate();
     }
-    return (encoderFL.getVelocity() + encoderBL.getVelocity() / 2.0);
+    return Settings.Drivetrain.kWheelCircumference * (encoderFL.getVelocity() + encoderBL.getVelocity() / 120.0);
   }
   public double getRightVelocity() {
     // negate so both velocities are positive
     if (RobotBase.isSimulation()){
       return simEncoderR.getRate();
     }
-    return (encoderFR.getVelocity() + encoderBR.getVelocity() / 2.0);
+    return Settings.Drivetrain.kWheelCircumference * (encoderFR.getVelocity() + encoderBR.getVelocity() / 120.0);
   }
 
   //TODO: change this so that it doesnt use the RelativeEncoders, since they dont update
   public DifferentialDriveWheelSpeeds getWheelSpeeds(){
-    double AvgLeftVel = 0.254 * (getLeftVelocity() * 2 * Math.PI * (Settings.Drivetrain.kWheelDiameter / 2)) / 60;
-    double AvgRightVel = 0.254 * (getRightVelocity() * 2 * Math.PI * (Settings.Drivetrain.kWheelDiameter / 2)) / 60;
+    // double AvgLeftVel = 0.254 * (getLeftVelocity() * 2 * Math.PI * (Settings.Drivetrain.kWheelDiameter / 2)) / 60;
+    double AvgLeftVel = getLeftVelocity();
+    double AvgRightVel = getRightVelocity();
     return new DifferentialDriveWheelSpeeds(AvgLeftVel, AvgRightVel);// in m/s
   }
 

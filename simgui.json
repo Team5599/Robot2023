@@ -59,6 +59,9 @@
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[4]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[5]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[6]": "PIDController",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/SmartDashboard/Autonomous": "String Chooser",
       "/SmartDashboard/Control Scheme": "String Chooser",
@@ -159,7 +162,7 @@
               "min": -10.0
             }
           ],
-          "height": 284,
+          "height": 199,
           "legendHorizontal": true,
           "legendLocation": 9,
           "legendOutside": true,
@@ -212,7 +215,7 @@
               "min": -1.5
             }
           ],
-          "height": 284,
+          "height": 199,
           "series": [
             {
               "color": [
@@ -266,7 +269,7 @@
               "min": -2.0
             }
           ],
-          "height": 284,
+          "height": 199,
           "series": [
             {
               "color": [

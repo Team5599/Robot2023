@@ -24,6 +24,8 @@ public interface Settings {
         int kGearboxMotorCount = 2;
         
         DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(Units.inchesToMeters(Drivetrain.kWheelTrackWidth));
+
+        double kWheelCircumference = 2 * Math.PI * Units.inchesToMeters(3); // meters
     }
 
 }
