@@ -128,6 +128,18 @@ public class Arm extends SubsystemBase {
     return (armCascade.get() * RoboRIO.getBatteryVoltage());
   }
 
+  // TEMPERATURE METHODS (C)
+
+  public double getLeftTemp() {
+    return armPullL.getTemperature();
+  }
+  public double getRightTemp() {
+    return armPullR.getTemperature();
+  }
+  public double getCascadeTemp() {
+    return armCascade.getTemperature();
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Arm/Left Motor Voltage (V)", getLeftVoltage());
@@ -141,6 +153,10 @@ public class Arm extends SubsystemBase {
     SmartDashboard.putNumber("Arm/Left Motor Velocity (RPM)", getLeftVelocity());
     SmartDashboard.putNumber("Arm/Right Motor Velocity (RPM)", getRightVelocity());
     SmartDashboard.putNumber("Arm/Cascade Motor Velocity (RPM)", getCascadeVelocity());
+
+    SmartDashboard.putNumber("Arm/Debug/Left Motor Temperature (C)", getLeftTemp());
+    SmartDashboard.putNumber("Arm/Debug/Right Motor Temperature (C)", getRightTemp());
+    SmartDashboard.putNumber("Arm/Debug/Cascade Motor Temperature (C)", getCascadeTemp());
   }
 
   @Override

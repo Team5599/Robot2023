@@ -14,12 +14,13 @@
  *  - D = Drivetrain Motors / Motor Controllers
  *  - A = Arm Motors / Motor Controllers
  *  - I = Intake Motors / Motor Controllers
- *  - P = Pulley Motors / Motor Controllers
+ *  - C = Cascade Motors / Motor Controllers
+ *  - FX = TalonFX (Falcon 500) Motor / Motor Controller
  * 
  *       ___   ___   ___   ___
  *      | 1 | | 2 | | 3 | | 4 |
  *      |___| |___| |___| |___|
- *        D     D     A     I
+ *        D     D    A-FX   I
  *            __________
  *  BACK     |   PDP    |        FRONT >>>>
  *           |__________|
@@ -27,7 +28,7 @@
  *       ___   ___   ___   ___    |        |
  *      | 5 | | 6 | | 7 | | 8 |   |roboRIO |
  *      |___| |___| |___| |___|   |________|
- *        D     D     A     P
+ *        D     D    A-FX  C-FX
  */
 
 package com.sentinels.robot.constants;
