@@ -55,7 +55,7 @@ public final class Autos {
         new RamseteController(0.2,0.5), //b and zeta (how much it turns), larger values = smaller turn (think of the turns as the size of a arc)
 
         //SimpleMotorFeedforward original values: 2, 2, 2
-        new SimpleMotorFeedforward(1, 3, 2),//voltages here, arbitrary numbers here for now
+        new SimpleMotorFeedforward(1, 3, 3),//voltages here, arbitrary numbers here for now
         Settings.Drivetrain.KINEMATICS, 
         drivetrain::getWheelSpeeds, 
 
