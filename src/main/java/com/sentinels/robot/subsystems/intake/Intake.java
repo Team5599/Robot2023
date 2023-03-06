@@ -12,21 +12,22 @@ import com.sentinels.robot.constants.Ports;
 import com.sentinels.robot.util.RoboRIO;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Code to allow the intake to compress, release, and pivot.
  * 
  * Intake contains:
- * </p>- 1x NEO motor w/ encoder for pivot
- * </p>- 1x Double solenoid for pneumatic piston to push and pull
+ * </p>- 1x NEO 550 motor w/ encoder for pivot
+ * </p>- 1x Double solenoid for pneumatic piston for push and pull
  */
 public class Intake extends SubsystemBase {
 
@@ -37,6 +38,7 @@ public class Intake extends SubsystemBase {
   private final DoubleSolenoid solenoid = new DoubleSolenoid(
     PneumaticsModuleType.CTREPCM, Ports.Intake.SOLENOIDPUSH, Ports.Intake.SOLENOIDPULL
   );
+  private final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
 
   public Intake() {
     // Reset motor and encoder
