@@ -19,6 +19,9 @@ import com.sentinels.robot.constants.Settings;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -46,25 +49,56 @@ public final class Autos {
   //TODO: ramsete controller oftenly has insane voltage spikes, find a way to stop them to keep the robot safe
   //https://docs.wpilib.org/en/stable/docs/software/advanced-controls/trajectories/troubleshooting.html
   public static CommandBase RamseteTest(Drivetrain drivetrain, Arm arm, IMU imu, Limelight limelight){
+    
+    var RamseteControl = NetworkTableInstance.getDefault().getTable("Ramsete Control");
+    var PIDleftSetpoint = RamseteControl.getEntry("Left setpoint");
+    var leftVel = RamseteControl.getEntry("Left Velocity");
+    var PIDrightSetpoint = RamseteControl.getEntry("Right setpoint");
+    var rightVel = RamseteControl.getEntry("Right Velocity");
+
+    RamseteController disabled = new RamseteController(.2, 0.5);
+    disabled.setEnabled(false);
+
+    PIDController leftController = new PIDController(0, 0, 0);
+    PIDController rightController = new PIDController(0, 0, 0);
+
     return Commands.sequence(
       new RamseteCommand(
         Arena.Trajectories.SimpleTrajectory, 
         drivetrain::getPose, 
 
         //Ramsete controlle original values: 0.2, 0.5
-        new RamseteController(0.2,0.5), //b and zeta (how much it turns), larger values = smaller turn (think of the turns as the size of a arc)
-
+        // new RamseteController(0.1,0.2), //b and zeta (how much it turns), larger values = smaller turn (think of the turns as the size of a arc)
+        disabled,
         //SimpleMotorFeedforward original values: 2, 2, 2
-        new SimpleMotorFeedforward(1, 3, 3),//voltages here, arbitrary numbers here for now
+        new SimpleMotorFeedforward(0.15, 2, 0.5),//voltages here, arbitrary numbers here for now
         Settings.Drivetrain.KINEMATICS, 
         drivetrain::getWheelSpeeds, 
 
         // PID 1 Left controller original values: 2, 0, 0
-        new PIDController(2, 0, 0),//both of these are arbitrary, set these later
+        // new PIDController(2, 0, 0),//both of these are arbitrary, set these later
+        leftController,
+
         //values for both controllers should be the same
         // PID 2 Right controller original values: 2, 0, 0
-        new PIDController(2, 0, 0), 
-        drivetrain::voltageDrive,
+        // new PIDController(2, 0, 0), 
+        rightController,
+
+        // drivetrain::voltageDrive,
+        (left, right)->{
+          drivetrain.voltageDrive(left, right);
+
+          leftVel.setNumber(drivetrain.getLeftVelocity());
+          PIDleftSetpoint.setNumber(leftController.getSetpoint());
+          rightVel.setNumber(drivetrain.getRightVelocity());
+          PIDrightSetpoint.setNumber(rightController.getSetpoint());
+
+          SmartDashboard.putNumber("RAMSETE/Left Velocity",drivetrain.getLeftVelocity());
+          SmartDashboard.putNumber("RAMSETE/Right Velocity",drivetrain.getRightVelocity());
+          SmartDashboard.putNumber("RAMSETE/Left Setpoint", leftController.getSetpoint());
+          SmartDashboard.putNumber("RAMSETE/Right Setpoint", rightController.getSetpoint());
+
+        },
         drivetrain
       ).andThen(
         () -> drivetrain.voltageDrive(0, 0)

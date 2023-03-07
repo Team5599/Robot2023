@@ -39,8 +39,10 @@ public interface Arena {
             List.of(new Translation2d(3,0)),
             new Pose2d(3,3, Rotation2d.fromDegrees(90)),
             kConfig
-        )
-;
+        );
+        // public Trajectory simpleTrajectory2 = TrajectoryGenerator.generateTrajectory(
+
+        // );
     }
     public interface Keypoints{
         // use this interface to set the coordinates of points around the arena, like the charging dock, gamepieces and human player portal, etc
