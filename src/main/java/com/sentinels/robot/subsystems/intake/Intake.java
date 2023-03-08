@@ -38,14 +38,18 @@ public class Intake extends SubsystemBase {
   private final DoubleSolenoid solenoid = new DoubleSolenoid(
     PneumaticsModuleType.CTREPCM, Ports.Intake.SOLENOIDPUSH, Ports.Intake.SOLENOIDPULL
   );
-  private final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
-
+  private static Compressor compressor = new Compressor(11, PneumaticsModuleType.CTREPCM);
+  // Compressor module is the pcm port currently its 11 (Joey Lam) // 
   public Intake() {
     // Reset motor and encoder
     motorPivot.restoreFactoryDefaults();
     encoderPivot.setPosition(0);
 
     solenoid.set(DoubleSolenoid.Value.kOff);
+    compressor.enableAnalog(10, 30);
+    compressor.enableDigital();
+
+    
   }
 
   public void intakeConstrict() {

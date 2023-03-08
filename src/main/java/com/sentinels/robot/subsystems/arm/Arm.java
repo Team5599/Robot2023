@@ -13,7 +13,6 @@ import com.sentinels.robot.util.RoboRIO;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.sensors.WPI_CANCoder;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -35,9 +34,9 @@ public class Arm extends SubsystemBase {
   private final WPI_TalonFX armPullR = new WPI_TalonFX(Ports.Arm.ARMRIGHTPULLEY);
   private final WPI_TalonFX armCascade = new WPI_TalonFX(Ports.Arm.ARMCASCADE);
 
-  private final WPI_CANCoder encoderL = new WPI_CANCoder(Ports.Arm.ARMLEFTPULLEY);
-  private final WPI_CANCoder encoderR = new WPI_CANCoder(Ports.Arm.ARMRIGHTPULLEY);
-  private final WPI_CANCoder encoderCascade = new WPI_CANCoder(Ports.Arm.ARMCASCADE);
+  //private final WPI_CANCoder encoderL = new WPI_CANCoder(Ports.Arm.ARMLEFTPULLEY);
+  //private final WPI_CANCoder encoderR = new WPI_CANCoder(Ports.Arm.ARMRIGHTPULLEY);
+  //private final WPI_CANCoder encoderCascade = new WPI_CANCoder(Ports.Arm.ARMCASCADE);
 
   private final MotorControllerGroup armPivotMotors = new MotorControllerGroup(armPullL, armPullR);
 
@@ -83,37 +82,37 @@ public class Arm extends SubsystemBase {
   }
 
   public void resetEncoders() {
-    encoderL.configFactoryDefault();
-    encoderR.configFactoryDefault();
-    encoderCascade.configFactoryDefault();
+    armPullL.configFactoryDefault();
+    armPullR.configFactoryDefault();
+    armCascade.configFactoryDefault();
 
-    encoderL.setPosition(0);
-    encoderR.setPosition(0);
-    encoderCascade.setPosition(0);
+    armPullL.setSelectedSensorPosition(0);
+    armPullR.setSelectedSensorPosition(0);
+    armCascade.setSelectedSensorPosition(0);
   }
 
   // POSITION METHODS (degrees)
 
   public double getLeftPosition() {
-    return encoderL.getPosition();
+    return armPullL.getSelectedSensorPosition();
   }
   public double getRightPosition() {
-    return encoderR.getPosition();
+    return armPullR.getSelectedSensorPosition();
   }
   public double getCascadePosition() {
-    return encoderCascade.getPosition();
+    return armCascade.getSelectedSensorPosition();
   }
 
   // VELOCITY METHODS (RPM) (converted deg/sec to rpm)
 
   public double getLeftVelocity() {
-    return (encoderL.getVelocity() * 6.0);
+    return (armPullL.getSelectedSensorVelocity() * 6.0);
   }
   public double getRightVelocity() {
-    return (encoderR.getVelocity() * 6.0);
+    return (armPullR.getSelectedSensorVelocity() * 6.0);
   }
   public double getCascadeVelocity() {
-    return (encoderCascade.getVelocity() * 6.0);
+    return (armCascade.getSelectedSensorVelocity() * 6.0);
   }
 
   // VOLTAGE METHODS (V)

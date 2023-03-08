@@ -6,7 +6,6 @@ package com.sentinels.robot.commands.autonomous;
 
 //import com.sentinels.robot.constants.Ports.Arm;
 import com.sentinels.robot.subsystems.drive.Drivetrain;
-import com.sentinels.robot.subsystems.odometry.IMU;
 import com.sentinels.robot.subsystems.vision.Limelight;
 import com.sentinels.robot.Robot;
 import com.sentinels.robot.commands.autonomous.Driving.AutonDock;
@@ -33,10 +32,9 @@ public final class Autos {
   private final Drivetrain drivetrain;
   private final Arm arm;
   private final Intake intake;
-  private final IMU imu;
   private final Limelight limelight;
 
-  public static CommandBase autonomous(Drivetrain drivetrain, Arm arm, Intake intake, IMU imu, Limelight limelight) {
+  public static CommandBase autonomous(Drivetrain drivetrain, Arm arm, Intake intake, Limelight limelight) {
     return Commands.sequence(
       new AutonDriveDistance(drivetrain, limelight, 1.5 , false)
     );

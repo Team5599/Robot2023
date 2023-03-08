@@ -21,7 +21,6 @@ import com.sentinels.robot.commands.drivetrain.*;
 import com.sentinels.robot.subsystems.arm.*;
 import com.sentinels.robot.subsystems.drive.*;
 import com.sentinels.robot.subsystems.intake.Intake;
-import com.sentinels.robot.subsystems.odometry.*;
 import com.sentinels.robot.subsystems.vision.*;
 
 import edu.wpi.first.math.trajectory.Trajectory;
@@ -45,7 +44,6 @@ public class RobotContainer {
   private final Drivetrain drivetrain = new Drivetrain();
   private final Camera camera = new Camera();
   private final Limelight limelight = new Limelight();
-  private final IMU imu = new IMU();
   
   // Input Devices
   private final CommandXboxController driver = new CommandXboxController(Ports.Controllers.DRIVER);
@@ -110,7 +108,7 @@ public class RobotContainer {
 
   private void configureAutonCommands() {
     autonChooser.addOption("Disabled", null);
-    autonChooser.addOption("Auton test", Autos.autonomous(drivetrain, arm, armIntake, imu, limelight));
+    autonChooser.addOption("Auton test", Autos.autonomous(drivetrain, arm, armIntake, limelight));
     //autonChooser.addOption("test", Autos.RamseteTest(drivetrain, arm, imu, limelight));
     SmartDashboard.putData("Autonomous", autonChooser);
   }
