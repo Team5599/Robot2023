@@ -43,7 +43,7 @@ public final class Autos {
   public static CommandBase autonomous(Drivetrain drivetrain, Arm arm, ArmIntake intake, IMU imu, Limelight limelight) {
     //TODO: does not work with 1.5, works with 1.8 though. setpoints can only be multiples of 0.45
     return Commands.sequence(
-      new AutonDriveDistance(drivetrain, limelight, 4.5, false)
+      new AutonDriveDistance(drivetrain, limelight, 4.5 , false)
     );
   }
   //TODO: ramsete controller oftenly has insane voltage spikes, find a way to stop them to keep the robot safe
@@ -56,22 +56,22 @@ public final class Autos {
     var PIDrightSetpoint = RamseteControl.getEntry("Right setpoint");
     var rightVel = RamseteControl.getEntry("Right Velocity");
 
-    RamseteController disabled = new RamseteController(.2, 0.5);
+    RamseteController disabled = new RamseteController(0.2, 0.5);
     disabled.setEnabled(false);
 
-    PIDController leftController = new PIDController(0, 0, 0);
-    PIDController rightController = new PIDController(0, 0, 0);
+    PIDController leftController = new PIDController(3, 0, 0);
+    PIDController rightController = new PIDController(3, 0, 0);
 
     return Commands.sequence(
       new RamseteCommand(
-        Arena.Trajectories.SimpleTrajectory, 
+        Arena.Trajectories.TestTrajectory, 
         drivetrain::getPose, 
 
         //Ramsete controlle original values: 0.2, 0.5
         // new RamseteController(0.1,0.2), //b and zeta (how much it turns), larger values = smaller turn (think of the turns as the size of a arc)
         disabled,
         //SimpleMotorFeedforward original values: 2, 2, 2
-        new SimpleMotorFeedforward(0.15, 2, 0.5),//voltages here, arbitrary numbers here for now
+        new SimpleMotorFeedforward(0.15, 2, 2),//voltages here, arbitrary numbers here for now
         Settings.Drivetrain.KINEMATICS, 
         drivetrain::getWheelSpeeds, 
 
@@ -98,6 +98,10 @@ public final class Autos {
           SmartDashboard.putNumber("RAMSETE/Left Setpoint", leftController.getSetpoint());
           SmartDashboard.putNumber("RAMSETE/Right Setpoint", rightController.getSetpoint());
 
+          SmartDashboard.putNumber("RAMSETE/Left Position Error", leftController.getPositionError());          
+          SmartDashboard.putNumber("RAMSETE/Left Velocity Error", leftController.getVelocityError());
+          SmartDashboard.putNumber("RAMSETE/Right Position Error", rightController.getPositionError());          
+          SmartDashboard.putNumber("RAMSETE/Right Velocity Error", rightController.getVelocityError());
         },
         drivetrain
       ).andThen(

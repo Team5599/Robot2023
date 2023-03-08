@@ -35,11 +35,16 @@ public interface Arena {
                 new TrajectoryConfig(Units.feetToMeters(3.0), Units.feetToMeters(3.0)));
 
         public Trajectory SimpleTrajectory = TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0,0, Rotation2d.fromDegrees(0)),
-            List.of(new Translation2d(3,0)),
+            new Pose2d(0,0, Rotation2d.fromDegrees(0)), //starting postion
+            List.of(new Translation2d(3,0)), //shows the turning process thingy
             new Pose2d(3,3, Rotation2d.fromDegrees(90)),
             kConfig
         );
+        public Trajectory StraightLine = TrajectoryGenerator.generateTrajectory(
+            new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
+            List.of(new Translation2d(3, 0)), 
+            new Pose2d(6, 0, Rotation2d.fromDegrees(0)), 
+            kConfig);
         // public Trajectory simpleTrajectory2 = TrajectoryGenerator.generateTrajectory(
 
         // );

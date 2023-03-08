@@ -4,11 +4,13 @@
 
 package com.sentinels.robot.commands.autonomous.Driving.SeperateDrive;
 
+import com.sentinels.robot.constants.Settings;
 import com.sentinels.robot.subsystems.drive.Drivetrain;
 import com.sentinels.robot.subsystems.odometry.IMU;
 import com.sentinels.robot.subsystems.vision.Limelight;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutonTurn extends CommandBase {
@@ -17,22 +19,28 @@ public class AutonTurn extends CommandBase {
   private final Limelight limelight;
   //private final IMU imu;
 
-  private final PIDController directionController;
-  double SetAngle;// the angle from us to the game piece
+  private final PIDController leftController;
+  private final PIDController rightController;
+  private double wheelDistance;
+  double limelightAngle;// the angle from us to the game piece
   public AutonTurn(Drivetrain drivetrain, Limelight limelight, IMU imu) {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
     //this.imu = imu;
-    directionController = new PIDController(0.3, 0.1, 0.1);
+    leftController = new PIDController(0.3, 0.1, 0.1);
+    rightController = new PIDController(0.3, 0.1, 0.1);
     addRequirements(drivetrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
+
   public void initialize() {
-    directionController.reset();
-    SetAngle = limelight.getTx(); 
-    directionController.setSetpoint(SetAngle);
+    wheelDistance = (Units.degreesToRadians(limelightAngle))*((Settings.Drivetrain.kWheelTrackWidth)/2);
+    leftController.reset();
+    rightController.reset();
+    leftController.setSetpoint(-wheelDistance);
+    rightController.setSetpoint(wheelDistance);
     
     //double radiusW = 3.0; //radius of the wheel
     //double halfWidthR = 13.5;//half of width of the robot
@@ -40,8 +48,7 @@ public class AutonTurn extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double motorSpeed = directionController.calculate(limelight.getTx());
-    drivetrain.tankDrive(motorSpeed, -motorSpeed); 
+    drivetrain.voltageDrive(leftController.calculate(drivetrain.getLeftPosition()), drivetrain.getRightPosition());
   }
 
   // Called once the command ends or is interrupted.
@@ -54,7 +61,7 @@ public class AutonTurn extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(directionController.atSetpoint()){
+    if(leftController.atSetpoint() && rightController.atSetpoint()){
       return true;
     }
     return false;

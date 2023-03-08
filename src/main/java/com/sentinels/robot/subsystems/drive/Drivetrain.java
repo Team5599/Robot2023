@@ -146,7 +146,7 @@ public class Drivetrain extends SubsystemBase {
     // Push the trajectory to Field2d.
     //field.getObject("traj").setTrajectory(trajectory);
 
-    field.getObject("simpler trajectory").setTrajectory(Arena.Trajectories.SimpleTrajectory);
+    field.getObject("simpler trajectory").setTrajectory(Arena.Trajectories.TestTrajectory);
     SmartDashboard.putData("Field", field);
   }
 
