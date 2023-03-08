@@ -47,17 +47,28 @@ public class Intake extends SubsystemBase {
 
     solenoid.set(DoubleSolenoid.Value.kOff);
     compressor.enableAnalog(10, 30);
-    compressor.enableDigital();
+    
+    if(compressor.getPressure() <= 60)
+    {
+      compressor.enableDigital();
+      System.out.print(compressor.getPressure());
+    }
+    else{
+      compressor.disable();
+      System.out.print("off");
 
+    }
     
   }
 
   public void intakeConstrict() {
     solenoid.set(Value.kForward);
+    solenoid.toggle();
   }
   
   public void intakeRetract() {
     solenoid.set(Value.kReverse);
+    solenoid.toggle();
   }
 
   // ENCODER + MOTOR INFO METHODS

@@ -1,6 +1,10 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+/***************************************************************
+                The Sentinels - FRC Team 5599
+        Benjamin N. Cardozo High School Robotics Team
+
+    This work is licensed under the terms of the MIT license.
+    Copyright (c) 2023 The Sentinels. All rights reserved.
+***************************************************************/
 
 package com.sentinels.robot.commands.armmech.intake;
 
@@ -8,20 +12,14 @@ import com.sentinels.robot.subsystems.intake.Intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-/** An example command that uses an example subsystem. */
 public class IntakeClose extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final Intake m_ArmIntakeSubsystem;
+  private Intake intake;
 
-  /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
-   */
-  public IntakeClose(Intake subsystem) {
-    m_ArmIntakeSubsystem = subsystem;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
+  public IntakeClose(Intake intake) {
+    this.intake = intake;
+    
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
@@ -30,7 +28,10 @@ public class IntakeClose extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    intake.intakeConstrict();
+    System.out.println("CONSTRICT");
+  }
 
   // Called once the command ends or is interrupted.
   @Override
