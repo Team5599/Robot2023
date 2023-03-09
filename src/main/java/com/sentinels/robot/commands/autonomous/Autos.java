@@ -12,7 +12,7 @@ import com.sentinels.robot.Robot;
 import com.sentinels.robot.commands.autonomous.Driving.AutonDock;
 import com.sentinels.robot.commands.autonomous.Driving.SeperateDrive.AutonDriveDistance;
 import com.sentinels.robot.subsystems.arm.Arm;
-import com.sentinels.robot.subsystems.intake.ArmIntake;
+import com.sentinels.robot.subsystems.intake.Intake;
 import com.sentinels.robot.constants.Settings;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -32,11 +32,11 @@ public final class Autos {
 
   private final Drivetrain drivetrain;
   private final Arm arm;
-  private final ArmIntake intake;
+  private final Intake intake;
   private final IMU imu;
   private final Limelight limelight;
 
-  public static CommandBase autonomous(Drivetrain drivetrain, Arm arm, ArmIntake intake, IMU imu, Limelight limelight) {
+  public static CommandBase autonomous(Drivetrain drivetrain, Arm arm, Intake intake, IMU imu, Limelight limelight) {
     return Commands.sequence(
       new AutonDriveDistance(drivetrain, limelight, 1.5 , false)
     );

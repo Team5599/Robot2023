@@ -6,7 +6,7 @@
     Copyright (c) 2023 The Sentinels. All rights reserved.
 ***************************************************************/
 
-// Port numbers for controllers/gamepads, subsystem/mechanism motor controllers, and sensors are defined in this file.
+// Port numbers for controllers/gamepads, subsystem/mechanism motor controllers, solenoids, and sensors are defined in this file.
 
 /**
  * ROBOT MOTOR CONTROL LAYOUT
@@ -48,11 +48,13 @@ public interface Ports {
         int ARMCASCADE = 8;
     }
 
-    public interface ArmIntake {
-        // Pneumatics
-        int PNEUMATICS = 10; // temp var name until pneumatics are known
+    public interface Intake {
         // Motors
         int INTAKEPIVOT = 4;
+
+        // Solenoids
+        int SOLENOIDPUSH = 0;
+        int SOLENOIDPULL = 1;
     }
 
     public interface Drivetrain {
