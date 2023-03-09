@@ -40,7 +40,7 @@ public class RobotContainer {
 
   // Subsystems
   private final Arm arm = new Arm();
-  private final Intake armIntake = new Intake();
+  private final Intake intake = new Intake();
   private final Drivetrain drivetrain = new Drivetrain();
   private final Camera camera = new Camera();
   private final Limelight limelight = new Limelight();
@@ -92,23 +92,25 @@ public class RobotContainer {
     operator.rightStick().whileTrue(new ArmPivot(arm, operator));
 
     // INTAKE
-    operator.a().onTrue(new IntakeOpen(armIntake));
-    operator.b().onTrue(new IntakeClose(armIntake));
+    operator.a().onTrue(new IntakeOpen(intake));
+    operator.b().onTrue(new IntakeClose(intake));
 
     // GAME PIECE MODES
-    operator.x();
-    operator.y();
+    // TODO: Attempt to create PSI modes for each game piece
+    operator.x(/* new ChooseCone(intake) */);
+    operator.y(/* new ChooseCube(intake) */);
   }
 
   // COMMAND DEFAULTS
 
   private void configureDefaultCommands() {
     drivetrain.setDefaultCommand(new DrivetrainDrive(drivetrain, driver, arcadeDriveActive));
+    arm.setDefaultCommand(new ArmPivot(arm, operator));
   }
 
   private void configureAutonCommands() {
     autonChooser.addOption("Disabled", null);
-    autonChooser.addOption("Auton test", Autos.autonomous(drivetrain, arm, armIntake, limelight));
+    autonChooser.addOption("Auton test", Autos.autonomous(drivetrain, arm, intake, limelight));
     //autonChooser.addOption("test", Autos.RamseteTest(drivetrain, arm, imu, limelight));
     SmartDashboard.putData("Autonomous", autonChooser);
   }
