@@ -34,10 +34,6 @@ public class Arm extends SubsystemBase {
   private final WPI_TalonFX armPullR = new WPI_TalonFX(Ports.Arm.ARMRIGHTPULLEY);
   private final WPI_TalonFX armCascade = new WPI_TalonFX(Ports.Arm.ARMCASCADE);
 
-  //private final WPI_CANCoder encoderL = new WPI_CANCoder(Ports.Arm.ARMLEFTPULLEY);
-  //private final WPI_CANCoder encoderR = new WPI_CANCoder(Ports.Arm.ARMRIGHTPULLEY);
-  //private final WPI_CANCoder encoderCascade = new WPI_CANCoder(Ports.Arm.ARMCASCADE);
-
   private final MotorControllerGroup armPivotMotors = new MotorControllerGroup(armPullL, armPullR);
 
   public Arm() {
@@ -73,7 +69,6 @@ public class Arm extends SubsystemBase {
   }
 
   public void CascadeArm(double speed) {
-    //if (isStalling()) { return; }
     armCascade.set(speed);
   }
 
