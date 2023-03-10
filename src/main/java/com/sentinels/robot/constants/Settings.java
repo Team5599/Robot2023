@@ -26,4 +26,20 @@ public interface Settings {
         DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(Units.inchesToMeters(Drivetrain.kWheelTrackWidth));
     }
 
+    public interface Arm {
+        double kArmLength = 47; //in inches
+        double kCascadeLength = 40;//in
+        // double kPivotToPerimeter;
+        double kMaxCascadeLength = 68;// from the pivot to the end of the arm once full extended in inches
+
+        double PivotGearRatio = 27;// versal planetary gear ratio
+        enum Level {
+            LOW,
+            MIDDLE,
+            HIGH,
+        }
+        
+
+    }
+
 }

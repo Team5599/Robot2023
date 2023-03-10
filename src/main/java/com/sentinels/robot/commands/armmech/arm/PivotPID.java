@@ -33,6 +33,7 @@ public class PivotPID extends CommandBase {
     // distance may have to be negated
     // if the pivot starts at 0 degrees, then we need to choose the bottom position to be the actual max amount of degrees, but the input should still be normal
     // input should be from 0 to `70 degrees but map to the proper places
+    //arm outer length: 47", arm inner length: 40", base length: 28.5"
     arm.PivotArm(pivotController.calculate(arm.getRightPosition()));
 
     //SmartDashboard.putNumber("Arm/PID",pivotController.getPositionError());

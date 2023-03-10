@@ -29,7 +29,7 @@ public class CascadePID extends CommandBase {
 
   // need an overload to take a string name/ enum / distance in meters
 
-  // public CascadePID(Arm arm, double distance) {
+  // public CascadePID(Arm arm, double distance, boolean inches) {
   //   this.arm = arm;
   //   cascadeController = new PIDController(1, 1, 1);
   //   cascadeController.setSetpoint(distance * gearRatio);
@@ -42,7 +42,9 @@ public class CascadePID extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+
+  }
 
   // Called once the command ends or is interrupted.
   @Override
