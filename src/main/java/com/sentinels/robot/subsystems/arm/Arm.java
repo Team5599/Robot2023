@@ -13,6 +13,9 @@ import com.sentinels.robot.util.RoboRIO;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -32,14 +35,15 @@ public class Arm extends SubsystemBase {
 
   private final WPI_TalonFX armPullL = new WPI_TalonFX(Ports.Arm.ARMLEFTPULLEY);
   private final WPI_TalonFX armPullR = new WPI_TalonFX(Ports.Arm.ARMRIGHTPULLEY);
-  private final WPI_TalonFX armCascade = new WPI_TalonFX(Ports.Arm.ARMCASCADE);
+  //private final WPI_TalonFX armCascade = new WPI_TalonFX(Ports.Arm.ARMCASCADE);
+  private final CANSparkMax armCascade = new CANSparkMax(Ports.Arm.ARMCASCADE, MotorType.kBrushless);
+  private final RelativeEncoder cascadeEncoder = armCascade.getEncoder();
 
   private final MotorControllerGroup armPivotMotors = new MotorControllerGroup(armPullL, armPullR);
 
   public Arm() {
     armPullL.setNeutralMode(NeutralMode.Brake);
     armPullR.setNeutralMode(NeutralMode.Brake);
-    armCascade.setNeutralMode(NeutralMode.Brake);
 
     resetEncoders();
     
@@ -79,11 +83,11 @@ public class Arm extends SubsystemBase {
   public void resetEncoders() {
     armPullL.configFactoryDefault();
     armPullR.configFactoryDefault();
-    armCascade.configFactoryDefault();
+    armCascade.restoreFactoryDefaults();
 
     armPullL.setSelectedSensorPosition(0);
     armPullR.setSelectedSensorPosition(0);
-    armCascade.setSelectedSensorPosition(0);
+    cascadeEncoder.setPosition(0);
   }
 
   // POSITION METHODS (degrees)
@@ -95,7 +99,7 @@ public class Arm extends SubsystemBase {
     return armPullR.getSelectedSensorPosition();
   }
   public double getCascadePosition() {
-    return armCascade.getSelectedSensorPosition();
+    return cascadeEncoder.getPosition();
   }
 
   // VELOCITY METHODS (RPM) (converted deg/sec to rpm)
@@ -107,7 +111,7 @@ public class Arm extends SubsystemBase {
     return (armPullR.getSelectedSensorVelocity() * 6.0);
   }
   public double getCascadeVelocity() {
-    return (armCascade.getSelectedSensorVelocity() * 6.0);
+    return ((cascadeEncoder.getVelocity()/60) * 6.0);
   }
 
   // VOLTAGE METHODS (V)
@@ -131,7 +135,7 @@ public class Arm extends SubsystemBase {
     return armPullR.getTemperature();
   }
   public double getCascadeTemp() {
-    return armCascade.getTemperature();
+    return armCascade.getMotorTemperature();
   }
 
   @Override
