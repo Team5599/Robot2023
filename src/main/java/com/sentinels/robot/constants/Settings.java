@@ -33,13 +33,36 @@ public interface Settings {
         double kMaxCascadeLength = 68;// from the pivot to the end of the arm once full extended in inches
 
         double PivotGearRatio = 27;// versal planetary gear ratio
-        enum Level {
-            LOW,
-            MIDDLE,
-            HIGH,
-        }
-        
-
+                
+        enum level {
+            TOP {
+                @Override
+                public boolean aimHigh() {
+                    return true;
+                }
+            },
+            MEDIUM {
+                @Override
+                public boolean aimMedium() {
+                    return true;
+                }
+            },
+            LOW {
+                @Override
+                public boolean aimLow() {
+                    return true;
+                }
+            };
+                
+            private int currentHeight;
+            public boolean aimHigh() {return false;}
+            public boolean aimMedium() {return false;}
+            public boolean aimLow() {return false;}
+                
+            public double getCurrentHeight(){
+                return currentHeight;
+            }
+        }  
     }
 
 }
