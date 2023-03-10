@@ -27,7 +27,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * <p>Arm contains:
  * <p>- 1x Falcon 500 Motor on the LEFT side pulley
  * <p>- 1x Falcon 500 Motor on the RIGHT side pulley
- * <p>- 1x Falcon 500 Motor on the arm for cascade (extend, retract)
+ * <p>- 1x NEO Motor on the arm for cascade (extend, retract)
  * 
  * @author Ahmed Osman, Karamat Hasan
  */
@@ -35,7 +35,7 @@ public class Arm extends SubsystemBase {
 
   private final WPI_TalonFX armPullL = new WPI_TalonFX(Ports.Arm.ARMLEFTPULLEY);
   private final WPI_TalonFX armPullR = new WPI_TalonFX(Ports.Arm.ARMRIGHTPULLEY);
-  //private final WPI_TalonFX armCascade = new WPI_TalonFX(Ports.Arm.ARMCASCADE);
+
   private final CANSparkMax armCascade = new CANSparkMax(Ports.Arm.ARMCASCADE, MotorType.kBrushless);
   private final RelativeEncoder cascadeEncoder = armCascade.getEncoder();
 
@@ -80,7 +80,7 @@ public class Arm extends SubsystemBase {
     armCascade.stopMotor();
   }
 
-  public void resetEncoders() {
+  private void resetEncoders() {
     armPullL.configFactoryDefault();
     armPullR.configFactoryDefault();
     armCascade.restoreFactoryDefaults();
@@ -111,7 +111,7 @@ public class Arm extends SubsystemBase {
     return (armPullR.getSelectedSensorVelocity() * 6.0);
   }
   public double getCascadeVelocity() {
-    return ((cascadeEncoder.getVelocity()/60) * 6.0);
+    return cascadeEncoder.getVelocity();
   }
 
   // VOLTAGE METHODS (V)
