@@ -4,6 +4,9 @@
 
 package com.sentinels.robot.commands.armmech.arm;
 
+import com.sentinels.robot.constants.Settings;
+
+import com.sentinels.robot.constants.Settings.Arm.level;
 import com.sentinels.robot.subsystems.arm.Arm;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -17,10 +20,26 @@ public class PivotPID extends CommandBase {
     this.arm = arm;
     pivotController = new PIDController(0.5,0,0);
     pivotController.setSetpoint(27*angle);//using 27 here because thats the gear ratio
-    addRequirements(arm);
+    //addRequirements(arm); // becuase this is used in a parallel command, using addRequirements may interfere with functionality
   }
 
-  // need an overload for an enum
+  public PivotPID(Arm arm, level height) {
+    this.arm = arm;
+    pivotController = new PIDController(0.5,0,0);
+
+    double setpoint = 0;
+    switch(height){
+      case LOW:
+        setpoint = 0;
+      case MEDIUM:
+        setpoint = 35;
+      case TOP:
+        setpoint = 70;
+    }
+    pivotController.setSetpoint(setpoint * Settings.Arm.kPivotGearRatio);
+
+    //addRequirements(arm);
+  }
 
   @Override
   public void initialize() {

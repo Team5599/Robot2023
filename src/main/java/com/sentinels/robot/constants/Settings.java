@@ -26,42 +26,22 @@ public interface Settings {
         DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(Units.inchesToMeters(Drivetrain.kWheelTrackWidth));
     }
 
-    public interface Arm {
-        double kArmLength = 47; //in inches
-        double kCascadeLength = 40;//in
-        // double kPivotToPerimeter;
+    public static interface Arm {
+        double kArmLength = 47; // in inches
+        double kCascadeLength = 40;// in
+        double kPivotToPerimeter = 30;// distance from pivot to the bumpers/ the robot perimeter
         double kMaxCascadeLength = 68;// from the pivot to the end of the arm once full extended in inches
 
-        double PivotGearRatio = 27;// versal planetary gear ratio
+        //double kPivotStartingAngle = 
+        //double kPivotMaxAngle
+
+        double kPivotGearRatio = 27;// versal planetary gear ratio
+        
                 
-        enum level {
-            TOP {
-                @Override
-                public boolean aimHigh() {
-                    return true;
-                }
-            },
-            MEDIUM {
-                @Override
-                public boolean aimMedium() {
-                    return true;
-                }
-            },
-            LOW {
-                @Override
-                public boolean aimLow() {
-                    return true;
-                }
-            };
-                
-            private int currentHeight;
-            public boolean aimHigh() {return false;}
-            public boolean aimMedium() {return false;}
-            public boolean aimLow() {return false;}
-                
-            public double getCurrentHeight(){
-                return currentHeight;
-            }
+        public enum level {// enum to be used in certain commands
+            TOP,
+            MEDIUM,
+            LOW
         }  
     }
 

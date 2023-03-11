@@ -4,6 +4,9 @@
 
 package com.sentinels.robot.commands.armmech.arm;
 
+
+import com.sentinels.robot.constants.Settings;
+import com.sentinels.robot.constants.Settings.Arm.level;
 import com.sentinels.robot.subsystems.arm.Arm;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -15,7 +18,7 @@ public class CascadePID extends CommandBase {
 
   //TODO:put this length into the constants file 
   private final double cascadeLength = 21; // in inches
-  private final double gearRatio = 27;
+  private final double gearRatio = 27; // this gear ratio may change
 
   /**
    * @param arm the arm subsystem
@@ -27,13 +30,25 @@ public class CascadePID extends CommandBase {
     cascadeController.setSetpoint(input * cascadeLength * gearRatio);
   }
 
-  // need an overload to take a string name/ enum / distance in meters
+   /**
+   * @param arm the arm subsystem
+   * @param level takes enums, use level.LOW, level.MEDIUM or level.TOP
+   */
+  public CascadePID(Arm arm, level distance) {
+    this.arm = arm;
+    cascadeController = new PIDController(1, 1, 1);
 
-  // public CascadePID(Arm arm, double distance, boolean inches) {
-  //   this.arm = arm;
-  //   cascadeController = new PIDController(1, 1, 1);
-  //   cascadeController.setSetpoint(distance * gearRatio);
-  // }
+    double setpoint = 0;
+    switch(distance){
+      case LOW:
+        setpoint = 0;
+      case MEDIUM:
+        setpoint = Settings.Arm.kCascadeLength/2;//TODO: change this once we have a system for controlling the cascade
+      case TOP:
+        setpoint = Settings.Arm.kCascadeLength;
+    }
+    cascadeController.setSetpoint(setpoint * gearRatio);
+  }
 
   @Override
   public void initialize() {
