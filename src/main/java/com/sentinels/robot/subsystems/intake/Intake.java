@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * Code to allow the intake to compress, release, and pivot.
  * 
  * Intake contains:
- * </p>- 1x NEO 550 motor w/ encoder for pivot
+ * </p>- 1x NEO motor w/ encoder for pivot
  * </p>- 1x Double solenoid for pneumatic piston for push and pull
  */
 public class Intake extends SubsystemBase {
@@ -51,6 +51,10 @@ public class Intake extends SubsystemBase {
   
   public void intakeOpen() {
     solenoid.set(Value.kReverse);
+  }
+
+  public void intakePivot(double speed) {
+    motorPivot.set(speed);
   }
 
   // ENCODER + MOTOR INFO METHODS

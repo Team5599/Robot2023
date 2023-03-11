@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class IntakeOpen extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
+  
   private Intake intake;
 
   public IntakeOpen(Intake intake) {
