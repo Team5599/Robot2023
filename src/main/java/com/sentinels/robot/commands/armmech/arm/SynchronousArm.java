@@ -16,10 +16,10 @@ public class SynchronousArm extends ParallelCommandGroup {
 
   //TODO: add a command for controlling the intake's pivot
   public SynchronousArm(Arm arm, double length, double angle) {
-    addCommands(new PivotPID(arm, angle), new CascadePID(arm,length));
+    addCommands(new PivotPID(arm, angle), new CascadePID(arm, length));
   }
 
   public SynchronousArm(Arm arm, level level){
-    addCommands(new PivotPID(arm, level), new CascadePID(arm,level));
+    addCommands(new PivotPID(arm, level), new CascadePID(arm, level));
   }
 }
