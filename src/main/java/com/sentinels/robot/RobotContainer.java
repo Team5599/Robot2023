@@ -13,9 +13,6 @@ import com.sentinels.robot.constants.Ports;
 import com.sentinels.robot.commands.armmech.arm.*;
 import com.sentinels.robot.commands.armmech.intake.*;
 import com.sentinels.robot.commands.autonomous.*;
-import com.sentinels.robot.commands.autonomous.Driving.AutonDock;
-import com.sentinels.robot.commands.autonomous.Driving.SeperateDrive.AutonDriveDistance;
-import com.sentinels.robot.commands.autonomous.Driving.SeperateDrive.AutonTurn;
 import com.sentinels.robot.commands.drivetrain.*;
 
 import com.sentinels.robot.subsystems.arm.*;
@@ -23,17 +20,13 @@ import com.sentinels.robot.subsystems.drive.*;
 import com.sentinels.robot.subsystems.intake.Intake;
 import com.sentinels.robot.subsystems.vision.*;
 
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here.
@@ -47,7 +40,7 @@ public class RobotContainer {
   
   // Input Devices
   private final CommandXboxController driver = new CommandXboxController(Ports.Controllers.DRIVER);
-  private final CommandXboxController operator = new CommandXboxController(Ports.Controllers.OPERATOR);
+  private final CommandJoystick operator = new CommandJoystick(Ports.Controllers.OPERATOR);
 
   // Autonomous
   private static SendableChooser<Command> autonChooser = new SendableChooser<>();
@@ -85,20 +78,20 @@ public class RobotContainer {
 
   private void configureOperatorBindings() {
     // ARM
-    operator.leftTrigger().whileTrue(new ArmCascade(arm, operator));
-    operator.rightTrigger().whileTrue(new ArmCascade(arm, operator));
+    operator.axisGreaterThan(2, -0.1).whileTrue(new ArmCascade(arm, operator));
+    operator.axisLessThan(2, 0.1).whileTrue(new ArmCascade(arm, operator));
 
-    operator.leftStick().whileTrue(new ArmPivot(arm, operator));
-    operator.rightStick().whileTrue(new ArmPivot(arm, operator));
+    operator.axisGreaterThan(5, -0.0).whileTrue(new ArmPivot(arm, operator));
+    operator.axisLessThan(5, 0.0).whileTrue(new ArmPivot(arm, operator));
 
     // INTAKE
-    operator.a().onTrue(new IntakeOpen(intake));
-    operator.b().onTrue(new IntakeClose(intake));
+    operator.button(3).onTrue(new IntakeOpen(intake));
+    operator.button(5).onTrue(new IntakeClose(intake));
 
     // GAME PIECE MODES
     // TODO: Attempt to create PSI modes for each game piece
-    operator.x(/* new ChooseCone(intake) */);
-    operator.y(/* new ChooseCube(intake) */);
+    operator.button(4).onTrue(new InstantCommand());
+    operator.button(6).onTrue(new InstantCommand());
   }
 
   // COMMAND DEFAULTS
@@ -106,6 +99,7 @@ public class RobotContainer {
   private void configureDefaultCommands() {
     drivetrain.setDefaultCommand(new DrivetrainDrive(drivetrain, driver, arcadeDriveActive));
     arm.setDefaultCommand(new ArmPivot(arm, operator));
+    intake.setDefaultCommand(new IntakePivot(intake, operator));
   }
 
   private void configureAutonCommands() {

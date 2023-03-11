@@ -18,9 +18,9 @@ public class ArmCascade extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
   private final Arm arm;
-  private final CommandXboxController operator;
+  private final CommandJoystick operator;
 
-  public ArmCascade(Arm arm, CommandXboxController operator) {
+  public ArmCascade(Arm arm, CommandJoystick operator) {
     this.arm = arm;
     this.operator = operator;
 
@@ -34,7 +34,7 @@ public class ArmCascade extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.CascadeArm(operator.getLeftTriggerAxis());
+    arm.CascadeArm(-operator.getRawAxis(5));
   }
 
   // Called once the command ends or is interrupted.
