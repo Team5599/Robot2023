@@ -21,6 +21,7 @@ public class IntakePivot extends CommandBase {
 
   public IntakePivot(Intake intake, CommandJoystick operator) {
     this.intake = intake;
+    this.operator = operator;
     
     addRequirements(intake);
   }
