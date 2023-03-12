@@ -24,7 +24,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -72,26 +71,22 @@ public class RobotContainer {
     SmartDashboard.putData("Control Scheme", controlChooser);
 
     arcadeDriveActive = controlChooser.getSelected();
-
-    //driver.b().whileTrue(new DrivetrainStop(drivetrain)); commented until drive team confirmation
   }
 
   private void configureOperatorBindings() {
     // ARM
-    operator.axisGreaterThan(2, -0.1).whileTrue(new ArmCascade(arm, operator));
-    operator.axisLessThan(2, 0.1).whileTrue(new ArmCascade(arm, operator));
+    operator.axisLessThan(6, -0.08).whileTrue(new ArmCascade(arm, operator));
+    operator.axisGreaterThan(6, 0.08).whileTrue(new ArmCascade(arm, operator));
 
-    operator.axisGreaterThan(5, -0.0).whileTrue(new ArmPivot(arm, operator));
-    operator.axisLessThan(5, 0.0).whileTrue(new ArmPivot(arm, operator));
+    operator.axisLessThan(2, -0.08).whileTrue(new ArmPivot(arm, operator));
+    operator.axisGreaterThan(2, 0.08).whileTrue(new ArmPivot(arm, operator));
 
     // INTAKE
     operator.button(3).onTrue(new IntakeOpen(intake));
     operator.button(5).onTrue(new IntakeClose(intake));
-
-    // GAME PIECE MODES
-    // TODO: Attempt to create PSI modes for each game piece
-    operator.button(4).onTrue(new InstantCommand());
-    operator.button(6).onTrue(new InstantCommand());
+    
+    operator.axisLessThan(4, -0.1).whileTrue(new IntakePivot(intake, operator));
+    operator.axisGreaterThan(4, 0.1).whileTrue(new IntakePivot(intake, operator));
   }
 
   // COMMAND DEFAULTS
