@@ -26,4 +26,23 @@ public interface Settings {
         DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(Units.inchesToMeters(Drivetrain.kWheelTrackWidth));
     }
 
+    public static interface Arm {
+        double kArmLength = 47; // in inches
+        double kCascadeLength = 40;// in
+        double kCascadeMaxExtensionLength = 21;
+        double kPivotToPerimeter = 30;// distance from pivot to the bumpers/ the robot perimeter
+        double kMaxCascadeLength = 68;// from the pivot to the end of the arm once full extended in inches
+
+        //double kPivotStartingAngle = 
+        double kPivotMaxAngle = 90 - Math.acos(28/38);
+        double kPivotGearRatio = 27;// versal planetary gear ratio
+        
+                
+        public enum level {// enum to be used in certain commands
+            TOP,
+            MEDIUM,
+            LOW
+        }  
+    }
+
 }

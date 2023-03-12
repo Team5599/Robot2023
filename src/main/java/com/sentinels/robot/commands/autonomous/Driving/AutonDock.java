@@ -5,7 +5,6 @@
 package com.sentinels.robot.commands.autonomous.Driving;
 
 import com.sentinels.robot.subsystems.drive.Drivetrain;
-import com.sentinels.robot.subsystems.odometry.IMU;
 import com.sentinels.robot.subsystems.vision.Limelight;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -15,14 +14,12 @@ public class AutonDock extends CommandBase {
 
   private final Drivetrain drivetrain;
   private final Limelight limelight;
-  private final IMU imu;
   private PIDController balanceController;
 
   /** Creates a new AutonDock. */
-  public AutonDock(Drivetrain drivetrain, Limelight limelight, IMU imu) {
+  public AutonDock(Drivetrain drivetrain, Limelight limelight) {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
-    this.imu = imu;
     balanceController = new PIDController(.1, 0.1, 0.1);
     addRequirements(drivetrain);// might need the IMU in here
   }

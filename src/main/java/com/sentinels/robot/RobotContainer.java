@@ -13,43 +13,33 @@ import com.sentinels.robot.constants.Ports;
 import com.sentinels.robot.commands.armmech.arm.*;
 import com.sentinels.robot.commands.armmech.intake.*;
 import com.sentinels.robot.commands.autonomous.*;
-import com.sentinels.robot.commands.autonomous.Driving.AutonDock;
-import com.sentinels.robot.commands.autonomous.Driving.SeperateDrive.AutonDriveDistance;
-import com.sentinels.robot.commands.autonomous.Driving.SeperateDrive.AutonTurn;
 import com.sentinels.robot.commands.drivetrain.*;
 
 import com.sentinels.robot.subsystems.arm.*;
 import com.sentinels.robot.subsystems.drive.*;
 import com.sentinels.robot.subsystems.intake.Intake;
-import com.sentinels.robot.subsystems.odometry.*;
 import com.sentinels.robot.subsystems.vision.*;
 
-import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-
 
 public class RobotContainer {
   // The robot's subsystems and commands are defined here.
 
   // Subsystems
   private final Arm arm = new Arm();
-  private final Intake armIntake = new Intake();
+  private final Intake intake = new Intake();
   private final Drivetrain drivetrain = new Drivetrain();
   private final Camera camera = new Camera();
   private final Limelight limelight = new Limelight();
-  private final IMU imu = new IMU();
   
   // Input Devices
   private final CommandXboxController driver = new CommandXboxController(Ports.Controllers.DRIVER);
-  private final CommandXboxController operator = new CommandXboxController(Ports.Controllers.OPERATOR);
+  private final CommandJoystick operator = new CommandJoystick(Ports.Controllers.OPERATOR);
 
   // Autonomous
   private static SendableChooser<Command> autonChooser = new SendableChooser<>();
@@ -81,36 +71,35 @@ public class RobotContainer {
     SmartDashboard.putData("Control Scheme", controlChooser);
 
     arcadeDriveActive = controlChooser.getSelected();
-
-    //driver.b().whileTrue(new DrivetrainStop(drivetrain)); commented until drive team confirmation
   }
 
   private void configureOperatorBindings() {
     // ARM
-    operator.leftTrigger().whileTrue(new ArmCascade(arm, operator));
-    operator.rightTrigger().whileTrue(new ArmCascade(arm, operator));
+    operator.axisLessThan(6, -0.08).whileTrue(new ArmCascade(arm, operator));
+    operator.axisGreaterThan(6, 0.08).whileTrue(new ArmCascade(arm, operator));
 
-    operator.leftStick().whileTrue(new ArmPivot(arm, operator));
-    operator.rightStick().whileTrue(new ArmPivot(arm, operator));
+    operator.axisLessThan(2, -0.08).whileTrue(new ArmPivot(arm, operator));
+    operator.axisGreaterThan(2, 0.08).whileTrue(new ArmPivot(arm, operator));
 
     // INTAKE
-    operator.a().onTrue(new IntakeOpen(armIntake));
-    operator.b().onTrue(new IntakeClose(armIntake));
-
-    // GAME PIECE MODES
-    operator.x();
-    operator.y();
+    operator.button(3).onTrue(new IntakeOpen(intake));
+    operator.button(5).onTrue(new IntakeClose(intake));
+    
+    operator.axisLessThan(4, -0.1).whileTrue(new IntakePivot(intake, operator));
+    operator.axisGreaterThan(4, 0.1).whileTrue(new IntakePivot(intake, operator));
   }
 
   // COMMAND DEFAULTS
 
   private void configureDefaultCommands() {
     drivetrain.setDefaultCommand(new DrivetrainDrive(drivetrain, driver, arcadeDriveActive));
+    arm.setDefaultCommand(new ArmPivot(arm, operator));
+    intake.setDefaultCommand(new IntakePivot(intake, operator));
   }
 
   private void configureAutonCommands() {
     autonChooser.addOption("Disabled", null);
-    autonChooser.addOption("Auton test", Autos.autonomous(drivetrain, arm, armIntake, imu, limelight));
+    autonChooser.addOption("Auton test", Autos.autonomous(drivetrain, arm, intake, limelight));
     //autonChooser.addOption("test", Autos.RamseteTest(drivetrain, arm, imu, limelight));
     SmartDashboard.putData("Autonomous", autonChooser);
   }

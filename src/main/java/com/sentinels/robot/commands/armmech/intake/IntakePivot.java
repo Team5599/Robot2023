@@ -11,14 +11,17 @@ package com.sentinels.robot.commands.armmech.intake;
 import com.sentinels.robot.subsystems.intake.Intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
-public class IntakeClose extends CommandBase {
+public class IntakePivot extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  
-  private Intake intake;
 
-  public IntakeClose(Intake intake) {
+  private Intake intake;
+  private CommandJoystick operator;
+
+  public IntakePivot(Intake intake, CommandJoystick operator) {
     this.intake = intake;
+    this.operator = operator;
     
     addRequirements(intake);
   }
@@ -28,7 +31,8 @@ public class IntakeClose extends CommandBase {
 
   @Override
   public void execute() {
-    intake.intakeClose();
+    // TODO: Put proper axis number in the getRawAxis() method below
+    intake.intakePivot(-operator.getRawAxis(4));
   }
 
   // Called once the command ends or is interrupted.

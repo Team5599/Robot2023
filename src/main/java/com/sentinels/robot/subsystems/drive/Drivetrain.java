@@ -12,7 +12,6 @@ import com.sentinels.robot.constants.Motors;
 import com.sentinels.robot.constants.Ports;
 import com.sentinels.robot.constants.Settings;
 import com.sentinels.robot.util.RoboRIO;
-import com.sentinels.robot.subsystems.odometry.IMU;
 
 import java.util.List;
 

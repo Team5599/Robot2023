@@ -18,7 +18,6 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -26,7 +25,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * Code to allow the intake to compress, release, and pivot.
  * 
  * Intake contains:
- * </p>- 1x NEO 550 motor w/ encoder for pivot
+ * </p>- 1x NEO motor w/ encoder for pivot
  * </p>- 1x Double solenoid for pneumatic piston for push and pull
  */
 public class Intake extends SubsystemBase {
@@ -36,24 +35,25 @@ public class Intake extends SubsystemBase {
   private final RelativeEncoder encoderPivot = motorPivot.getEncoder();
 
   private final DoubleSolenoid solenoid = new DoubleSolenoid(
-    PneumaticsModuleType.CTREPCM, Ports.Intake.SOLENOIDPUSH, Ports.Intake.SOLENOIDPULL
+    11, PneumaticsModuleType.CTREPCM, Ports.Intake.SOLENOIDPUSH, Ports.Intake.SOLENOIDPULL
   );
-  private final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
 
   public Intake() {
     // Reset motor and encoder
     motorPivot.restoreFactoryDefaults();
     encoderPivot.setPosition(0);
-
-    solenoid.set(DoubleSolenoid.Value.kOff);
   }
 
-  public void intakeConstrict() {
+  public void intakeClose() {
     solenoid.set(Value.kForward);
   }
   
-  public void intakeRetract() {
+  public void intakeOpen() {
     solenoid.set(Value.kReverse);
+  }
+
+  public void intakePivot(double speed) {
+    motorPivot.set(speed);
   }
 
   // ENCODER + MOTOR INFO METHODS

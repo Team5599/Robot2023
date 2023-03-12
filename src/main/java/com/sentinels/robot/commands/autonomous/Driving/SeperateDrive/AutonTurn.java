@@ -5,7 +5,6 @@
 package com.sentinels.robot.commands.autonomous.Driving.SeperateDrive;
 
 import com.sentinels.robot.subsystems.drive.Drivetrain;
-import com.sentinels.robot.subsystems.odometry.IMU;
 import com.sentinels.robot.subsystems.vision.Limelight;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -20,10 +19,10 @@ public class AutonTurn extends CommandBase {
 
   private final PIDController directionController;
   double SetAngle;// the angle from us to the game piece
-  public AutonTurn(Drivetrain drivetrain, Limelight limelight, IMU imu) {
+  public AutonTurn(Drivetrain drivetrain, Limelight limelight) {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
-    //this.imu = imu;
+    
     directionController = new PIDController(0.3, 0.1, 0.1);
     addRequirements(drivetrain);
   }
