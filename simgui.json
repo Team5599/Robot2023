@@ -11,6 +11,7 @@
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/Limelight": "Subsystem",
       "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
+      "/LiveWindow/Ungrouped/DigitalInput[26]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[27]": "Digital Input",
       "/LiveWindow/Ungrouped/MotorControllerGroup[1]": "Motor Controller",
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
@@ -72,9 +73,15 @@
         "Drivetrain": {
           "open": true
         },
+        "Limelight": {
+          "open": true
+        },
         "SendableChooser[1]": {
           "open": true
         },
+        "open": true
+      },
+      "limelight": {
         "open": true
       }
     }
