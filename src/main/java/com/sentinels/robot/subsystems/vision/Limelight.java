@@ -12,7 +12,7 @@ public class Limelight extends SubsystemBase {
     NetworkTableEntry tx = table.getEntry("tx");
     NetworkTableEntry ty = table.getEntry("ty");
     NetworkTableEntry ta = table.getEntry("ta");
-
+    NetworkTableEntry getled = table.getEntry("ledMode"); // Adds Ledmode to nte // 
     public Limelight() { }
 
     @Override
@@ -21,17 +21,27 @@ public class Limelight extends SubsystemBase {
         double x = tx.getDouble(0.0);
         double y = ty.getDouble(0.0);
         double area = ta.getDouble(0.0);
-
+        double ledstats = getled.getDouble(0);
         //post to smart dashboard periodically
         SmartDashboard.putNumber("Limelight/tX", x);
         SmartDashboard.putNumber("Limelight/tY", y);
         SmartDashboard.putNumber("Limelight/tA", area);
+        SmartDashboard.putNumber("limelight/ledMode", ledstats);
+        blink();// CALLS BLINK CAMERA //
     }
     
     // these will return -191 if there is no game piece present
     public double getTx() {//gets xoffset angle
         return table.getEntry("tx").getDouble(200);// 200 since it is not an angle that can be returned
     }
+
+    // Command to blink once // 
+    public void blink(){
+        table.getEntry("ledMode").setNumber(2); // Set value to 2 for blink
+    }
+    
+
+
 
     public double getTa() {
         return table.getEntry("ta").getDouble(-200);
