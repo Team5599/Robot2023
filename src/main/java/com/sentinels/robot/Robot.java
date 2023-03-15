@@ -25,7 +25,7 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
-  private String trajectoryJSON = "paths/BackAndForth.wpilib.json";
+  private String trajectoryJSON = "Test.wpilib.json";
   public static Trajectory trajectory;
 
   //private static Compressor compressor = new Compressor(11, PneumaticsModuleType.CTREPCM);
