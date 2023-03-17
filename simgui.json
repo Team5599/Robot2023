@@ -1,5 +1,6 @@
 {
   "HALProvider": {
+<<<<<<< HEAD
     "Encoders": {
       "0": {
         "header": {
@@ -11,6 +12,14 @@
           "open": true
         }
       },
+=======
+    "RoboRIO": {
+      "RoboRIO Input": {
+        "open": true
+      }
+    },
+    "Timing": {
+>>>>>>> a9ac7c4 (added DrivetrainVoltageDrive to test voltages)
       "window": {
         "visible": true
       }
@@ -115,6 +124,9 @@
           "Relative Encoders": {
             "open": true
           },
+          "open": true
+        },
+        "Drivetrain": {
           "open": true
         },
         "SendableChooser[1]": {

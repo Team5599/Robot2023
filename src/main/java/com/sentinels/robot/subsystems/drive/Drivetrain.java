@@ -9,6 +9,7 @@
 package com.sentinels.robot.subsystems.drive;
 
 import com.sentinels.robot.Robot;
+import com.sentinels.robot.Robot;
 import com.sentinels.robot.constants.Arena;
 import com.sentinels.robot.constants.Motors;
 import com.sentinels.robot.constants.Ports;
@@ -141,7 +142,6 @@ public class Drivetrain extends SubsystemBase {
             Arena.Trajectories.kConfig);
 
     // Push the trajectory to Field2d.
-    // field.getObject("traj").setTrajectory(trajectory);
     field.getObject("traj").setTrajectory(trajectory);
     //field.getObject("json").setTrajectory(Robot.trajectory);
 
@@ -287,11 +287,8 @@ public class Drivetrain extends SubsystemBase {
     // Set the inputs to the system. Note that we need to convert
     // the [-1, 1] PWM signal to voltage by multiplying it by the
     // robot controller voltage.
-    // SimDrivetrain.simDrivetrain.setInputs(leftMotors.get() * RoboRIO.getInputVoltage(), rightMotors.get() * RoboRIO.getInputVoltage());
-
-     SimDrivetrain.simDrivetrain.setInputs(leftMotors.get() * RoboRIO.getInputVoltage(), rightMotors.get() * RoboRIO.getInputVoltage());
-    // SimDrivetrain.simDrivetrain.setInputs(getLeftVoltage(), getRightVoltage());
-    
+    //SimDrivetrain.simDrivetrain.setInputs(leftMotors.get() * RoboRIO.getInputVoltage(), rightMotors.get() * RoboRIO.getInputVoltage());
+    SimDrivetrain.simDrivetrain.setInputs( RoboRIO.getInputVoltage(), RoboRIO.getInputVoltage());
     // Advance the model by 20 ms. Note that if you are running this
     // subsystem in a separate thread or have changed the nominal timestep
     // of TimedRobot, this value needs to match it.
