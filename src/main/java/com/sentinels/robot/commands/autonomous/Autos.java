@@ -9,7 +9,7 @@ import com.sentinels.robot.subsystems.drive.Drivetrain;
 import com.sentinels.robot.subsystems.odometry.IMU;
 import com.sentinels.robot.subsystems.vision.Limelight;
 import com.sentinels.robot.commands.autonomous.Driving.AutonDock;
-import com.sentinels.robot.commands.autonomous.Driving.SeperateDrive.AutonDriveDistance;
+import com.sentinels.robot.commands.autonomous.Driving.AutonDriveDistance;
 import com.sentinels.robot.commands.drivetrain.DrivetrainVoltageDrive;
 import com.sentinels.robot.subsystems.arm.Arm;
 import com.sentinels.robot.subsystems.intake.ArmIntake;
@@ -19,8 +19,11 @@ import com.sentinels.robot.constants.Settings;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Tracer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -34,21 +37,53 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 public final class Autos {
   /** Example static factory for an autonomous command. */
 
-  private final Drivetrain drivetrain;
-  private final Arm arm;
-  private final ArmIntake intake;
-  private final IMU imu;
-  private final Limelight limelight;
+  // private final Drivetrain drivetrain;
+  // private final Arm arm;
+  // private final ArmIntake intake;
+  // private final IMU imu;
+  // private final Limelight limelight;
 
-  public static CommandBase autonomous(Drivetrain drivetrain, Arm arm, ArmIntake intake, IMU imu, Limelight limelight) {
+
+  public static CommandBase Routine0(Drivetrain drivetrain, Arm arm, ArmIntake intake, Limelight limelight){
+
+    RamseteController disabled = new RamseteController(0.2, 0.5);
+    disabled.setEnabled(false);
+
+    PIDController leftController = new PIDController(3, 0, 0);
+    PIDController rightController = new PIDController(3, 0, 0);
+
+    //Trajectory traj = new Trajectory();
+
+    return Commands.sequence(
+      new RamseteCommand(
+        Arena.Trajectories.TestTrajectory, 
+        drivetrain::getPose, 
+        //Ramsete controlle original values: 0.2, 0.5
+        // new RamseteController(0.1,0.2), //b and zeta (how much it turns), larger values = smaller turn (think of the turns as the size of a arc)
+        disabled,
+        new SimpleMotorFeedforward(0.15, 2, 2),//voltages here, arbitrary numbers here for now
+        Settings.Drivetrain.KINEMATICS, 
+        drivetrain::getWheelSpeeds, 
+        leftController,
+        rightController,
+        drivetrain::voltageDrive
+      )
+      .andThen(
+        () -> drivetrain.voltageDrive(0, 0)
+      )
+    );
+  }
+
+
+  public static CommandBase PIDtest(Drivetrain drivetrain, IMU imu, Limelight limelight) {
     //TODO: does not work with 1.5, works with 1.8 though. setpoints can only be multiples of 0.45
     return Commands.sequence(
       new AutonDriveDistance(drivetrain, limelight, 4.5 , false)
     );
   }
-  //TODO: ramsete controller oftenly has insane voltage spikes, find a way to stop them to keep the robot safe
+
   //https://docs.wpilib.org/en/stable/docs/software/advanced-controls/trajectories/troubleshooting.html
-  public static CommandBase RamseteTest(Drivetrain drivetrain, Arm arm, IMU imu, Limelight limelight){
+  public static CommandBase RamseteTest(Drivetrain drivetrain, IMU imu, Limelight limelight){
     
     var RamseteControl = NetworkTableInstance.getDefault().getTable("Ramsete Control");
     var PIDleftSetpoint = RamseteControl.getEntry("Left setpoint");
@@ -66,25 +101,15 @@ public final class Autos {
       new RamseteCommand(
         Arena.Trajectories.TestTrajectory, 
         drivetrain::getPose, 
-
         //Ramsete controlle original values: 0.2, 0.5
         // new RamseteController(0.1,0.2), //b and zeta (how much it turns), larger values = smaller turn (think of the turns as the size of a arc)
         disabled,
-        //SimpleMotorFeedforward original values: 2, 2, 2
         new SimpleMotorFeedforward(0.15, 2, 2),//voltages here, arbitrary numbers here for now
         Settings.Drivetrain.KINEMATICS, 
         drivetrain::getWheelSpeeds, 
-
-        // PID 1 Left controller original values: 2, 0, 0
-        // new PIDController(2, 0, 0),//both of these are arbitrary, set these later
         leftController,
-
-        //values for both controllers should be the same
-        // PID 2 Right controller original values: 2, 0, 0
-        // new PIDController(2, 0, 0), 
         rightController,
-
-        // drivetrain::voltageDrive,
+        // drivetrain::voltageDrive,1
         (left, right)->{
           drivetrain.voltageDrive(left, right);
 

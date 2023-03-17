@@ -8,13 +8,17 @@
 
 package com.sentinels.robot.subsystems.drive;
 
+import com.sentinels.robot.Robot;
 import com.sentinels.robot.constants.Arena;
 import com.sentinels.robot.constants.Ports;
 import com.sentinels.robot.constants.Settings;
 import com.sentinels.robot.util.RoboRIO;
 import com.sentinels.robot.util.SparkMAXsim;
 
+import java.nio.file.Path;
 import java.util.List;
+
+import javax.annotation.processing.RoundEnvironment;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -85,8 +89,6 @@ public class Drivetrain extends SubsystemBase {
   private final EncoderSim simEncoderR = new EncoderSim(sEncoderR);
 
   private final ADIS16470_IMUSim imuSim = new ADIS16470_IMUSim(imu);
-
-  private final Trajectory trajectory;
   
   private Field2d field = new Field2d();
 
@@ -134,19 +136,16 @@ public class Drivetrain extends SubsystemBase {
         VecBuilder.fill(0.001, 0.001, 0.001, 0.05, 0.05, 0.005, 0.005)
     );
 
-    // Create the trajectory to follow in autonomous. It is best to initialize
-    // trajectories here to avoid wasting time in autonomous.
-    trajectory =
-        TrajectoryGenerator.generateTrajectory(
-            new Pose2d(0, 0, Rotation2d.fromDegrees(0)),
-            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-            new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
-            Arena.Trajectories.kConfig);
+    field.getObject("traj").setTrajectory(Arena.Trajectories.TestTrajectory);
 
-    // Push the trajectory to Field2d.
-    //field.getObject("traj").setTrajectory(trajectory);
+    if (RobotBase.isSimulation()){
+      for (Arena.Trajectories.Routine0 paths : Arena.Trajectories.Routine0.values()){
+        field.getObject(paths.name()).setTrajectory(paths.trajectory);
+      }
+      // the line after does not work, it gets put back to the bottom left corner
+      // field.getObject("Robot").setPose(5,0,Rotation2d.fromDegrees(0));
+    }
 
-    field.getObject("simpler trajectory").setTrajectory(Arena.Trajectories.TestTrajectory);
     SmartDashboard.putData("Field", field);
   }
 

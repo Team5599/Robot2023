@@ -81,6 +81,14 @@
           "style": "Line",
           "weight": 3.0
         },
+        "ToCube1": {
+          "arrows": false,
+          "style": "Line"
+        },
+        "ToCube2": {
+          "arrows": false,
+          "style": "Line"
+        },
         "bottom": 544,
         "height": 8.013679504394531,
         "image": "images/2023-field.png",
@@ -116,6 +124,9 @@
             "open": true
           }
         },
+        "Field": {
+          "open": true
+        },
         "PID": {
           "open": true
         },
@@ -148,7 +159,7 @@
               "min": -10.0
             }
           ],
-          "height": 334,
+          "height": 630,
           "legendHorizontal": true,
           "legendLocation": 9,
           "legendOutside": true,
@@ -209,7 +220,7 @@
               "min": -1.5
             }
           ],
-          "height": 326,
+          "height": 630,
           "series": [
             {
               "color": [
@@ -263,7 +274,7 @@
               "min": -2.0
             }
           ],
-          "height": 326,
+          "height": 630,
           "series": [
             {
               "color": [
@@ -321,7 +332,7 @@
               "min": -2.0
             }
           ],
-          "height": 333,
+          "height": 301,
           "name": "Setpoints vs. Measurements(velocity)",
           "series": [
             {
@@ -363,7 +374,7 @@
           ]
         },
         {
-          "height": 333,
+          "height": 301,
           "series": [
             {
               "color": [

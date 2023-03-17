@@ -1,0 +1,11 @@
+All new PathWeaver paths must be built by following this format.
+    Project Directory: Robot2023/PathWeaver
+    Output Directory: Robot2023/src/main/deploy 
+
+JSON files are now written and loaded in constants/Arena.java under the trajectories interface
+Each path will be grouped in the path weaver by the autonomous routine, and each routine will be given a name  
+    *as of right now they are given a number
+
+
+
+
