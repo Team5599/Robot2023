@@ -32,7 +32,7 @@ public class DrivetrainVoltageDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.voltageDrive(10, 10);
+    drivetrain.voltageDrive(8, 10);
     //drivetrain.tankDrive(1, 1);
   }
 

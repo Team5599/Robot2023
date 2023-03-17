@@ -18,9 +18,15 @@ import com.sentinels.robot.util.RoboRIO;
 import java.util.List;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVPhysicsSim;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
+import com.revrobotics.SparkMaxRelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.hal.SimDouble;
+import edu.wpi.first.hal.SimValue;
+import edu.wpi.first.hal.simulation.SimDeviceDataJNI.SimDeviceInfo;
 import edu.wpi.first.math.estimator.DifferentialDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -35,11 +41,13 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive.WheelSpeeds;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.simulation.ADIS16470_IMUSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
+import edu.wpi.first.wpilibj.simulation.SimDeviceSim;
 
 /**
  * Code to allow the robot to move.
@@ -54,12 +62,12 @@ import edu.wpi.first.wpilibj.simulation.EncoderSim;
 public class Drivetrain extends SubsystemBase {
 
   // LEFT side motors
-  private final CANSparkMax motorFL = new CANSparkMax(Ports.Drivetrain.FRONTLEFT, MotorType.kBrushless);
-  private final CANSparkMax motorBL = new CANSparkMax(Ports.Drivetrain.BACKLEFT, MotorType.kBrushless);
+  private final CANSparkMax motorFL = new SparkMAXsim(Ports.Drivetrain.FRONTLEFT, MotorType.kBrushless);
+  private final CANSparkMax motorBL = new SparkMAXsim(Ports.Drivetrain.BACKLEFT, MotorType.kBrushless);
   
   // RIGHT side motors
-  private final CANSparkMax motorFR = new CANSparkMax(Ports.Drivetrain.FRONTRIGHT, MotorType.kBrushless);
-  private final CANSparkMax motorBR = new CANSparkMax(Ports.Drivetrain.BACKRIGHT, MotorType.kBrushless);
+  private final CANSparkMax motorFR = new SparkMAXsim(Ports.Drivetrain.FRONTRIGHT, MotorType.kBrushless);
+  private final CANSparkMax motorBR = new SparkMAXsim(Ports.Drivetrain.BACKRIGHT, MotorType.kBrushless);
 
   private final MotorControllerGroup leftMotors = new MotorControllerGroup(motorFL, motorBL);
   private final MotorControllerGroup rightMotors = new MotorControllerGroup(motorFR, motorBR);
@@ -86,6 +94,11 @@ public class Drivetrain extends SubsystemBase {
   private final EncoderSim simEncoderL = new EncoderSim(sEncoderL);
   private final EncoderSim simEncoderR = new EncoderSim(sEncoderR);
 
+  // private final SparkMAXsim motorFLsim = new SparkMAXsim(Ports.Drivetrain.FRONTLEFT);
+  // private final SparkMAXsim motorBLsim = new SparkMAXsim(Ports.Drivetrain.BACKLEFT);
+  // private final SparkMAXsim motorFRsim = new SparkMAXsim(Ports.Drivetrain.FRONTRIGHT);
+  // private final SparkMAXsim motorBRsim = new SparkMAXsim(Ports.Drivetrain.BACKRIGHT);
+
   private final ADIS16470_IMUSim imuSim = new ADIS16470_IMUSim(imu);
 
   private final Trajectory trajectory;
@@ -110,6 +123,12 @@ public class Drivetrain extends SubsystemBase {
     
     simEncoderL.setDistancePerPulse(2 * Math.PI * (Settings.Drivetrain.kWheelDiameter / 2) / 42);
     simEncoderR.setDistancePerPulse(2 * Math.PI * (Settings.Drivetrain.kWheelDiameter / 2) / 42);
+    // physicsSim.getInstance().addSparkMax(motorBL, 3,5000);
+    // physicsSim.getInstance().addSparkMax(motorFL, 3,5000);
+    // physicsSim.getInstance().addSparkMax(motorBR, 3,5000);
+    // physicsSim.getInstance().addSparkMax(motorFR, 3,5000);
+
+
 
     // Create the trajectory to follow in autonomous. It is best to initialize
     // trajectories here to avoid wasting time in autonomous.
@@ -139,8 +158,12 @@ public class Drivetrain extends SubsystemBase {
     drivetrain.arcadeDrive(xSpeed, rotation);
   }
   public void voltageDrive(double leftVoltage, double rightVoltage){
-    leftMotors.setVoltage(leftVoltage);
-    rightMotors.setVoltage(rightVoltage);
+    //leftMotors.setVoltage(leftVoltage);
+    //rightMotors.setVoltage(rightVoltage);
+
+    leftMotors.set(leftVoltage/RoboRIO.getBatteryVoltage());
+    rightMotors.set(rightVoltage/RoboRIO.getBatteryVoltage());
+
     drivetrain.feed();
   }
 
@@ -187,7 +210,7 @@ public class Drivetrain extends SubsystemBase {
   // VOLTAGE FUNCTIONS
 
   public double getLeftVoltage() {
-    return -(leftMotors.get() * RoboRIO.getBatteryVoltage());
+    return (leftMotors.get() * RoboRIO.getBatteryVoltage());
   }
   public double getRightVoltage() {
     return (rightMotors.get() * RoboRIO.getBatteryVoltage());
@@ -221,12 +244,6 @@ public class Drivetrain extends SubsystemBase {
     return odometry.getEstimatedPosition();
   }
 
-  // see line 102 of docs
-
-  // public void resetOdometry(){
-  //   resetEncoders();
-  // }
-
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Drivetrain/Left Motors Voltage (V)", getLeftVoltage());
@@ -237,10 +254,27 @@ public class Drivetrain extends SubsystemBase {
 
     SmartDashboard.putNumber("Drivetrain/Left Motors Velocity (RPM)", getLeftVelocity());
     SmartDashboard.putNumber("Drivetrain/Right Motors Velocity (RPM)", getRightVelocity());
+    
+    //physicsSim.getInstance().run();
+    
+    // double simVeloctiyL = (motorBLsim.getVelocity() + motorFLsim.getVelocity())/2;
+    // double simVeloctiyR = (motorBRsim.getVelocity() + motorFRsim.getVelocity())/2;
+
+    // SmartDashboard.putNumber("Drivetrain/Left Sim Velocity (RPM)", simVeloctiyL);
+    // SmartDashboard.putNumber("Drivetrain/Right Sim Motors Velocity (RPM)", simVeloctiyR);
+
+    SmartDashboard.putNumber("Drivetrain/Left get:", leftMotors.get());
+    SmartDashboard.putNumber("Drivetrain/Right get:", rightMotors.get());
+
+    // SmartDashboard.putNumber("Drivetrain/Relative Encoders/Front Left Position:", flrelative.getPosition());
+    // SmartDashboard.putNumber("Drivetrain/Relative Encoders/Front Right Position:", frrelative.getPosition());
+    // SmartDashboard.putNumber("Drivetrain/Relative Encoders/Back Left Position:", blrelative.getPosition());
+    // SmartDashboard.putNumber("Drivetrain/Relative Encoders/Back Right Position:", brrelative.getPosition());
 
     // This will get the simulated sensor readings that we set
     // in the previous article while in simulation, but will use
     // real values on the robot itself.
+    
     odometry.update(getHeading(), simEncoderL.getDistance(), simEncoderR.getDistance());
     field.setRobotPose(odometry.getEstimatedPosition());
   }
@@ -250,18 +284,23 @@ public class Drivetrain extends SubsystemBase {
     // Set the inputs to the system. Note that we need to convert
     // the [-1, 1] PWM signal to voltage by multiplying it by the
     // robot controller voltage.
-    //SimDrivetrain.simDrivetrain.setInputs(leftMotors.get() * RoboRIO.getInputVoltage(), rightMotors.get() * RoboRIO.getInputVoltage());
-    SimDrivetrain.simDrivetrain.setInputs( RoboRIO.getInputVoltage(), RoboRIO.getInputVoltage());
+    // SimDrivetrain.simDrivetrain.setInputs(leftMotors.get() * RoboRIO.getInputVoltage(), rightMotors.get() * RoboRIO.getInputVoltage());
+
+     SimDrivetrain.simDrivetrain.setInputs(leftMotors.get() * RoboRIO.getInputVoltage(), rightMotors.get() * RoboRIO.getInputVoltage());
+    // SimDrivetrain.simDrivetrain.setInputs(getLeftVoltage(), getRightVoltage());
+    
     // Advance the model by 20 ms. Note that if you are running this
     // subsystem in a separate thread or have changed the nominal timestep
     // of TimedRobot, this value needs to match it.
-    SimDrivetrain.simDrivetrain.update(0.02);
+    SimDrivetrain.simDrivetrain.update(.02);
   
     // Update all of our sensors.
     simEncoderL.setDistance(SimDrivetrain.simDrivetrain.getLeftPositionMeters());
     simEncoderL.setRate(SimDrivetrain.simDrivetrain.getLeftVelocityMetersPerSecond());
     simEncoderR.setDistance(SimDrivetrain.simDrivetrain.getRightPositionMeters());
     simEncoderR.setRate(SimDrivetrain.simDrivetrain.getRightVelocityMetersPerSecond());
-    imuSim.setGyroAngleX(-SimDrivetrain.simDrivetrain.getHeading().getDegrees());
+    imuSim.setGyroAngleX(-SimDrivetrain.simDrivetrain.getHeading().getDegrees());    
+
+    //field.setRobotPose(getPose());
   }
 }
