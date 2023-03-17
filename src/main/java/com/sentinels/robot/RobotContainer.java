@@ -102,7 +102,7 @@ public class RobotContainer {
     autonChooser.addOption("Auton test", Autos.autonomous(drivetrain, arm, intake, limelight));
     //autonChooser.addOption("test", Autos.RamseteTest(drivetrain, arm, imu, limelight));
     autonChooser.addOption("voltage drive test", Autos.voltageTest(drivetrain));
-
+    autonChooser.setDefaultOption("voltage drive test", Autos.voltageTest(drivetrain));
     SmartDashboard.putData("Autonomous", autonChooser);
   }
 
