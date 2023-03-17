@@ -78,6 +78,12 @@ public class AutonDriveDistance extends CommandBase {
       -distanceController.calculate(drivetrain.getLeftPosition(),setpoint), 
       -distanceController.calculate(drivetrain.getRightPosition(),setpoint)
     );
+
+    // drivetrain.voltageDrive(
+    //   distanceController.calculate(drivetrain.getLeftPosition()),
+    //   distanceController.calculate(drivetrain.getRightPosition())
+    // );
+
   }
 
   // Called once the command ends or is interrupted.
