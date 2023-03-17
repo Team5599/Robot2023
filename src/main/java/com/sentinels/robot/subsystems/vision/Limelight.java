@@ -12,6 +12,8 @@ public class Limelight extends SubsystemBase {
     NetworkTableEntry tx = table.getEntry("tx");
     NetworkTableEntry ty = table.getEntry("ty");
     NetworkTableEntry ta = table.getEntry("ta");
+    NetworkTableEntry getled = table.getEntry("ledMode"); // Adds Ledmode to nte // 
+    NetworkTableEntry getview = table.getEntry("stream"); // Adds Stream to nte // 
 
     public Limelight() { }
 
@@ -41,4 +43,14 @@ public class Limelight extends SubsystemBase {
         double distance = Math.sin(angle1) / Math.sin(angle2 - angle1);
         return distance;
     }
+    
+    // Command to blink once // 
+    public void blink(){
+        table.getEntry("ledMode").setNumber(2); // Set value to 2 for blink
+    }
+
+    public void sidestream(){
+        table.getEntry("stream").setNumber(0);
+    }
+
 }
