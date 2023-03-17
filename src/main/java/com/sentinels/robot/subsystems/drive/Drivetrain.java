@@ -138,8 +138,10 @@ public class Drivetrain extends SubsystemBase {
             List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
             new Pose2d(3, 0, Rotation2d.fromDegrees(0)),
             Arena.Trajectories.kConfig);
+            Arena.Trajectories.kConfig);
 
     // Push the trajectory to Field2d.
+    // field.getObject("traj").setTrajectory(trajectory);
     field.getObject("traj").setTrajectory(trajectory);
     //field.getObject("json").setTrajectory(Robot.trajectory);
 
@@ -154,6 +156,7 @@ public class Drivetrain extends SubsystemBase {
   public void tankDrive(double leftSpeed, double rightSpeed) {
     drivetrain.tankDrive(leftSpeed, rightSpeed);
   }
+  public void arcadeDrive(double xSpeed, double rotation) {  
   public void arcadeDrive(double xSpeed, double rotation) {  
     drivetrain.arcadeDrive(xSpeed, rotation);
   }

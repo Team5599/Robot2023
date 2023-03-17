@@ -12,6 +12,7 @@ import com.sentinels.robot.commands.autonomous.Driving.AutonDock;
 import com.sentinels.robot.commands.autonomous.Driving.SeperateDrive.AutonDriveDistance;
 import com.sentinels.robot.commands.drivetrain.DrivetrainVoltageDrive;
 import com.sentinels.robot.subsystems.arm.Arm;
+import com.sentinels.robot.constants.Arena;
 import com.sentinels.robot.subsystems.intake.Intake;
 import com.sentinels.robot.constants.Settings;
 
