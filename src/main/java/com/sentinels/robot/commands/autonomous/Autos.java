@@ -45,7 +45,7 @@ public final class Autos {
 
   //theres an error here that doesnt let me simulate the code
 
-  public static CommandBase RamseteTest(Drivetrain drivetrain, Arm arm, IMU imu, Limelight limelight){
+  public static CommandBase RamseteTest(Drivetrain drivetrain, Arm arm, Limelight limelight){
     return Commands.sequence(
       new RamseteCommand(
         Arena.Trajectories.TestTrajectory, 
