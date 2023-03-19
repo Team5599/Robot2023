@@ -12,18 +12,18 @@ import com.sentinels.robot.subsystems.arm.Arm;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class PivotPID extends CommandBase {
+public class pivotPID extends CommandBase {
   private final Arm arm;
   private final PIDController pivotController;
 
-  public PivotPID(Arm arm, double angle) {
+  public pivotPID(Arm arm, double angle) {
     this.arm = arm;
     pivotController = new PIDController(0.5,0,0);
     pivotController.setSetpoint(27*angle);//using 27 here because thats the gear ratio
     //addRequirements(arm); // becuase this is used in a parallel command, using addRequirements may interfere with functionality
   }
 
-  public PivotPID(Arm arm, level height) {
+  public pivotPID(Arm arm, level height) {
     this.arm = arm;
     pivotController = new PIDController(0.5,0,0);
 
