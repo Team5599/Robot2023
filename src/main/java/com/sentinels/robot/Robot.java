@@ -4,12 +4,6 @@
 
 package com.sentinels.robot;
 
-import java.nio.file.Path;
-
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -22,11 +16,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
   private RobotContainer m_robotContainer;
-
-  private String trajectoryJSON = "paths/BackAndForth.wpilib.json";
-  public static Trajectory trajectory;
 
   //private static Compressor compressor = new Compressor(11, PneumaticsModuleType.CTREPCM);
   // Compressor module is the pcm port currently its 11 (Joey Lam) // 
@@ -39,16 +29,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-
-    //copied from wpi docs
-    //https://docs.wpilib.org/en/stable/docs/software/pathplanning/pathweaver/integrating-robot-program.html
-    try {
-      Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON); 
-      trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-    } catch (Exception e) {
-      DriverStation.reportError("Unable to open trajectory located at \"" + trajectoryJSON + "\"", e.getStackTrace());
-    }
-
   }
 
   /**

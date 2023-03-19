@@ -1,6 +1,5 @@
 package com.sentinels.robot.subsystems.drive;
 
-import com.sentinels.robot.util.RoboRIO;
 import com.sentinels.robot.constants.Settings;
 
 import edu.wpi.first.math.VecBuilder;

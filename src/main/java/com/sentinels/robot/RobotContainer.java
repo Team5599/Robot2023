@@ -13,6 +13,9 @@ import com.sentinels.robot.constants.Ports;
 import com.sentinels.robot.commands.armmech.arm.*;
 import com.sentinels.robot.commands.armmech.intake.*;
 import com.sentinels.robot.commands.autonomous.*;
+import com.sentinels.robot.commands.autonomous.Driving.AutonDock;
+import com.sentinels.robot.commands.autonomous.Driving.AutonDriveDistance;
+import com.sentinels.robot.commands.autonomous.Driving.AutonTurn;
 import com.sentinels.robot.commands.drivetrain.*;
 
 import com.sentinels.robot.subsystems.arm.*;
@@ -99,8 +102,18 @@ public class RobotContainer {
 
   private void configureAutonCommands() {
     autonChooser.addOption("Disabled", null);
-    autonChooser.addOption("Auton test", Autos.autonomous(drivetrain, arm, intake, limelight));
-    //autonChooser.addOption("test", Autos.RamseteTest(drivetrain, arm, imu, limelight));
+
+    // SIMULATION TESTS
+
+    autonChooser.addOption("PID test", Autos.PIDtest(drivetrain, limelight));
+    autonChooser.addOption("Ramsete test", Autos.RamseteTest(drivetrain, limelight));
+    autonChooser.addOption("voltage drive test", Autos.voltageTest(drivetrain));
+
+    // REAL 
+
+    //autonChooser.addOption("Routine 0", getAutonomousCommand());
+
+    autonChooser.setDefaultOption("Ramsete test", Autos.RamseteTest(drivetrain, limelight));
     SmartDashboard.putData("Autonomous", autonChooser);
   }
 
