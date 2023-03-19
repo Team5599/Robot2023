@@ -4,21 +4,21 @@
 
 package com.sentinels.robot.commands.armmech.intake;
 
-import com.sentinels.robot.subsystems.intake.ArmIntake;
+import com.sentinels.robot.subsystems.intake.Intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 /** An example command that uses an example subsystem. */
 public class IntakeClose extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ArmIntake m_ArmIntakeSubsystem;
+  private final Intake m_ArmIntakeSubsystem;
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public IntakeClose(ArmIntake subsystem) {
+  public IntakeClose(Intake subsystem) {
     m_ArmIntakeSubsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);

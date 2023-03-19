@@ -9,7 +9,7 @@
 package com.sentinels.robot;
 
 import com.sentinels.robot.constants.Ports;
-//command imports
+
 import com.sentinels.robot.commands.armmech.arm.*;
 import com.sentinels.robot.commands.armmech.intake.*;
 import com.sentinels.robot.commands.autonomous.*;
@@ -17,10 +17,10 @@ import com.sentinels.robot.commands.autonomous.Driving.AutonDock;
 import com.sentinels.robot.commands.autonomous.Driving.AutonDriveDistance;
 import com.sentinels.robot.commands.autonomous.Driving.AutonTurn;
 import com.sentinels.robot.commands.drivetrain.*;
-//subsystem imports
+
 import com.sentinels.robot.subsystems.arm.*;
 import com.sentinels.robot.subsystems.drive.*;
-import com.sentinels.robot.subsystems.intake.ArmIntake;
+import com.sentinels.robot.subsystems.intake.Intake;
 import com.sentinels.robot.subsystems.odometry.*;
 import com.sentinels.robot.subsystems.vision.*;
 
@@ -39,7 +39,7 @@ public class RobotContainer {
 
   // Subsystems
   private final Arm arm = new Arm();
-  private final ArmIntake armIntake = new ArmIntake();
+  private final Intake armIntake = new Intake();
   private final Drivetrain drivetrain = new Drivetrain();
   private final Camera camera = new Camera();
   private final Limelight limelight = new Limelight();
@@ -47,7 +47,7 @@ public class RobotContainer {
   
   // Input Devices
   private final CommandXboxController driver = new CommandXboxController(Ports.Controllers.DRIVER);
-  private final CommandJoystick operator = new CommandJoystick(Ports.Controllers.OPERATOR);
+  private final CommandXboxController operator = new CommandXboxController(Ports.Controllers.OPERATOR);
 
   // Autonomous
   private static SendableChooser<Command> autonChooser = new SendableChooser<>();
@@ -73,31 +73,31 @@ public class RobotContainer {
 
   private void configureDriverBindings() {
     controlChooser.setDefaultOption("Tank Drive", false);
-
     controlChooser.addOption("Tank Drive", false);
     controlChooser.addOption("Arcade Drive", true);
+
     SmartDashboard.putData("Control Scheme", controlChooser);
 
     arcadeDriveActive = controlChooser.getSelected();
 
-    driver.b().whileTrue(new DrivetrainStop(drivetrain));
-    //driver.x().whileTrue(new )
+    //driver.b().whileTrue(new DrivetrainStop(drivetrain)); commented until drive team confirmation
   }
 
   private void configureOperatorBindings() {
-    operator.axisGreaterThan(2, 0).whileTrue(new ArmPivot(arm, operator));//pulley pivoting
-    operator.axisLessThan(2, 0).whileTrue(new ArmPivot(arm, operator));
+    // ARM
+    operator.leftTrigger().whileTrue(new ArmCascade(arm, operator));
+    operator.rightTrigger().whileTrue(new ArmCascade(arm, operator));
 
-    operator.axisGreaterThan(4, 0).whileTrue(new ArmExtend(arm, operator));//arm retraction and extension
-    operator.axisLessThan(4,0).whileTrue(new ArmExtend(arm, operator));
+    operator.leftStick().whileTrue(new ArmPivot(arm, operator));
+    operator.rightStick().whileTrue(new ArmPivot(arm, operator));
 
-    operator.button(1).whileTrue(new IntakeOpen(armIntake));
-    
-    //operator.button(5).whileTrue(null);// intake command calls
-    //operator.button(4).whileTrue(null);//
+    // INTAKE
+    operator.a().onTrue(new IntakeOpen(armIntake));
+    operator.b().onTrue(new IntakeClose(armIntake));
 
-    // HEIGHT PRESETS
-    
+    // GAME PIECE MODES
+    operator.x();
+    operator.y();
   }
 
   // COMMAND DEFAULTS
