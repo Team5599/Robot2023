@@ -44,7 +44,7 @@ public final class Autos {
   // private final Limelight limelight;
 
 
-  public static CommandBase Routine0(Drivetrain drivetrain, Arm arm, ArmIntake intake, Limelight limelight){
+  public static CommandBase Routine0(Drivetrain drivetrain, Arm arm, Intake intake, Limelight limelight){
 
     RamseteController disabled = new RamseteController(0.2, 0.5);
     disabled.setEnabled(false);
