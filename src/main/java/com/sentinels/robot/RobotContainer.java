@@ -14,9 +14,6 @@ import com.sentinels.robot.constants.Ports;
 import com.sentinels.robot.commands.armmech.arm.*;
 import com.sentinels.robot.commands.armmech.intake.*;
 import com.sentinels.robot.commands.autonomous.*;
-import com.sentinels.robot.commands.autonomous.Driving.AutonDock;
-import com.sentinels.robot.commands.autonomous.Driving.AutonDriveDistance;
-import com.sentinels.robot.commands.autonomous.Driving.AutonTurn;
 import com.sentinels.robot.commands.drivetrain.*;
 
 import com.sentinels.robot.subsystems.arm.*;
@@ -38,7 +35,6 @@ public class RobotContainer {
   private final Arm arm = new Arm();
   private final Intake intake = new Intake();
   private final Drivetrain drivetrain = new Drivetrain();
-  private final Camera camera = new Camera();
   private final Limelight limelight = new Limelight();
   
   // Input Devices
