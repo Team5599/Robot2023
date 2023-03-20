@@ -242,6 +242,13 @@ public class Drivetrain extends SubsystemBase {
     return odometry.getEstimatedPosition();
   }
 
+  public Pose2d getInvertedPose2d(){
+    return new Pose2d(
+      odometry.getEstimatedPosition().getTranslation(),
+      odometry.getEstimatedPosition().getRotation().rotateBy(Rotation2d.fromDegrees(180))
+    );
+  }
+
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Drivetrain/Left Motors Voltage (V)", getLeftVoltage());
@@ -255,6 +262,8 @@ public class Drivetrain extends SubsystemBase {
     
     SmartDashboard.putNumber("Drivetrain/Left get:", leftMotors.get());
     SmartDashboard.putNumber("Drivetrain/Right get:", rightMotors.get());
+
+    // SmartDashboard.putNumberArray("Drivetrain/Pose", poseArray);
     
     // This will get the simulated sensor readings that we set
     // in the previous article while in simulation, but will use

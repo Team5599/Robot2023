@@ -103,13 +103,13 @@ public class RobotContainer {
     // SIMULATION TESTS
 
     autonChooser.addOption("PID test", Autos.PIDtest(drivetrain, limelight));
-    autonChooser.addOption("Ramsete test", Autos.RamseteDrive(drivetrain, Arena.Trajectories.SimpleTrajectory, true));
+    autonChooser.addOption("Trajectory test", Autos.RamseteDrive(drivetrain, Arena.Trajectories.SimpleTrajectory, true));
 
     // REAL 
 
     autonChooser.addOption("Routine 0", Autos.Routine0(drivetrain, arm, intake, limelight));
 
-    autonChooser.setDefaultOption("Ramsete test", Autos.RamseteDrive(drivetrain, Arena.Trajectories.SimpleTrajectory, true));
+    autonChooser.setDefaultOption("Trajectory test", Autos.RamseteDrive(drivetrain, Arena.Trajectories.SimpleTrajectory, true));
     SmartDashboard.putData("Autonomous", autonChooser);
   }
 

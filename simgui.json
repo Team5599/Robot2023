@@ -46,12 +46,16 @@
       "/LiveWindow/Ungrouped/DigitalInput[26]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[27]": "Digital Input",
       "/LiveWindow/Ungrouped/MotorControllerGroup[1]": "Motor Controller",
+      "/LiveWindow/Ungrouped/PIDController[10]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[4]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[5]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[6]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[7]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[8]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[9]": "PIDController",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/SmartDashboard/Autonomous": "String Chooser",
       "/SmartDashboard/Control Scheme": "String Chooser",
@@ -121,9 +125,7 @@
         "Drivetrain": {
           "Relative Encoders": {
             "open": true
-          }
-        },
-        "Field": {
+          },
           "open": true
         },
         "PID": {
@@ -158,7 +160,7 @@
               "min": -10.0
             }
           ],
-          "height": 243,
+          "height": 334,
           "legendHorizontal": true,
           "legendLocation": 9,
           "legendOutside": true,
@@ -219,7 +221,7 @@
               "min": -1.5
             }
           ],
-          "height": 243,
+          "height": 326,
           "series": [
             {
               "color": [
@@ -332,7 +334,7 @@
               "min": -2.0
             }
           ],
-          "height": 206,
+          "height": 261,
           "name": "Setpoints vs. Measurements(velocity)",
           "series": [
             {
@@ -374,7 +376,7 @@
           ]
         },
         {
-          "height": 206,
+          "height": 261,
           "series": [
             {
               "color": [

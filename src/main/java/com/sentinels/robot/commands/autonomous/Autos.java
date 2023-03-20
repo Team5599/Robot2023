@@ -25,8 +25,8 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 public final class Autos {
   public static CommandBase Routine0(Drivetrain drivetrain, Arm arm, Intake intake, Limelight limelight){    
     return Commands.sequence(
-      RamseteDrive(drivetrain, Arena.Trajectories.Routine0.ToCube1.trajectory, false)
-      ,RamseteDrive(drivetrain, Arena.Trajectories.Routine0.inverted.trajectory, false)
+      RamseteDrive(drivetrain, Arena.Trajectories.Routine0.ToCube1.trajectory, true)
+      ,RamseteDrive(drivetrain, Arena.Trajectories.Routine0.Unnamed.trajectory, true)
     );
   }
   /**
@@ -53,7 +53,7 @@ public final class Autos {
     return Commands.sequence(
       new RamseteCommand(
         trajectory, 
-        drivetrain::getPose, 
+        drivetrain::getPose,
         disabled,
         new SimpleMotorFeedforward(0.15, 2, 2),//voltages here, arbitrary numbers here for now
         Settings.Drivetrain.KINEMATICS, 

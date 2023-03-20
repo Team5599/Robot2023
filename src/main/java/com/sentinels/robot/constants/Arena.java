@@ -57,23 +57,20 @@ public interface Arena {
         // JSONs / REAL 
         //https://docs.wpilib.org/en/stable/docs/software/pathplanning/pathweaver/integrating-robot-program.html
 
-        
         public enum Routine0{
-            ToCube1("ToCube1.wpilib.json"),
-            ToCube2("ToCube2.wpilib.json"),
-            inverted("InvertedTest_0.wpilib.json");
+            ToCube1("ToCube1"),
+            ToCube2("ToCube2"),
+            Unnamed("Unnamed");
 
             String path;
             public Trajectory trajectory;
-            Routine0(String name){
-                path = "output/" + name;
+            Routine0(String name){                
+                path = "output/" + name + ".wpilib.json";
 
-                
                 try {
                     Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(path); 
+                    System.out.println(trajectoryPath.toString());  
                     trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
-                    System.out.println(trajectoryPath);
-                    //System.out.println("C:\Users\Karamat\vsc programs\Robot2023\src\main\deploy\output\InvertedTest_0.wpilib.json");
                 } catch (Exception e) {
                     System.out.println("/////////////////////////\n\n");
                     DriverStation.reportError("UNABLE TO OPEN TRAJECTORY " + path, e.getStackTrace());
