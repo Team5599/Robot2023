@@ -8,6 +8,7 @@
 
 package com.sentinels.robot;
 
+import com.sentinels.robot.constants.Arena;
 import com.sentinels.robot.constants.Ports;
 
 import com.sentinels.robot.commands.armmech.arm.*;
@@ -106,14 +107,13 @@ public class RobotContainer {
     // SIMULATION TESTS
 
     autonChooser.addOption("PID test", Autos.PIDtest(drivetrain, limelight));
-    autonChooser.addOption("Ramsete test", Autos.RamseteTest(drivetrain, limelight));
-    autonChooser.addOption("voltage drive test", Autos.voltageTest(drivetrain));
+    autonChooser.addOption("Ramsete test", Autos.RamseteDrive(drivetrain, Arena.Trajectories.SimpleTrajectory, true));
 
     // REAL 
 
-    //autonChooser.addOption("Routine 0", getAutonomousCommand());
+    autonChooser.addOption("Routine 0", Autos.Routine0(drivetrain, arm, intake, limelight));
 
-    autonChooser.setDefaultOption("Ramsete test", Autos.RamseteTest(drivetrain, limelight));
+    autonChooser.setDefaultOption("Ramsete test", Autos.RamseteDrive(drivetrain, Arena.Trajectories.SimpleTrajectory, true));
     SmartDashboard.putData("Autonomous", autonChooser);
   }
 

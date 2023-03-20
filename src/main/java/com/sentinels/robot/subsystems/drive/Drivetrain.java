@@ -25,6 +25,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.Encoder;
@@ -127,15 +128,11 @@ public class Drivetrain extends SubsystemBase {
         VecBuilder.fill(0.001, 0.001, 0.001, 0.05, 0.05, 0.005, 0.005)
     );
 
-    field.getObject("traj").setTrajectory(Arena.Trajectories.TestTrajectory);
-
-    if (RobotBase.isSimulation()){
-      for (Arena.Trajectories.Routine0 paths : Arena.Trajectories.Routine0.values()){
-        field.getObject(paths.name()).setTrajectory(paths.trajectory);
-      }
-      // the line after does not work, it gets put back to the bottom left corner
-      // field.getObject("Robot").setPose(5,0,Rotation2d.fromDegrees(0));
-    }
+    // if (RobotBase.isSimulation()){
+    //   for (Arena.Trajectories.Routine0 paths : Arena.Trajectories.Routine0.values()){
+    //     field.getObject(paths.name()).setTrajectory(paths.trajectory);
+    //   }
+    // }
 
     SmartDashboard.putData("Field", field);
   }
@@ -162,6 +159,14 @@ public class Drivetrain extends SubsystemBase {
   public void driveStop() {
     drivetrain.stopMotor();
   }
+  /**
+   * Draw a trajectory in the simulation 
+   * @param trajectory - the trajectory to be drawm
+   * 
+   */
+  public void displayPath(Trajectory trajectory){
+    field.getObject("new trajectory").setTrajectory(trajectory);
+  }
 
   // POSITION FUNCTIONS
 
@@ -179,7 +184,6 @@ public class Drivetrain extends SubsystemBase {
   }
 
   // VELOCITY FUNCTIONS
-    // Because Relative Encoders only update if the robot is real, were only using the simEncoders while simulating
   public double getLeftVelocity() {
     if (RobotBase.isSimulation()){
       return simEncoderL.getRate();
@@ -194,7 +198,6 @@ public class Drivetrain extends SubsystemBase {
     return Settings.Drivetrain.kWheelCircumference * (encoderFR.getVelocity() + encoderBR.getVelocity() / 120.0);
   }
 
-  //TODO: change this so that it doesnt use the RelativeEncoders, since they dont update
   public DifferentialDriveWheelSpeeds getWheelSpeeds(){
     // double AvgLeftVel = 0.254 * (getLeftVelocity() * 2 * Math.PI * (Settings.Drivetrain.kWheelDiameter / 2)) / 60;
     double AvgLeftVel = getLeftVelocity();

@@ -18,7 +18,7 @@ public class CascadePID extends CommandBase {
 
   //TODO:put this length into the constants file 
   private final double cascadeLength = 21; // in inches
-  private final double gearRatio = 27; // this gear ratio may change
+  private final double gearRatio = 21; // this gear ratio may change
 
   /**
    * @param arm the arm subsystem

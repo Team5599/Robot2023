@@ -60,18 +60,24 @@ public interface Arena {
         
         public enum Routine0{
             ToCube1("ToCube1.wpilib.json"),
-            ToCube2("ToCube2.wpilib.json");
+            ToCube2("ToCube2.wpilib.json"),
+            inverted("InvertedTest_0.wpilib.json");
 
             String path;
             public Trajectory trajectory;
             Routine0(String name){
                 path = "output/" + name;
 
+                
                 try {
                     Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(path); 
                     trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+                    System.out.println(trajectoryPath);
+                    //System.out.println("C:\Users\Karamat\vsc programs\Robot2023\src\main\deploy\output\InvertedTest_0.wpilib.json");
                 } catch (Exception e) {
-                    DriverStation.reportError("UNABLE TO OPEN TRAJECTORY" + path, e.getStackTrace());
+                    System.out.println("/////////////////////////\n\n");
+                    DriverStation.reportError("UNABLE TO OPEN TRAJECTORY " + path, e.getStackTrace());
+                    System.out.println("\n\n /////////////////////////");
                 }
             }
         }
