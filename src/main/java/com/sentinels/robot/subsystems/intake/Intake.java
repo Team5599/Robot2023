@@ -55,6 +55,10 @@ public class Intake extends SubsystemBase {
   public void intakePivot(double speed) {
     motorPivot.set(speed);
   }
+  
+  public void pivotStop() {
+    motorPivot.stopMotor();
+  }
 
   // ENCODER + MOTOR INFO METHODS
 

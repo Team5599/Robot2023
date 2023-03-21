@@ -31,13 +31,18 @@ public class IntakePivot extends CommandBase {
 
   @Override
   public void execute() {
-    // TODO: Put proper axis number in the getRawAxis() method below
-    intake.intakePivot(-operator.getRawAxis(4));
+    if (operator.button(6).getAsBoolean()) {
+      intake.intakePivot(0.25);
+    } else {
+      intake.intakePivot(-0.25);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    intake.pivotStop();
+  }
 
   // Returns true when the command should end.
   @Override

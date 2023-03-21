@@ -31,7 +31,7 @@ public class ArmPivot extends CommandBase {
 
   @Override
   public void execute() {
-    arm.PivotArm(-operator.getRawAxis(2));
+    arm.PivotArm(-operator.getRawAxis(1));
   }
     
   // Called once the command ends or is interrupted.

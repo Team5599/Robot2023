@@ -51,21 +51,22 @@ public class DrivetrainDrive extends CommandBase {
   public void execute() {
     driverLeftY = limiterL.calculate(driver.getLeftY());
     driverRightY = limiterR.calculate(driver.getRightY());
-    if(RobotBase.isSimulation()){
+
+    if (RobotBase.isSimulation()) {
       driverLeftY = driver.getLeftY();
       driverRightY = driver.getRightY();
     }
 
     periodic();
+
     if (arcadeDriveActive) {
       drivetrain.arcadeDrive(driverRightY * Settings.Drivetrain.kDriveSpeedCap, driverLeftX * Settings.Drivetrain.kDriveSpeedCap);
-    }
-    else {
+    } else {
       drivetrain.tankDrive(driverLeftY * Settings.Drivetrain.kDriveSpeedCap, driverRightY * Settings.Drivetrain.kDriveSpeedCap);
     }
   }
 
-  public void periodic(){
+  public void periodic() {
     double[] axes = {driverLeftY,driverRightY};
     SmartDashboard.putNumberArray("Controller/Inputs (LY,RY):", axes);
   }

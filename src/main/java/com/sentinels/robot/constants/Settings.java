@@ -29,6 +29,8 @@ public interface Settings {
     }
 
     public static interface Arm {
+        double kArmSpeedCap = 0.7;
+
         double kArmLength = 47; // in inches
         double kCascadeLength = 40;// in
         double kCascadeMaxExtensionLength = 21;

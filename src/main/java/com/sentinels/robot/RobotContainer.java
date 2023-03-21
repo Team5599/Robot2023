@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -75,18 +76,18 @@ public class RobotContainer {
 
   private void configureOperatorBindings() {
     // ARM
-    operator.axisLessThan(6, -0.08).whileTrue(new ArmCascade(arm, operator));
-    operator.axisGreaterThan(6, 0.08).whileTrue(new ArmCascade(arm, operator));
+    operator.povUp().whileTrue(new RepeatCommand(new ArmCascade(arm, operator)));
+    operator.povDown().whileTrue(new RepeatCommand(new ArmCascade(arm, operator)));
 
-    operator.axisLessThan(2, -0.08).whileTrue(new ArmPivot(arm, operator));
-    operator.axisGreaterThan(2, 0.08).whileTrue(new ArmPivot(arm, operator));
+    operator.axisLessThan(1, -0.12).whileTrue(new ArmPivot(arm, operator));
+    operator.axisGreaterThan(1, 0.12).whileTrue(new ArmPivot(arm, operator));
 
     // INTAKE
     operator.button(3).onTrue(new IntakeOpen(intake));
     operator.button(5).onTrue(new IntakeClose(intake));
     
-    operator.axisLessThan(4, -0.1).whileTrue(new IntakePivot(intake, operator));
-    operator.axisGreaterThan(4, 0.1).whileTrue(new IntakePivot(intake, operator));
+    operator.button(6).whileTrue(new RepeatCommand(new IntakePivot(intake, operator)));
+    operator.button(4).whileTrue(new RepeatCommand(new IntakePivot(intake, operator)));
   }
 
   // COMMAND DEFAULTS
@@ -94,7 +95,6 @@ public class RobotContainer {
   private void configureDefaultCommands() {
     drivetrain.setDefaultCommand(new DrivetrainDrive(drivetrain, driver, arcadeDriveActive));
     arm.setDefaultCommand(new ArmPivot(arm, operator));
-    intake.setDefaultCommand(new IntakePivot(intake, operator));
   }
 
   private void configureAutonCommands() {
