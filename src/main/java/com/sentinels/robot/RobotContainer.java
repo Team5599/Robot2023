@@ -70,7 +70,6 @@ public class RobotContainer {
     controlChooser.addOption("Arcade Drive", true);
 
     SmartDashboard.putData("Control Scheme", controlChooser);
-
     arcadeDriveActive = controlChooser.getSelected();
   }
 
@@ -101,12 +100,11 @@ public class RobotContainer {
     autonChooser.addOption("Disabled", null);
 
     // SIMULATION TESTS
-
     autonChooser.addOption("PID test", Autos.PIDtest(drivetrain, limelight));
     autonChooser.addOption("Trajectory test", Autos.RamseteDrive(drivetrain, Arena.Trajectories.SimpleTrajectory, true));
 
     // REAL 
-
+    autonChooser.addOption("Score & Exit", Autos.BasicAuton(drivetrain, arm, intake, limelight));
     autonChooser.addOption("Routine 0", Autos.Routine0(drivetrain, arm, intake, limelight));
 
     autonChooser.setDefaultOption("Trajectory test", Autos.RamseteDrive(drivetrain, Arena.Trajectories.SimpleTrajectory, true));

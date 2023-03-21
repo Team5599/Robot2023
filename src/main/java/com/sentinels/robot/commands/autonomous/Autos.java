@@ -6,7 +6,12 @@ package com.sentinels.robot.commands.autonomous;
 
 import com.sentinels.robot.subsystems.drive.Drivetrain;
 import com.sentinels.robot.subsystems.vision.Limelight;
+import com.sentinels.robot.commands.armmech.arm.ArmCascade;
+import com.sentinels.robot.commands.armmech.arm.ArmPivot;
+import com.sentinels.robot.commands.armmech.intake.IntakeOpen;
+import com.sentinels.robot.commands.armmech.intake.IntakePivot;
 import com.sentinels.robot.commands.autonomous.Driving.AutonDriveDistance;
+import com.sentinels.robot.commands.drivetrain.DrivetrainDrive;
 import com.sentinels.robot.subsystems.arm.Arm;
 import com.sentinels.robot.subsystems.intake.Intake;
 import com.sentinels.robot.constants.Arena;
@@ -23,19 +28,35 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
 public final class Autos {
+
   public static CommandBase Routine0(Drivetrain drivetrain, Arm arm, Intake intake, Limelight limelight){    
     return Commands.sequence(
-      RamseteDrive(drivetrain, Arena.Trajectories.Routine0.ToCube1.trajectory, true)
-      ,RamseteDrive(drivetrain, Arena.Trajectories.Routine0.Unnamed.trajectory, true)
+      RamseteDrive(drivetrain, Arena.Trajectories.Routine0.ToCube1.trajectory, true),
+      RamseteDrive(drivetrain, Arena.Trajectories.Routine0.Unnamed.trajectory, true)
     );
   }
+
+  public static CommandBase BasicAuton(Drivetrain drivetrain, Arm arm, Intake intake, Limelight limelight) {
+    return Commands.sequence(
+      new ArmPivot(arm, null),
+      new ArmCascade(arm, null),
+      new IntakePivot(intake, null),
+      new IntakeOpen(intake),
+
+      new ArmPivot(arm, null),
+      new ArmCascade(arm, null),
+      new DrivetrainDrive(drivetrain, null, false),
+
+      RamseteDrive(drivetrain, Arena.Trajectories.BasicAuton.LeaveCommunity.trajectory, false)
+    );
+  }
+
   /**
    * Command that fills in a Ramsete command based on the robot and pre-tuned values for PID, feedforward and Ramsete
    * @param drivetrain - the drivetrain subsystem
    * @param trajectory - the trajectory that the robot will drive
    * @param diagnostic - allow if the Ramsete graph is changed and if the path is displayed in a simulation
-   * @return - the command itself
-   * 
+   * @return the command itself
    */
   public static CommandBase RamseteDrive(Drivetrain drivetrain, Trajectory trajectory, boolean displayStats) {
     var RamseteControl = NetworkTableInstance.getDefault().getTable("Ramsete Control");
@@ -60,8 +81,8 @@ public final class Autos {
         drivetrain::getWheelSpeeds, 
         leftController,
         rightController,
-        (left, right)->{
-          if(displayStats == false){
+        (left, right) -> {
+          if (displayStats == false) {
             drivetrain.voltageDrive(left, right);
             return;
           }
@@ -72,6 +93,7 @@ public final class Autos {
           PIDleftSetpoint.setNumber(leftController.getSetpoint());
           rightVel.setNumber(drivetrain.getRightVelocity());
           PIDrightSetpoint.setNumber(rightController.getSetpoint());
+
           SmartDashboard.putNumber("RAMSETE/Left Velocity",drivetrain.getLeftVelocity());
           SmartDashboard.putNumber("RAMSETE/Right Velocity",drivetrain.getRightVelocity());
           SmartDashboard.putNumber("RAMSETE/Left Setpoint", leftController.getSetpoint());
