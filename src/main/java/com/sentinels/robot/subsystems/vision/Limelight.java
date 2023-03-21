@@ -12,6 +12,8 @@ public class Limelight extends SubsystemBase {
     NetworkTableEntry tx = table.getEntry("tx");
     NetworkTableEntry ty = table.getEntry("ty");
     NetworkTableEntry ta = table.getEntry("ta");
+    NetworkTableEntry viewStream = table.getEntry("stream");
+    NetworkTableEntry getled = table.getEntry("ledMode");
 
     public Limelight() { }
 
@@ -26,6 +28,9 @@ public class Limelight extends SubsystemBase {
         SmartDashboard.putNumber("Limelight/tX", x);
         SmartDashboard.putNumber("Limelight/tY", y);
         SmartDashboard.putNumber("Limelight/tA", area);
+
+        blink();
+        sidestream();
     }
     
     // these will return -191 if there is no game piece present
@@ -35,6 +40,14 @@ public class Limelight extends SubsystemBase {
 
     public double getTa() {
         return table.getEntry("ta").getDouble(-200);
+    }
+
+    public void blink(){
+        table.getEntry("ledMode").setNumber(1); // Set value to 2 for blink
+    }
+    
+    public void sidestream(){
+        table.getEntry("stream").setNumber(0);
     }
 
     public double ParllaxDistance(double angle1, double angle2){
