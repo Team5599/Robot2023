@@ -10,6 +10,7 @@ package com.sentinels.robot.commands.armmech.intake;
 
 import com.sentinels.robot.subsystems.intake.Intake;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
@@ -18,6 +19,7 @@ public class IntakePivot extends CommandBase {
 
   private Intake intake;
   private CommandJoystick operator;
+  private SlewRateLimiter limiter = new SlewRateLimiter(0.5);
 
   public IntakePivot(Intake intake, CommandJoystick operator) {
     this.intake = intake;
@@ -32,9 +34,9 @@ public class IntakePivot extends CommandBase {
   @Override
   public void execute() {
     if (operator.button(6).getAsBoolean()) {
-      intake.intakePivot(0.25);
+      intake.intakePivot(limiter.calculate(0.25));
     } else {
-      intake.intakePivot(-0.25);
+      intake.intakePivot(limiter.calculate(-0.25));
     }
   }
 

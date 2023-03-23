@@ -9,6 +9,7 @@ import com.sentinels.robot.constants.Settings;
 import com.sentinels.robot.constants.Settings.Arm.level;
 import com.sentinels.robot.subsystems.arm.Arm;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -53,7 +54,7 @@ public class PivotPID extends CommandBase {
     // if the pivot starts at 0 degrees, then we need to choose the bottom position to be the actual max amount of degrees, but the input should still be normal
     // input should be from 0 to `70 degrees but map to the proper places
     //arm outer length: 47", arm inner length: 40", base length: 28.5"
-    arm.PivotArm(pivotController.calculate(arm.getRightPosition()));
+    arm.PivotArm(MathUtil.clamp(pivotController.calculate(arm.getRightPosition()), -0.5, 0.5));
 
     //SmartDashboard.putNumber("Arm/PID",pivotController.getPositionError());
   }

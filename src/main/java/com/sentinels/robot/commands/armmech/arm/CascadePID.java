@@ -47,7 +47,7 @@ public class CascadePID extends CommandBase {
       case TOP:
         setpoint = Settings.Arm.kCascadeLength;
     }
-    cascadeController.setSetpoint(setpoint * gearRatio);
+    cascadeController.setSetpoint(setpoint * gearRatio );
   }
 
   @Override
@@ -58,7 +58,7 @@ public class CascadePID extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    arm.CascadeArm(cascadeController.calculate(arm.getCascadeExtensionDist()));
   }
 
   // Called once the command ends or is interrupted.

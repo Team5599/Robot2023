@@ -31,22 +31,14 @@ public final class Autos {
 
   public static CommandBase Routine0(Drivetrain drivetrain, Arm arm, Intake intake, Limelight limelight){    
     return Commands.sequence(
-      RamseteDrive(drivetrain, Arena.Trajectories.Routine0.ToCube1.trajectory, true),
-      RamseteDrive(drivetrain, Arena.Trajectories.Routine0.Unnamed.trajectory, true)
+      // RamseteDrive(drivetrain, Arena.Trajectories.Routine0.ToCube1.trajectory, true),
+      // RamseteDrive(drivetrain, Arena.Trajectories.Routine0.Unnamed.trajectory, true)
+
     );
   }
 
   public static CommandBase BasicAuton(Drivetrain drivetrain, Arm arm, Intake intake, Limelight limelight) {
     return Commands.sequence(
-      new ArmPivot(arm, null),
-      new ArmCascade(arm, null),
-      new IntakePivot(intake, null),
-      new IntakeOpen(intake),
-
-      new ArmPivot(arm, null),
-      new ArmCascade(arm, null),
-      new DrivetrainDrive(drivetrain, null, false),
-
       RamseteDrive(drivetrain, Arena.Trajectories.BasicAuton.LeaveCommunity.trajectory, false)
     );
   }

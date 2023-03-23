@@ -10,7 +10,7 @@ package com.sentinels.robot;
 
 import com.sentinels.robot.constants.Arena;
 import com.sentinels.robot.constants.Ports;
-
+import com.sentinels.robot.constants.Settings.Arm.level;
 import com.sentinels.robot.commands.armmech.arm.*;
 import com.sentinels.robot.commands.armmech.intake.*;
 import com.sentinels.robot.commands.autonomous.*;
@@ -107,7 +107,10 @@ public class RobotContainer {
     autonChooser.addOption("Score & Exit", Autos.BasicAuton(drivetrain, arm, intake, limelight));
     autonChooser.addOption("Routine 0", Autos.Routine0(drivetrain, arm, intake, limelight));
 
-    autonChooser.setDefaultOption("Score & Exit", Autos.BasicAuton(drivetrain, arm, intake, limelight));
+    // autonChooser.setDefaultOption("Score & Exit", Autos.BasicAuton(drivetrain, arm, intake, limelight));
+
+    autonChooser.setDefaultOption("arm pid", new CascadePID(arm, level.MEDIUM));
+    
     SmartDashboard.putData("Autonomous", autonChooser);
   }
 

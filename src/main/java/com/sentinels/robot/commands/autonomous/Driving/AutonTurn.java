@@ -42,7 +42,10 @@ public class AutonTurn extends CommandBase {
 
   @Override
   public void execute() {
-    drivetrain.voltageDrive(leftController.calculate(drivetrain.getLeftPosition()), drivetrain.getRightPosition());
+    drivetrain.voltageDrive(
+      leftController.calculate(drivetrain.getLeftPosition()), 
+      rightController.calculate(drivetrain.getRightPosition())
+    );
   }
 
   // Called once the command ends or is interrupted.

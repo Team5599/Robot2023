@@ -97,8 +97,19 @@ public class Arm extends SubsystemBase {
   public double getRightPosition() {
     return armPivotR.getSelectedSensorPosition();
   }
-  public double getCascadePosition() {
+  /**
+   * 
+   * @return the cascade motor's position
+   */
+  public double getCascadeMotorPosition() {
     return cascadeEncoder.getPosition();
+  }
+  /**
+   * 
+   * @return the distance the cascade has extended
+   */
+  public double getCascadeExtensionDist(){
+    return 2*Math.PI*getCascadeMotorPosition();
   }
 
   // VELOCITY METHODS (RPM) (converted deg/sec to rpm)
@@ -145,7 +156,8 @@ public class Arm extends SubsystemBase {
 
     SmartDashboard.putNumber("Arm/Left Motor Position (Degrees)", getLeftPosition());
     SmartDashboard.putNumber("Arm/Right Motor Position (Degrees)", getRightPosition());
-    SmartDashboard.putNumber("Arm/Cascade Motor Position (Degrees)", getCascadePosition());
+    SmartDashboard.putNumber("Arm/Cascade Motor Position (Degrees)", getCascadeMotorPosition());
+    SmartDashboard.putNumber("Arm/Cascade Extension Length", getCascadeExtensionDist());
 
     SmartDashboard.putNumber("Arm/Left Motor Velocity (RPM)", getLeftVelocity());
     SmartDashboard.putNumber("Arm/Right Motor Velocity (RPM)", getRightVelocity());

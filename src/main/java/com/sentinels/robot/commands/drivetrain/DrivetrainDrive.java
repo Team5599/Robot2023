@@ -29,8 +29,8 @@ public class DrivetrainDrive extends CommandBase {
   private double driverLeftX;
   private Boolean arcadeDriveActive;
 
-  private final SlewRateLimiter limiterL = new SlewRateLimiter(0.85);
-  private final SlewRateLimiter limiterR = new SlewRateLimiter(0.85);
+  private final SlewRateLimiter limiterL = new SlewRateLimiter(3);
+  private final SlewRateLimiter limiterR = new SlewRateLimiter(3);
 
   public DrivetrainDrive(Drivetrain drivetrain, CommandXboxController controller, Boolean arcadeDriveActive) {
     this.drivetrain = drivetrain;
