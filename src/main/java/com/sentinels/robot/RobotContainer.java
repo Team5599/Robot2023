@@ -107,7 +107,7 @@ public class RobotContainer {
     autonChooser.addOption("Score & Exit", Autos.BasicAuton(drivetrain, arm, intake, limelight));
     autonChooser.addOption("Routine 0", Autos.Routine0(drivetrain, arm, intake, limelight));
 
-    autonChooser.setDefaultOption("Trajectory test", Autos.RamseteDrive(drivetrain, Arena.Trajectories.SimpleTrajectory, true));
+    autonChooser.setDefaultOption("Score & Exit", Autos.BasicAuton(drivetrain, arm, intake, limelight));
     SmartDashboard.putData("Autonomous", autonChooser);
   }
 
