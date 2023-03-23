@@ -9,6 +9,7 @@ import com.sentinels.robot.constants.Settings;
 import com.sentinels.robot.constants.Settings.Arm.level;
 import com.sentinels.robot.subsystems.arm.Arm;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -58,7 +59,9 @@ public class CascadePID extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.CascadeArm(cascadeController.calculate(arm.getCascadeExtensionDist()));
+    arm.CascadeArm(
+      MathUtil.clamp(cascadeController.calculate(arm.getCascadeExtensionDist()), -0.5, 0.5)
+    );
   }
 
   // Called once the command ends or is interrupted.
