@@ -160,7 +160,7 @@
               "min": -10.0
             }
           ],
-          "height": 334,
+          "height": 332,
           "legendHorizontal": true,
           "legendLocation": 9,
           "legendOutside": true,
@@ -221,7 +221,7 @@
               "min": -1.5
             }
           ],
-          "height": 326,
+          "height": 0,
           "series": [
             {
               "color": [
@@ -334,7 +334,7 @@
               "min": -2.0
             }
           ],
-          "height": 261,
+          "height": 2,
           "name": "Setpoints vs. Measurements(velocity)",
           "series": [
             {
@@ -376,7 +376,7 @@
           ]
         },
         {
-          "height": 261,
+          "height": 2,
           "series": [
             {
               "color": [
