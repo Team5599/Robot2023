@@ -127,10 +127,17 @@ public class Arm extends SubsystemBase {
    * divided by 27 because of the gear ratio
    */
   public double getArmPivotAngle(){
-    return (armPivotL.getSelectedSensorPosition()%1024)/1024/Settings.Arm.kArmPivotGearRatio;
+    // return (((armPivotL.getSelectedSensorPosition() % 4096)/4096)/Settings.Arm.kArmPivotGearRatio)*360;
+    double encoderPosition = armPivotL.getSelectedSensorPosition();
+    double angle = ((double)encoderPosition / (4096  * Settings.Arm.kArmPivotGearRatio)) * 360;
+    return angle % 360;
   }
   public double getCascadeVelocity() {
     return cascadeEncoder.getVelocity();
+  }
+
+  public double getArmEncoderValue(){
+    return armPivotL.getSelectedSensorPosition();
   }
 
   // VOLTAGE METHODS (V)

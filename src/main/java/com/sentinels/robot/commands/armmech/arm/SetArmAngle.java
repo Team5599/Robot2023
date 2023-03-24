@@ -15,7 +15,7 @@ public class SetArmAngle extends CommandBase {
   private final Arm arm;
   private double targetAngle;
   private double currentAngle;
-  private double ACCEPTABLE_ERROR = 5.0;
+  private double ACCEPTABLE_ERROR = 2.0;
 
   /** Creates a new SetArmAngle. */
   public SetArmAngle(Arm arm, double targetAngle) {
@@ -45,10 +45,11 @@ public class SetArmAngle extends CommandBase {
     SmartDashboard.putNumber("Arm/Cascade Auto/Target Angle", targetAngle);
     SmartDashboard.putNumber("Arm/Cascade Auto/Current Angle", currentAngle);
     SmartDashboard.putNumber("Arm/Cascade Auto/Angle Difference", angleDifference);
+    SmartDashboard.putNumber("Arm/Cascade Auto/Encoder Value Actual", arm.getArmEncoderValue());
 
     if (isWithinBounds(currentAngle, targetAngle)) return;
 
-    System.out.println("Moving arm . . .");
+    System.out.println("Moving arm . . . [" + currentAngle + " | " + targetAngle + " | " + angleDifference + "]");
 
     if (targetAngle > currentAngle){
       arm.PivotArm(0.1);
