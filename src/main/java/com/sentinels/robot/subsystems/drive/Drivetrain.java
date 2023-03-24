@@ -283,6 +283,8 @@ public class Drivetrain extends SubsystemBase {
     // in the previous article while in simulation, but will use
     // real values on the robot itself.
     odometry.update(getHeading(), simEncoderL.getDistance(), simEncoderR.getDistance());
+
+    // odometry.update(getHeading(), )
   }
 
   @Override

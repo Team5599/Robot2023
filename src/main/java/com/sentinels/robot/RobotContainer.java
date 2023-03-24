@@ -14,6 +14,7 @@ import com.sentinels.robot.constants.Settings.Arm.level;
 import com.sentinels.robot.commands.armmech.arm.*;
 import com.sentinels.robot.commands.armmech.intake.*;
 import com.sentinels.robot.commands.autonomous.*;
+import com.sentinels.robot.commands.autonomous.Driving.AutonTimedDrive;
 import com.sentinels.robot.commands.drivetrain.*;
 
 import com.sentinels.robot.subsystems.arm.*;
@@ -106,12 +107,13 @@ public class RobotContainer {
     autonChooser.addOption("Trajectory test", Autos.RamseteDrive(drivetrain, Arena.Trajectories.SimpleTrajectory, true));
 
     // REAL 
+    autonChooser.addOption("timed drive", new AutonTimedDrive(drivetrain).withTimeout(3));
     autonChooser.addOption("Score & Exit", Autos.BasicAuton(drivetrain, arm, intake, limelight));
     autonChooser.addOption("Routine 0", Autos.Routine0(drivetrain, arm, intake, limelight));
 
     // autonChooser.setDefaultOption("Score & Exit", Autos.BasicAuton(drivetrain, arm, intake, limelight));
 
-    autonChooser.setDefaultOption("Disabled", null);
+    autonChooser.setDefaultOption("timed drive", new AutonTimedDrive(drivetrain).withTimeout(6));
     
     SmartDashboard.putData("Autonomous", autonChooser);
   }
