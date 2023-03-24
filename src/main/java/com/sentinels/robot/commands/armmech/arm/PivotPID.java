@@ -37,7 +37,7 @@ public class PivotPID extends CommandBase {
       case TOP:
         setpoint = 70;
     }
-    pivotController.setSetpoint(setpoint * Settings.Arm.kPivotGearRatio);
+    // pivotController.setSetpoint(setpoint * Settings.Arm.kPivotGearRatio);
 
     //addRequirements(arm);
   }

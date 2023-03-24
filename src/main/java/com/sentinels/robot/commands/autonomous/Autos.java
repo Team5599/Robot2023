@@ -8,14 +8,17 @@ import com.sentinels.robot.subsystems.drive.Drivetrain;
 import com.sentinels.robot.subsystems.vision.Limelight;
 import com.sentinels.robot.commands.armmech.arm.ArmCascade;
 import com.sentinels.robot.commands.armmech.arm.ArmPivot;
+import com.sentinels.robot.commands.armmech.arm.SetArmAngle;
 import com.sentinels.robot.commands.armmech.intake.IntakeOpen;
 import com.sentinels.robot.commands.armmech.intake.IntakePivot;
 import com.sentinels.robot.commands.autonomous.Driving.AutonDriveDistance;
+import com.sentinels.robot.commands.autonomous.Driving.AutonTimedDrive;
 import com.sentinels.robot.commands.drivetrain.DrivetrainDrive;
 import com.sentinels.robot.subsystems.arm.Arm;
 import com.sentinels.robot.subsystems.intake.Intake;
 import com.sentinels.robot.constants.Arena;
 import com.sentinels.robot.constants.Settings;
+import com.sentinels.robot.constants.Settings.Arm.level;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
@@ -35,6 +38,14 @@ public final class Autos {
       // RamseteDrive(drivetrain, Arena.Trajectories.Routine0.ToCube1.trajectory, true),
       // RamseteDrive(drivetrain, Arena.Trajectories.Routine0.Unnamed.trajectory, true)
 
+    );
+  }
+
+  public static CommandBase FullAuto(Drivetrain drivetrain, Arm arm, Intake intake) {
+    arm.resetEncoders();
+    return Commands.sequence(
+      new SetArmAngle(arm, 45)
+      //,new AutonTimedDrive(drivetrain).withTimeout(3.9)
     );
   }
 

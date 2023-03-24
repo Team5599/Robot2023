@@ -95,7 +95,7 @@ public class RobotContainer {
   private void configureDefaultCommands() {
     drivetrain.setDefaultCommand(new DrivetrainDrive(drivetrain, driver, arcadeDriveActive));
     arm.setDefaultCommand(new ArmPivot(arm, operator));
-    intake.setDefaultCommand(new IntakeStall(intake));
+    //intake.setDefaultCommand(new IntakeStall(intake));
   }
 
   private void configureAutonCommands() {
@@ -107,13 +107,14 @@ public class RobotContainer {
     autonChooser.addOption("Trajectory test", Autos.RamseteDrive(drivetrain, Arena.Trajectories.SimpleTrajectory, true));
 
     // REAL 
-    autonChooser.addOption("timed drive", new AutonTimedDrive(drivetrain).withTimeout(3));
+    autonChooser.addOption("timed drive", new AutonTimedDrive(drivetrain).withTimeout(3.9));
     autonChooser.addOption("Score & Exit", Autos.BasicAuton(drivetrain, arm, intake, limelight));
     autonChooser.addOption("Routine 0", Autos.Routine0(drivetrain, arm, intake, limelight));
+    autonChooser.addOption("Full Auto", Autos.FullAuto(drivetrain, arm, intake));
 
     // autonChooser.setDefaultOption("Score & Exit", Autos.BasicAuton(drivetrain, arm, intake, limelight));
 
-    autonChooser.setDefaultOption("timed drive", new AutonTimedDrive(drivetrain).withTimeout(6));
+    autonChooser.setDefaultOption("timed drive", new AutonTimedDrive(drivetrain).withTimeout(3.9));
     
     SmartDashboard.putData("Autonomous", autonChooser);
   }

@@ -19,7 +19,7 @@ public class IntakePivot extends CommandBase {
 
   private Intake intake;
   private CommandJoystick operator;
-  private SlewRateLimiter limiter = new SlewRateLimiter(0.3);
+  private SlewRateLimiter limiter = new SlewRateLimiter(0.5);
 
   public IntakePivot(Intake intake, CommandJoystick operator) {
     this.intake = intake;
@@ -33,10 +33,11 @@ public class IntakePivot extends CommandBase {
 
   @Override
   public void execute() {
+    //THIS GOT INVERTED AND UNINVERTED MULTIPLE TIMES
     if (operator.button(6).getAsBoolean()) {
       intake.intakePivot(limiter.calculate(0.10));
     } else {
-      intake.intakePivot(limiter.calculate(-0.07));
+      intake.intakePivot(limiter.calculate(-0.10));
     }
   }
 

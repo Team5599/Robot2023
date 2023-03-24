@@ -28,7 +28,7 @@ public class IntakeStall extends CommandBase {
 
   @Override
   public void execute() {
-    intake.intakePivot(0.1);
+    intake.intakePivot(0.08);
   }
 
   // Called once the command ends or is interrupted.

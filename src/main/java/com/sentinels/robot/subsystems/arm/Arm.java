@@ -9,6 +9,7 @@
 package com.sentinels.robot.subsystems.arm;
 
 import com.sentinels.robot.constants.Ports;
+import com.sentinels.robot.constants.Settings;
 import com.sentinels.robot.util.RoboRIO;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
@@ -119,6 +120,14 @@ public class Arm extends SubsystemBase {
   }
   public double getRightVelocity() {
     return (armPivotR.getSelectedSensorVelocity() * 6.0);
+  }
+  /**
+   * 
+   * @return the angle of the arm using the ticks of the Falcons, assuming there are 1024 ticks per rotation
+   * divided by 27 because of the gear ratio
+   */
+  public double getArmPivotAngle(){
+    return (armPivotL.getSelectedSensorPosition()%1024)/1024/Settings.Arm.kArmPivotGearRatio;
   }
   public double getCascadeVelocity() {
     return cascadeEncoder.getVelocity();
