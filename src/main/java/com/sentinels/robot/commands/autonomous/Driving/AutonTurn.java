@@ -8,6 +8,7 @@ import com.sentinels.robot.constants.Settings;
 import com.sentinels.robot.subsystems.drive.Drivetrain;
 import com.sentinels.robot.subsystems.vision.Limelight;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -43,8 +44,8 @@ public class AutonTurn extends CommandBase {
   @Override
   public void execute() {
     drivetrain.voltageDrive(
-      leftController.calculate(drivetrain.getLeftPosition()), 
-      rightController.calculate(drivetrain.getRightPosition())
+      MathUtil.clamp(leftController.calculate(drivetrain.getLeftPosition()), -0.5, 0.5), 
+      MathUtil.clamp(rightController.calculate(drivetrain.getRightPosition()), -0.5, 0.5) 
     );
   }
 

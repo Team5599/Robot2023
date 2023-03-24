@@ -16,6 +16,7 @@ import com.sentinels.robot.util.SparkMAXsim;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.MathUtil;
@@ -224,6 +225,19 @@ public class Drivetrain extends SubsystemBase {
     encoderBL.setPosition(0);
     encoderFR.setPosition(0);
     encoderBR.setPosition(0);
+  }
+
+  public void setCoastMode() {
+    motorBL.setIdleMode(IdleMode.kCoast);
+    motorBR.setIdleMode(IdleMode.kCoast);
+    motorFL.setIdleMode(IdleMode.kCoast);
+    motorFR.setIdleMode(IdleMode.kCoast);
+  }
+  public void setBrakeMode() {
+    motorBL.setIdleMode(IdleMode.kBrake);
+    motorBR.setIdleMode(IdleMode.kBrake);
+    motorFL.setIdleMode(IdleMode.kBrake);
+    motorFR.setIdleMode(IdleMode.kBrake);
   }
 
   // IMU FUNCTIONS + TRAJECTORY 

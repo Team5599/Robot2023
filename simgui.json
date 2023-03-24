@@ -36,6 +36,11 @@
       "RoboRIO Input": {
         "open": true
       }
+    },
+    "Timing": {
+      "window": {
+        "visible": false
+      }
     }
   },
   "NTProvider": {
@@ -160,7 +165,7 @@
               "min": -10.0
             }
           ],
-          "height": 332,
+          "height": 778,
           "legendHorizontal": true,
           "legendLocation": 9,
           "legendOutside": true,
@@ -221,7 +226,7 @@
               "min": -1.5
             }
           ],
-          "height": 0,
+          "height": 778,
           "series": [
             {
               "color": [
@@ -334,7 +339,7 @@
               "min": -2.0
             }
           ],
-          "height": 2,
+          "height": 374,
           "name": "Setpoints vs. Measurements(velocity)",
           "series": [
             {
@@ -376,7 +381,7 @@
           ]
         },
         {
-          "height": 2,
+          "height": 374,
           "series": [
             {
               "color": [

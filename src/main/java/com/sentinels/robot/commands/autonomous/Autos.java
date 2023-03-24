@@ -23,6 +23,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
@@ -39,7 +40,7 @@ public final class Autos {
 
   public static CommandBase BasicAuton(Drivetrain drivetrain, Arm arm, Intake intake, Limelight limelight) {
     return Commands.sequence(
-      RamseteDrive(drivetrain, Arena.Trajectories.BasicAuton.LeaveCommunity.trajectory, false)
+      //new AutonDriveDistance(drivetrain, limelight, 2, false)
     );
   }
 
@@ -58,9 +59,9 @@ public final class Autos {
     var rightVel = RamseteControl.getEntry("Right Velocity");
 
     //original values: 0.2,0.5
-    RamseteController disabled = new RamseteController(0.1, 0.2);
-    PIDController leftController = new PIDController(3, 0, 0);
-    PIDController rightController = new PIDController(3, 0, 0);
+    RamseteController disabled = new RamseteController(2, 0.7);
+    PIDController leftController = new PIDController(10, 0, 0);
+    PIDController rightController = new PIDController(10, 0, 0);
     disabled.setEnabled(false);
     
     return Commands.sequence(
@@ -68,7 +69,7 @@ public final class Autos {
         trajectory, 
         drivetrain::getPose,
         disabled,
-        new SimpleMotorFeedforward(0.15, 2, 2),//voltages here, arbitrary numbers here for now
+        new SimpleMotorFeedforward(0.15, 2, 1.5),//voltages here, arbitrary numbers here for now
         Settings.Drivetrain.KINEMATICS, 
         drivetrain::getWheelSpeeds, 
         leftController,

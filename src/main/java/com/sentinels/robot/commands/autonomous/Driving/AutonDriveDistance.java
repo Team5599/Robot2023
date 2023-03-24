@@ -62,6 +62,8 @@ public class AutonDriveDistance extends CommandBase {
 
   @Override
   public void initialize() {
+    drivetrain.setCoastMode();
+
     SmartDashboard.putNumber("PID/error Left", distanceControllerL.getPositionError());
     SmartDashboard.putNumber("PID/error Right", distanceControllerR.getPositionError());
     SmartDashboard.putNumber("PID/Left Setpoint", distanceControllerL.getSetpoint());
@@ -83,7 +85,7 @@ public class AutonDriveDistance extends CommandBase {
   @Override
   public void execute() {
     drivetrain.tankDrive(
-      MathUtil.clamp(distanceControllerL.calculate(drivetrain.getLeftPosition()), -.5, .5),
+      -MathUtil.clamp(distanceControllerL.calculate(drivetrain.getLeftPosition()), -.5, .5),
       MathUtil.clamp(distanceControllerR.calculate(drivetrain.getRightPosition()), -.5, .5) 
     );
     
@@ -101,6 +103,8 @@ public class AutonDriveDistance extends CommandBase {
       angle2 = limelight.getTx();
       RobotContainer.distance = limelight.ParllaxDistance(angle1, angle2);
     }
+
+    drivetrain.setBrakeMode();
   }
 
   // Returns true when the command should end.

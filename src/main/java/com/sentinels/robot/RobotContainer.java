@@ -94,13 +94,15 @@ public class RobotContainer {
   private void configureDefaultCommands() {
     drivetrain.setDefaultCommand(new DrivetrainDrive(drivetrain, driver, arcadeDriveActive));
     arm.setDefaultCommand(new ArmPivot(arm, operator));
+    intake.setDefaultCommand(new IntakeStall(intake));
   }
 
   private void configureAutonCommands() {
     autonChooser.addOption("Disabled", null);
 
     // SIMULATION TESTS
-    autonChooser.addOption("PID test", Autos.PIDtest(drivetrain, limelight));
+    
+    // autonChooser.addOption("PID test", Autos.PIDtest(drivetrain, limelight));
     autonChooser.addOption("Trajectory test", Autos.RamseteDrive(drivetrain, Arena.Trajectories.SimpleTrajectory, true));
 
     // REAL 
@@ -109,7 +111,7 @@ public class RobotContainer {
 
     // autonChooser.setDefaultOption("Score & Exit", Autos.BasicAuton(drivetrain, arm, intake, limelight));
 
-    autonChooser.setDefaultOption("arm pid", new CascadePID(arm, level.MEDIUM));
+    autonChooser.setDefaultOption("Disabled", null);
     
     SmartDashboard.putData("Autonomous", autonChooser);
   }
