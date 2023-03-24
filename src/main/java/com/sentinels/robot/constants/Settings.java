@@ -37,7 +37,7 @@ public interface Settings {
         double kPivotToPerimeter = 30;// distance from pivot to the bumpers/ the robot perimeter
         double kMaxCascadeLength = 68;// from the pivot to the end of the arm once full extended in inches
 
-        //double kPivotStartingAngle = 
+        double kPivotStartingAngle = 90 - 27;// may need extra data 
         double kArmPivotGearRatio = 27;// versal planetary gear ratio
         
         public enum level {// enum to be used in certain commands

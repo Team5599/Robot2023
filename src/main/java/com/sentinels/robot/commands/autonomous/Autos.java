@@ -44,7 +44,7 @@ public final class Autos {
   public static CommandBase FullAuto(Drivetrain drivetrain, Arm arm, Intake intake) {
     arm.resetEncoders();
     return Commands.sequence(
-      new SetArmAngle(arm, 10)
+      new SetArmAngle(arm, 25)
       //,new AutonTimedDrive(drivetrain).withTimeout(3.9)
     );
   }

@@ -123,13 +123,13 @@ public class Arm extends SubsystemBase {
   }
   /**
    * 
-   * @return the angle of the arm using the ticks of the Falcons, assuming there are 1024 ticks per rotation
+   * @return the angle of the arm using the ticks of the Falcons, assuming there are 4096 ticks per rotation
    * divided by 27 because of the gear ratio
    */
   public double getArmPivotAngle(){
     // return (((armPivotL.getSelectedSensorPosition() % 4096)/4096)/Settings.Arm.kArmPivotGearRatio)*360;
     double encoderPosition = armPivotL.getSelectedSensorPosition();
-    double angle = ((double)encoderPosition / (4096  * Settings.Arm.kArmPivotGearRatio)) * 360;
+    double angle = ((double)encoderPosition * 360 / (4096  * Settings.Arm.kArmPivotGearRatio)) ;
     return angle % 360;
   }
   public double getCascadeVelocity() {
@@ -173,6 +173,7 @@ public class Arm extends SubsystemBase {
     SmartDashboard.putNumber("Arm/Left Motor Position (Degrees)", getLeftPosition());
     SmartDashboard.putNumber("Arm/Right Motor Position (Degrees)", getRightPosition());
     SmartDashboard.putNumber("Arm/Cascade Motor Position (Degrees)", getCascadeMotorPosition());
+    SmartDashboard.putNumber("Arm/Arm Pivot Angle (Degrees)", getArmPivotAngle());    
     SmartDashboard.putNumber("Arm/Cascade Extension Length", getCascadeExtensionDist());
 
     SmartDashboard.putNumber("Arm/Left Motor Velocity (RPM)", getLeftVelocity());

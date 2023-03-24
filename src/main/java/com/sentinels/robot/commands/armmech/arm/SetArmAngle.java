@@ -4,6 +4,7 @@
 
 package com.sentinels.robot.commands.armmech.arm;
 
+import com.sentinels.robot.constants.Settings;
 import com.sentinels.robot.constants.Settings.Arm.level;
 import com.sentinels.robot.subsystems.arm.Arm;
 
@@ -17,7 +18,7 @@ public class SetArmAngle extends CommandBase {
   private double currentAngle;
   private double ACCEPTABLE_ERROR = 2.0;
 
-  /** Creates a new SetArmAngle. */
+  //input is a real world angle relative to the floor
   public SetArmAngle(Arm arm, double targetAngle) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.arm = arm;
@@ -34,7 +35,10 @@ public class SetArmAngle extends CommandBase {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    //conversion to in code angle
+    // targetAngle-=Settings.Arm.kPivotStartingAngle;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -43,9 +47,9 @@ public class SetArmAngle extends CommandBase {
     double angleDifference = targetAngle - currentAngle;
 
     SmartDashboard.putNumber("Arm/Cascade Auto/Target Angle", targetAngle);
-    SmartDashboard.putNumber("Arm/Cascade Auto/Current Angle", currentAngle);
+    // SmartDashboard.putNumber("Arm/Cascade Auto/Current Angle", currentAngle);
     SmartDashboard.putNumber("Arm/Cascade Auto/Angle Difference", angleDifference);
-    SmartDashboard.putNumber("Arm/Cascade Auto/Encoder Value Actual", arm.getArmEncoderValue());
+    // SmartDashboard.putNumber("Arm/Cascade Auto/Encoder Value Actual", arm.getArmEncoderValue());
 
     if (isWithinBounds(currentAngle, targetAngle)) return;
 
