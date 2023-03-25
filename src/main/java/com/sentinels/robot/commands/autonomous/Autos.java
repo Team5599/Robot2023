@@ -42,7 +42,7 @@ public final class Autos {
   public static CommandBase BasicAuton(Drivetrain drivetrain, Arm arm, Intake intake) {
     return Commands.sequence(
       // Lower the arm
-      new SetArmAngle(arm, -35),
+      new SetArmAngle(arm, -5),
       // Drop the cube
       new IntakeOpen(intake),
       // Drive to community (backwards)

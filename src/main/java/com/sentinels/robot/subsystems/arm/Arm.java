@@ -89,6 +89,17 @@ public class Arm extends SubsystemBase {
     armPivotR.setSelectedSensorPosition(0);
     cascadeEncoder.setPosition(0);
   }
+  
+  /**
+   * @return the angle of the arm using the ticks of the Falcons, assuming there are 2048 ticks per rotation
+   * divided by 27 because of the gear ratio
+   */
+  public double getArmPivotAngle(){
+    // return (((armPivotL.getSelectedSensorPosition() % 4096)/4096)/Settings.Arm.kArmPivotGearRatio)*360;
+    double encoderPosition = armPivotL.getSelectedSensorPosition();
+    double angle = (encoderPosition * 360 / (2048  * Settings.Arm.kArmPivotGearRatio));
+    return (angle % 360);
+  }
 
   // POSITION METHODS (degrees)
 
@@ -98,15 +109,14 @@ public class Arm extends SubsystemBase {
   public double getRightPosition() {
     return armPivotR.getSelectedSensorPosition();
   }
+
   /**
-   * 
    * @return the cascade motor's position
    */
   public double getCascadeMotorPosition() {
     return cascadeEncoder.getPosition();
   }
   /**
-   * 
    * @return the distance the cascade has extended
    */
   public double getCascadeExtensionDist(){
@@ -121,23 +131,9 @@ public class Arm extends SubsystemBase {
   public double getRightVelocity() {
     return (armPivotR.getSelectedSensorVelocity() * 6.0);
   }
-  /**
-   * 
-   * @return the angle of the arm using the ticks of the Falcons, assuming there are 4096 ticks per rotation
-   * divided by 27 because of the gear ratio
-   */
-  public double getArmPivotAngle(){
-    // return (((armPivotL.getSelectedSensorPosition() % 4096)/4096)/Settings.Arm.kArmPivotGearRatio)*360;
-    double encoderPosition = armPivotL.getSelectedSensorPosition();
-    double angle = ((double)encoderPosition * 360 / (4096  * Settings.Arm.kArmPivotGearRatio)) ;
-    return angle % 360;
-  }
+
   public double getCascadeVelocity() {
     return cascadeEncoder.getVelocity();
-  }
-
-  public double getArmEncoderValue(){
-    return armPivotL.getSelectedSensorPosition();
   }
 
   // VOLTAGE METHODS (V)

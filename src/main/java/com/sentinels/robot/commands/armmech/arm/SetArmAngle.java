@@ -32,8 +32,7 @@ public class SetArmAngle extends CommandBase {
       // eg. 60deg is 60deg
       // eg. 400deg is 40deg
       this.targetAngle = (currentAngle + angleOffet) % 360;
-    }
-      
+    } 
 
     addRequirements(arm);
   }
@@ -61,16 +60,16 @@ public class SetArmAngle extends CommandBase {
     SmartDashboard.putNumber("Arm/Cascade Auto/Target Angle", targetAngle);
     SmartDashboard.putNumber("Arm/Cascade Auto/Current Angle", currentAngle);
     SmartDashboard.putNumber("Arm/Cascade Auto/Angle Difference", angleDifference);
-    SmartDashboard.putNumber("Arm/Cascade Auto/Encoder Value Actual", arm.getArmEncoderValue());
+    SmartDashboard.putNumber("Arm/Cascade Auto/Encoder Value Actual", arm.getLeftPosition());
 
     if (isWithinBounds(currentAngle, targetAngle)) return;
 
     System.out.println("Moving arm . . . [" + currentAngle + " | " + targetAngle + " | " + angleDifference + "]");
 
     if (targetAngle > currentAngle){
-      arm.PivotArm(0.5);
+      arm.PivotArm(0.15);
     } else {
-      arm.PivotArm(-0.5);
+      arm.PivotArm(-0.15);
     }
   }
 
