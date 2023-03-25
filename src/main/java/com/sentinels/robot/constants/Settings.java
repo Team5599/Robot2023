@@ -28,7 +28,7 @@ public interface Settings {
         double kWheelCircumference = 2 * Math.PI * Units.inchesToMeters(3); // meters
 
         public interface Autonomous {
-            double kTimedDriveSpeed = 2.5;
+            double kTimedDriveVoltage = 2.5;
         }
     }
 
@@ -45,10 +45,22 @@ public interface Settings {
         double kArmPivotGearRatio = 27;// versal planetary gear ratio
         
         public enum level {// enum to be used in certain commands
-            TOP,
-            MEDIUM,
-            LOW
+            TOP(0,0),
+            MEDIUM(33,0),
+            LOW(0,0);
+
+            //for now, these are for the cube
+            public double pivotAngle;
+            public double cascadeLength;
+            level(double pivotAngle, double cascadeLength){
+                this.cascadeLength = cascadeLength;
+                this.pivotAngle = pivotAngle;
+            }
+
         }  
+
+        double TOPpivot= 2;
+        double MEDIUMpivot = 33;
     }
 
 }
