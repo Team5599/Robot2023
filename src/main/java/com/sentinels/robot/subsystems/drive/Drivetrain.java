@@ -152,8 +152,8 @@ public class Drivetrain extends SubsystemBase {
   public void voltageDrive(double leftVoltage, double rightVoltage){
     MathUtil.clamp(leftVoltage, -RoboRIO.getBatteryVoltage() , RoboRIO.getBatteryVoltage());
     MathUtil.clamp(rightVoltage, -RoboRIO.getBatteryVoltage() , RoboRIO.getBatteryVoltage());
-    leftMotors.setVoltage(leftVoltage);
-    rightMotors.setVoltage(rightVoltage);
+    leftMotors.setVoltage(-leftVoltage);
+    rightMotors.setVoltage(-rightVoltage);
 
     drivetrain.feed();
   }

@@ -6,19 +6,13 @@ package com.sentinels.robot.commands.autonomous;
 
 import com.sentinels.robot.subsystems.drive.Drivetrain;
 import com.sentinels.robot.subsystems.vision.Limelight;
-import com.sentinels.robot.commands.armmech.arm.ArmCascade;
-import com.sentinels.robot.commands.armmech.arm.ArmPivot;
 import com.sentinels.robot.commands.armmech.arm.SetArmAngle;
 import com.sentinels.robot.commands.armmech.intake.IntakeOpen;
-import com.sentinels.robot.commands.armmech.intake.IntakePivot;
 import com.sentinels.robot.commands.autonomous.Driving.AutonDriveDistance;
 import com.sentinels.robot.commands.autonomous.Driving.AutonTimedDrive;
-import com.sentinels.robot.commands.drivetrain.DrivetrainDrive;
 import com.sentinels.robot.subsystems.arm.Arm;
 import com.sentinels.robot.subsystems.intake.Intake;
-import com.sentinels.robot.constants.Arena;
 import com.sentinels.robot.constants.Settings;
-import com.sentinels.robot.constants.Settings.Arm.level;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
@@ -26,18 +20,15 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
 public final class Autos {
 
-  public static CommandBase Routine0(Drivetrain drivetrain, Arm arm, Intake intake, Limelight limelight){    
+  public static CommandBase SimpleTimedDrive(Drivetrain drivetrain, double seconds) {
     return Commands.sequence(
-      // RamseteDrive(drivetrain, Arena.Trajectories.Routine0.ToCube1.trajectory, true),
-      // RamseteDrive(drivetrain, Arena.Trajectories.Routine0.Unnamed.trajectory, true)
-
+      new AutonTimedDrive(drivetrain, false).withTimeout(seconds)
     );
   }
 
@@ -48,14 +39,15 @@ public final class Autos {
     );
   }
 
-  public static CommandBase BasicAuton(Drivetrain drivetrain, Arm arm, Intake intake, Limelight limelight) {
+  public static CommandBase BasicAuton(Drivetrain drivetrain, Arm arm, Intake intake) {
     return Commands.sequence(
       // Lower the arm
       new SetArmAngle(arm, -35),
       // Drop the cube
-      new IntakeOpen(),
-      // Drive to community
-      new AutonTimedDrive(drivetrain).withTimeout(3.9))
+      new IntakeOpen(intake),
+      // Drive to community (backwards)
+      new AutonTimedDrive(drivetrain, true).withTimeout(3.9),
+      new SetArmAngle(arm, 15)
     );
   }
 

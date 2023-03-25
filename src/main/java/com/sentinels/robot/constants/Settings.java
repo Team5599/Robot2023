@@ -26,6 +26,10 @@ public interface Settings {
         DifferentialDriveKinematics KINEMATICS = new DifferentialDriveKinematics(Units.inchesToMeters(Drivetrain.kWheelTrackWidth));
 
         double kWheelCircumference = 2 * Math.PI * Units.inchesToMeters(3); // meters
+
+        public interface Autonomous {
+            double kTimedDriveSpeed = 2.5;
+        }
     }
 
     public static interface Arm {

@@ -5,27 +5,34 @@
 package com.sentinels.robot.commands.autonomous.Driving;
 
 import com.sentinels.robot.subsystems.drive.Drivetrain;
+import com.sentinels.robot.constants.Settings.Drivetrain.Autonomous;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutonTimedDrive extends CommandBase {
+
   private Drivetrain drivetrain;
-  /** Creates a new AutonTimedDrive. */
-  public AutonTimedDrive(Drivetrain drivetrain) {
+  private boolean reverseEnabled;
+
+  public AutonTimedDrive(Drivetrain drivetrain, boolean reverseEnabled) {
     this.drivetrain = drivetrain;
+    this.reverseEnabled = reverseEnabled;
+
     addRequirements(drivetrain);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    drivetrain.voltageDrive(-2.5, -2.5);
+    if (reverseEnabled) {
+      drivetrain.voltageDrive(-Autonomous.kTimedDriveSpeed, -Autonomous.kTimedDriveSpeed);
+    } else {
+      drivetrain.voltageDrive(Autonomous.kTimedDriveSpeed, Autonomous.kTimedDriveSpeed);
+    }
   }
 
   // Called once the command ends or is interrupted.

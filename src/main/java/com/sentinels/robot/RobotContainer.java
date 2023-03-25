@@ -8,13 +8,10 @@
 
 package com.sentinels.robot;
 
-import com.sentinels.robot.constants.Arena;
 import com.sentinels.robot.constants.Ports;
-import com.sentinels.robot.constants.Settings.Arm.level;
 import com.sentinels.robot.commands.armmech.arm.*;
 import com.sentinels.robot.commands.armmech.intake.*;
 import com.sentinels.robot.commands.autonomous.*;
-import com.sentinels.robot.commands.autonomous.Driving.AutonTimedDrive;
 import com.sentinels.robot.commands.drivetrain.*;
 
 import com.sentinels.robot.subsystems.arm.*;
@@ -103,20 +100,17 @@ public class RobotContainer {
 
     // SIMULATION TESTS
     
-    // autonChooser.addOption("PID test", Autos.PIDtest(drivetrain, limelight));
-    autonChooser.addOption("Trajectory test", Autos.RamseteDrive(drivetrain, Arena.Trajectories.SimpleTrajectory, true));
+    //autonChooser.addOption("PID test", Autos.PIDtest(drivetrain, limelight));
+    //autonChooser.addOption("Trajectory test", Autos.RamseteDrive(drivetrain, Arena.Trajectories.SimpleTrajectory, true));
 
     // REAL 
-    autonChooser.addOption("timed drive", new AutonTimedDrive(drivetrain).withTimeout(3.9));
-    autonChooser.addOption("Score & Exit", Autos.BasicAuton(drivetrain, arm, intake, limelight));
-    autonChooser.addOption("Routine 0", Autos.Routine0(drivetrain, arm, intake, limelight));
+    autonChooser.addOption("Leave Community", Autos.SimpleTimedDrive(drivetrain, 3.9));
+    autonChooser.addOption("Score & Exit", Autos.BasicAuton(drivetrain, arm, intake));
     autonChooser.addOption("Arm Angle Test", Autos.ArmAngleTest(drivetrain, arm, intake));
 
-    // autonChooser.setDefaultOption("Score & Exit", Autos.BasicAuton(drivetrain, arm, intake, limelight));
-
-    autonChooser.setDefaultOption("timed drive", new AutonTimedDrive(drivetrain).withTimeout(3.9));
+    autonChooser.setDefaultOption("Score & Exit", Autos.BasicAuton(drivetrain, arm, intake));
     
-    SmartDashboard.putData("Autonomous", autonChooser);
+    SmartDashboard.putData("Selected Autonomous", autonChooser);
   }
 
   public Command getAutonomousCommand() {
