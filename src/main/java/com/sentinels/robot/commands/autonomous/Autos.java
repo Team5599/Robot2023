@@ -55,7 +55,7 @@ public final class Autos {
       // Drop the cube
       new IntakeOpen(),
       // Drive to community
-      new AutonDriveDistance(drivetrain, limelight, 2, false)
+      new AutonTimedDrive(drivetrain).withTimeout(3.9))
     );
   }
 
