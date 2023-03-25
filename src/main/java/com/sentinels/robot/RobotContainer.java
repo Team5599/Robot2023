@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -48,11 +49,16 @@ public class RobotContainer {
   private Boolean arcadeDriveActive;
 
   public RobotContainer() {
+    
     configureButtonBindings();
     configureDefaultCommands();
     configureAutonCommands();
 
     DriverStation.silenceJoystickConnectionWarning(true);
+  }
+  // INITALIZATION
+  private void initializeEncoders(){
+    
   }
 
   // BUTTON BINDINGS
@@ -100,13 +106,14 @@ public class RobotContainer {
 
     // SIMULATION TESTS
     
-    //autonChooser.addOption("PID test", Autos.PIDtest(drivetrain, limelight));
-    //autonChooser.addOption("Trajectory test", Autos.RamseteDrive(drivetrain, Arena.Trajectories.SimpleTrajectory, true));
+    // autonChooser.addOption("PID test", Autos.PIDtest(drivetrain, limelight));
+    // autonChooser.addOption("Trajectory test", Autos.RamseteDrive(drivetrain, Arena.Trajectories.SimpleTrajectory, true));
 
     // REAL 
     autonChooser.addOption("Leave Community", Autos.SimpleTimedDrive(drivetrain, 3.9));
     autonChooser.addOption("Score & Exit", Autos.BasicAuton(drivetrain, arm, intake));
     autonChooser.addOption("Arm Angle Test", Autos.ArmAngleTest(drivetrain, arm, intake));
+    autonChooser.addOption("Dock test", Autos.DockingTest(drivetrain));
 
     autonChooser.setDefaultOption("Score & Exit", Autos.BasicAuton(drivetrain, arm, intake));
     

@@ -43,6 +43,7 @@ public class SetArmAngle extends CommandBase {
     this.arm = arm;
     // this.targetAngle = targetAngle;
     this.targetAngle = targetAngle.pivotAngle;
+    arm.resetEncoderPositions();
     addRequirements(arm);
   }
 
@@ -56,6 +57,7 @@ public class SetArmAngle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    currentAngle = arm.getArmPivotAngle();
     
     double angleDifference = targetAngle - currentAngle;
 

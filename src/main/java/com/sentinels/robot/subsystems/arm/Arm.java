@@ -90,6 +90,10 @@ public class Arm extends SubsystemBase {
   public void StopCascade() {
     armCascade.stopMotor();
   }
+  public void resetEncoderPositions(){
+    armPivotL.setSelectedSensorPosition(0);
+    armPivotR.setSelectedSensorPosition(0);
+  }
 
   public void resetEncoders() {
     armPivotL.configFactoryDefault();
@@ -108,7 +112,7 @@ public class Arm extends SubsystemBase {
   public double getArmPivotAngle(){
     // return (((armPivotL.getSelectedSensorPosition() % 4096)/4096)/Settings.Arm.kArmPivotGearRatio)*360;
     double encoderPosition = armPivotL.getSelectedSensorPosition();
-    double angle = (encoderPosition * 360 / (2048  * Settings.Arm.kArmPivotGearRatio));
+    double angle = (encoderPosition* 360 / (2048  * Settings.Arm.kArmPivotGearRatio));
     return (angle % 360);
   }
 

@@ -6,10 +6,15 @@ package com.sentinels.robot.commands.autonomous;
 
 import com.sentinels.robot.subsystems.drive.Drivetrain;
 import com.sentinels.robot.subsystems.vision.Limelight;
+import com.sentinels.robot.commands.armmech.arm.ArmStop;
+import com.sentinels.robot.commands.armmech.arm.AutonTimedArmPivot;
 import com.sentinels.robot.commands.armmech.arm.SetArmAngle;
 import com.sentinels.robot.commands.armmech.intake.IntakeOpen;
+import com.sentinels.robot.commands.autonomous.Docking.AutonDock;
+import com.sentinels.robot.commands.autonomous.Docking.AutonDriveToDock;
 import com.sentinels.robot.commands.autonomous.Driving.AutonDriveDistance;
 import com.sentinels.robot.commands.autonomous.Driving.AutonTimedDrive;
+import com.sentinels.robot.commands.autonomous.Driving.PIDdrive;
 import com.sentinels.robot.subsystems.arm.Arm;
 import com.sentinels.robot.subsystems.intake.Intake;
 import com.sentinels.robot.constants.Settings;
@@ -33,7 +38,6 @@ public final class Autos {
   }
 
   public static CommandBase ArmAngleTest(Drivetrain drivetrain, Arm arm, Intake intake) {
-    arm.resetEncoders();
     return Commands.sequence(
       new SetArmAngle(arm, 25)
     );
@@ -42,11 +46,11 @@ public final class Autos {
   public static CommandBase BasicAuton(Drivetrain drivetrain, Arm arm, Intake intake) {
     return Commands.sequence(
       // Lower the arm
-      new SetArmAngle(arm, -5),
+      new AutonTimedArmPivot(arm).withTimeout(0.5),
       // Drop the cube
       new IntakeOpen(intake),
       // Drive to community (backwards)
-      new SetArmAngle(arm, 5),
+      //new AutonTimedArmPivot(arm).withTimeout(1),
       new AutonTimedDrive(drivetrain, true).withTimeout(3.9)
       // Raise arm
       //new SetArmAngle(arm, 5)
@@ -113,10 +117,17 @@ public final class Autos {
       )
     );
   }
+  public static CommandBase DockingTest(Drivetrain drivetrain){
+    return Commands.sequence(
+      new AutonDriveToDock(drivetrain),
+      new AutonDock(drivetrain)
+      );
+  }
 
   public static CommandBase PIDtest(Drivetrain drivetrain, Limelight limelight) {
     // Only works with numbers around 3 meters, underneath that must have multiples of .45
     return Commands.sequence(
+      // new PIDdrive(drivetrain, 10)
       new AutonDriveDistance(drivetrain, limelight, 4.5 , false)
     );
   }

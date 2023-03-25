@@ -176,7 +176,8 @@ public class Drivetrain extends SubsystemBase {
     if(RobotBase.isSimulation()){
       return simEncoderL.getDistance();
     }
-    return Settings.Drivetrain.kWheelCircumference * (encoderFL.getPosition() + encoderBL.getPosition() / 2.0);
+    //real encoders might need to be inverted for PID control
+    return Settings.Drivetrain.kWheelCircumference * (-encoderFL.getPosition() + -encoderBL.getPosition() / 2.0);
   }
   public double getRightPosition() {
     if(RobotBase.isSimulation()){
@@ -190,7 +191,7 @@ public class Drivetrain extends SubsystemBase {
     if (RobotBase.isSimulation()){
       return simEncoderL.getRate();
     }
-    return Settings.Drivetrain.kWheelCircumference * (encoderFL.getVelocity() + encoderBL.getVelocity() / 120.0);
+    return -Settings.Drivetrain.kWheelCircumference * (encoderFL.getVelocity() + encoderBL.getVelocity() / 120.0);
   }
   public double getRightVelocity() {
     // negate so both velocities are positive
@@ -257,8 +258,9 @@ public class Drivetrain extends SubsystemBase {
     return odometry.getEstimatedPosition();
   }
   public double getPitch(){
-    imu.setYawAxis(edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis.kY);
-    return imu.getAngle();
+    //Pitching down is positive, so now it is negated
+    imu.setYawAxis(edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis.kX);
+    return -imu.getAngle();
   }
 
   public Pose2d getInvertedPose2d(){

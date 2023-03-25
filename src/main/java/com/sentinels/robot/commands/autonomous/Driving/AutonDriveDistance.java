@@ -85,7 +85,8 @@ public class AutonDriveDistance extends CommandBase {
   @Override
   public void execute() {
     drivetrain.tankDrive(
-      -MathUtil.clamp(distanceControllerL.calculate(drivetrain.getLeftPosition()), -.5, .5),
+      //-
+      MathUtil.clamp(distanceControllerL.calculate(drivetrain.getLeftPosition()), -.5, .5),
       MathUtil.clamp(distanceControllerR.calculate(drivetrain.getRightPosition()), -.5, .5) 
     );
     
