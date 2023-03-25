@@ -41,17 +41,21 @@ public final class Autos {
     );
   }
 
-  public static CommandBase FullAuto(Drivetrain drivetrain, Arm arm, Intake intake) {
+  public static CommandBase ArmAngleTest(Drivetrain drivetrain, Arm arm, Intake intake) {
     arm.resetEncoders();
     return Commands.sequence(
       new SetArmAngle(arm, 25)
-      //,new AutonTimedDrive(drivetrain).withTimeout(3.9)
     );
   }
 
   public static CommandBase BasicAuton(Drivetrain drivetrain, Arm arm, Intake intake, Limelight limelight) {
     return Commands.sequence(
-      //new AutonDriveDistance(drivetrain, limelight, 2, false)
+      // Lower the arm
+      new SetArmAngle(arm, -35),
+      // Drop the cube
+      new IntakeOpen(),
+      // Drive to community
+      new AutonDriveDistance(drivetrain, limelight, 2, false)
     );
   }
 

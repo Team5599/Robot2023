@@ -110,7 +110,7 @@ public class RobotContainer {
     autonChooser.addOption("timed drive", new AutonTimedDrive(drivetrain).withTimeout(3.9));
     autonChooser.addOption("Score & Exit", Autos.BasicAuton(drivetrain, arm, intake, limelight));
     autonChooser.addOption("Routine 0", Autos.Routine0(drivetrain, arm, intake, limelight));
-    autonChooser.addOption("Full Auto", Autos.FullAuto(drivetrain, arm, intake));
+    autonChooser.addOption("Arm Angle Test", Autos.ArmAngleTest(drivetrain, arm, intake));
 
     // autonChooser.setDefaultOption("Score & Exit", Autos.BasicAuton(drivetrain, arm, intake, limelight));
 
