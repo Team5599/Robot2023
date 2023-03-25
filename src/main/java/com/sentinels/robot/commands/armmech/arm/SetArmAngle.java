@@ -61,9 +61,9 @@ public class SetArmAngle extends CommandBase {
     double angleDifference = targetAngle - currentAngle;
 
     SmartDashboard.putNumber("Arm/Cascade Auto/Target Angle", targetAngle);
-    // SmartDashboard.putNumber("Arm/Cascade Auto/Current Angle", currentAngle);
+    SmartDashboard.putNumber("Arm/Cascade Auto/Current Angle", currentAngle);
     SmartDashboard.putNumber("Arm/Cascade Auto/Angle Difference", angleDifference);
-    // SmartDashboard.putNumber("Arm/Cascade Auto/Encoder Value Actual", arm.getArmEncoderValue());
+    SmartDashboard.putNumber("Arm/Cascade Auto/Encoder Value Actual", arm.getArmEncoderValue());
 
     if (isWithinBounds(currentAngle, targetAngle)) return;
 
