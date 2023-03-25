@@ -19,10 +19,24 @@ public class SetArmAngle extends CommandBase {
   private double ACCEPTABLE_ERROR = 2.0;
 
   //input is a real world angle relative to the floor
-  public SetArmAngle(Arm arm, double targetAngle) {
+  public SetArmAngle(Arm arm, double angleOffet) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.arm = arm;
-    this.targetAngle = targetAngle;
+    this.currentAngle = arm.getArmPivotAngle();
+
+    // The following ensures that the target angle will always be a number between 0 and 360
+    if (currentAngle + angleOffet < 0) {
+      // If the target angle is less than 0, convert this to the equivalent number counting backwards from 360
+      // eg. -50degrees is 310deg
+      // eg. -400deg is 320deg
+      this.targetAngle = 360 - (Math.abs((currentAngle + angleOffet) % 360))
+    } else {
+      // eg. 60deg is 60deg
+      // eg. 400deg is 40deg
+      this.targetAngle = (currentAngle + angleOffet) % 360;
+    }
+      
+
     addRequirements(arm);
   }
 
@@ -43,7 +57,7 @@ public class SetArmAngle extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    currentAngle = arm.getArmPivotAngle();
+    
     double angleDifference = targetAngle - currentAngle;
 
     SmartDashboard.putNumber("Arm/Cascade Auto/Target Angle", targetAngle);
@@ -56,9 +70,9 @@ public class SetArmAngle extends CommandBase {
     System.out.println("Moving arm . . . [" + currentAngle + " | " + targetAngle + " | " + angleDifference + "]");
 
     if (targetAngle > currentAngle){
-      arm.PivotArm(0.1);
+      arm.PivotArm(0.5);
     } else {
-      arm.PivotArm(-0.1);
+      arm.PivotArm(-0.5);
     }
   }
 
