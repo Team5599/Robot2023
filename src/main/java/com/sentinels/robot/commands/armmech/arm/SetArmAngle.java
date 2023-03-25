@@ -4,6 +4,7 @@
 
 package com.sentinels.robot.commands.armmech.arm;
 
+import com.sentinels.robot.constants.Settings.Arm.level;
 import com.sentinels.robot.subsystems.arm.Arm;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -38,12 +39,13 @@ public class SetArmAngle extends CommandBase {
     addRequirements(arm);
   }
 
-  // public SetArmAngle(Arm arm, level targetAngle) {
-  //   // Use addRequirements() here to declare subsystem dependencies.
-  //   this.arm = arm;
-  //   this.targetAngle = targetAngle;
-  //   addRequirements(arm);
-  // }
+  public SetArmAngle(Arm arm, level targetAngle) {
+    // Use addRequirements() here to declare subsystem dependencies.
+    this.arm = arm;
+    // this.targetAngle = targetAngle;
+    this.targetAngle = targetAngle.pivotAngle;
+    addRequirements(arm);
+  }
 
   // Called when the command is initially scheduled.
   @Override
@@ -68,9 +70,9 @@ public class SetArmAngle extends CommandBase {
     System.out.println("Moving arm . . . [" + currentAngle + " | " + targetAngle + " | " + angleDifference + "]");
 
     if (targetAngle > currentAngle){
-      arm.PivotArm(0.5);
+      arm.PivotArm(0.1);
     } else {
-      arm.PivotArm(-0.5);
+      arm.PivotArm(-0.1);
     }
   }
 

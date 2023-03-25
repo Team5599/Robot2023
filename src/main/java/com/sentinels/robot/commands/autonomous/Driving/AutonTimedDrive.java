@@ -29,9 +29,9 @@ public class AutonTimedDrive extends CommandBase {
   @Override
   public void execute() {
     if (reverseEnabled) {
-      drivetrain.voltageDrive(-Autonomous.kTimedDriveSpeed, -Autonomous.kTimedDriveSpeed);
+      drivetrain.voltageDrive(-Autonomous.kTimedDriveVoltage, -Autonomous.kTimedDriveVoltage);
     } else {
-      drivetrain.voltageDrive(Autonomous.kTimedDriveSpeed, Autonomous.kTimedDriveSpeed);
+      drivetrain.voltageDrive(Autonomous.kTimedDriveVoltage, Autonomous.kTimedDriveVoltage);
     }
   }
 
