@@ -65,14 +65,10 @@
       "/SmartDashboard/Autonomous": "String Chooser",
       "/SmartDashboard/Control Scheme": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Selected Autonomous": "String Chooser",
       "/SmartDashboard/SendableChooser[1]": "String Chooser"
     },
     "windows": {
-      "/SmartDashboard/Autonomous": {
-        "window": {
-          "visible": true
-        }
-      },
       "/SmartDashboard/Field": {
         "Robot": {
           "arrowColor": [
@@ -115,6 +111,11 @@
         "width": 16.541748046875,
         "window": {
           "name": "Charged Up 2023 Field Robot Simulation (SmartDashboard)",
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Selected Autonomous": {
+        "window": {
           "visible": true
         }
       }

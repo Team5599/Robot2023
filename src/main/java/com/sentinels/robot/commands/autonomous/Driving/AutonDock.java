@@ -5,7 +5,6 @@
 package com.sentinels.robot.commands.autonomous.Driving;
 
 import com.sentinels.robot.subsystems.drive.Drivetrain;
-import com.sentinels.robot.subsystems.vision.Limelight;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -13,14 +12,13 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 public class AutonDock extends CommandBase {
 
   private final Drivetrain drivetrain;
-  private final Limelight limelight;
   private PIDController balanceController;
 
   /** Creates a new AutonDock. */
-  public AutonDock(Drivetrain drivetrain, Limelight limelight) {
+  public AutonDock(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
-    this.limelight = limelight;
-    balanceController = new PIDController(.1, 0.1, 0.1);
+    balanceController = new PIDController(.1, 0, 0.1);
+    balanceController.setSetpoint(0);
     addRequirements(drivetrain);// might need the IMU in here
   }
 
@@ -33,13 +31,14 @@ public class AutonDock extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    double input = balanceController.calculate(drivetrain.getPitch());
+    drivetrain.tankDrive(input, input);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
+    drivetrain.driveStop();
   }
 
   // Returns true when the command should end.

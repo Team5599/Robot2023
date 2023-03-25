@@ -46,8 +46,10 @@ public final class Autos {
       // Drop the cube
       new IntakeOpen(intake),
       // Drive to community (backwards)
-      new AutonTimedDrive(drivetrain, true).withTimeout(3.9),
-      new SetArmAngle(arm, 15)
+      new SetArmAngle(arm, 5),
+      new AutonTimedDrive(drivetrain, true).withTimeout(3.9)
+      // Raise arm
+      //new SetArmAngle(arm, 5)
     );
   }
 
@@ -64,7 +66,7 @@ public final class Autos {
     var leftVel = RamseteControl.getEntry("Left Velocity");
     var PIDrightSetpoint = RamseteControl.getEntry("Right setpoint");
     var rightVel = RamseteControl.getEntry("Right Velocity");
-
+    
     //original values: 0.2,0.5
     RamseteController disabled = new RamseteController(2, 0.7);
     PIDController leftController = new PIDController(10, 0, 0);

@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  */
 public class Arm extends SubsystemBase {
 
+  private double maxArmPos = 108155;
   private final WPI_TalonFX armPivotL = new WPI_TalonFX(Ports.Arm.ARMLEFTPULLEY);
   private final WPI_TalonFX armPivotR = new WPI_TalonFX(Ports.Arm.ARMRIGHTPULLEY);
 
@@ -43,11 +44,21 @@ public class Arm extends SubsystemBase {
   private final MotorControllerGroup armPivotMotors = new MotorControllerGroup(armPivotL, armPivotR);
 
   public Arm() {
+    resetEncoders();
     armPivotL.setNeutralMode(NeutralMode.Brake);
     armPivotR.setNeutralMode(NeutralMode.Brake);
     armPivotL.setInverted(true);
 
-    resetEncoders();
+    armPivotL.configForwardSoftLimitThreshold(maxArmPos);
+    armPivotL.configForwardSoftLimitEnable(true);
+    armPivotL.configReverseSoftLimitThreshold(0);
+    armPivotL.configReverseSoftLimitEnable(true);
+
+    armPivotR.configForwardSoftLimitThreshold(maxArmPos);
+    armPivotR.configForwardSoftLimitEnable(true);
+    armPivotR.configReverseSoftLimitThreshold(0);
+    armPivotR.configReverseSoftLimitEnable(true);
+
   }
   
   // motor stall is detected by the output current of a motor

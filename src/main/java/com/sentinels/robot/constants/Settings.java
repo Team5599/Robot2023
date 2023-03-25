@@ -42,7 +42,7 @@ public interface Settings {
         double kMaxCascadeLength = 68;// from the pivot to the end of the arm once full extended in inches
 
         double kPivotStartingAngle = 90 - 27;// may need extra data 
-        double kArmPivotGearRatio = 27;// versal planetary gear ratio
+        double kArmPivotGearRatio = 27; // 27:1 Ratio
         
         public enum level {// enum to be used in certain commands
             TOP(0,0),

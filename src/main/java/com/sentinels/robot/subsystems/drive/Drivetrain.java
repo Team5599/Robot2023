@@ -31,6 +31,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotBase;
+import edu.wpi.first.wpilibj.ADIS16448_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -255,6 +256,10 @@ public class Drivetrain extends SubsystemBase {
   public Pose2d getPose() {
     return odometry.getEstimatedPosition();
   }
+  public double getPitch(){
+    imu.setYawAxis(edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis.kY);
+    return imu.getAngle();
+  }
 
   public Pose2d getInvertedPose2d(){
     return new Pose2d(
@@ -276,6 +281,11 @@ public class Drivetrain extends SubsystemBase {
     
     SmartDashboard.putNumber("Drivetrain/Left get:", leftMotors.get());
     SmartDashboard.putNumber("Drivetrain/Right get:", rightMotors.get());
+
+    SmartDashboard.putNumber("IMU/angle",getPitch());
+    SmartDashboard.putString("IMU/yaw axis",imu.getYawAxis().toString());
+    SmartDashboard.putNumber("IMU/x angle",imu.getXFilteredAccelAngle());
+    SmartDashboard.putNumber("IMU/y angle",imu.getYFilteredAccelAngle());
 
     // SmartDashboard.putNumberArray("Drivetrain/Pose", poseArray);
     
