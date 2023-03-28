@@ -41,8 +41,8 @@ public class AutonDriveDistance extends CommandBase {
   public AutonDriveDistance(Drivetrain drivetrain, Limelight limelight) {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
-    distanceControllerL = new PIDController(2,2, 4);
-    distanceControllerR = new PIDController(2, 2, 4);
+    distanceControllerL = new PIDController(0.7,0, .04);
+    distanceControllerR = new PIDController(0.7, 0, .04);
     parallaxEnable = false;
     addRequirements(drivetrain);
   }
@@ -53,8 +53,8 @@ public class AutonDriveDistance extends CommandBase {
     this.limelight = limelight;
     this.parallaxEnable = parallaxEnable;
     this.setpoint = setpoint;
-    distanceControllerL = new PIDController(3,2, 4);
-    distanceControllerR = new PIDController(3, 2, 4);
+    distanceControllerL = new PIDController(0.7,0, 0.04);
+    distanceControllerR = new PIDController(0.7, 0, 0.04);
     distanceControllerL.setSetpoint(setpoint + drivetrain.getLeftPosition());
     distanceControllerR.setSetpoint(setpoint + drivetrain.getRightPosition());
     addRequirements(drivetrain);
@@ -68,8 +68,8 @@ public class AutonDriveDistance extends CommandBase {
     SmartDashboard.putNumber("PID/error Right", distanceControllerR.getPositionError());
     SmartDashboard.putNumber("PID/Left Setpoint", distanceControllerL.getSetpoint());
     SmartDashboard.putNumber("PID/Right Setpoint", distanceControllerR.getSetpoint());
-    distanceControllerL.setSetpoint(setpoint + drivetrain.getLeftPosition());
-    distanceControllerR.setSetpoint(setpoint + drivetrain.getRightPosition());
+    distanceControllerL.setSetpoint(-setpoint - drivetrain.getLeftPosition());
+    distanceControllerR.setSetpoint(-setpoint - drivetrain.getRightPosition());
     distanceControllerL.reset();
     distanceControllerR.reset();
 

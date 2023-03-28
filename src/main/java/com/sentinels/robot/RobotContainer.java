@@ -106,7 +106,7 @@ public class RobotContainer {
 
     // SIMULATION TESTS
     
-    // autonChooser.addOption("PID test", Autos.PIDtest(drivetrain, limelight));
+    autonChooser.addOption("PID test", Autos.PIDtest(drivetrain, limelight));
     // autonChooser.addOption("Trajectory test", Autos.RamseteDrive(drivetrain, Arena.Trajectories.SimpleTrajectory, true));
 
     // REAL 
