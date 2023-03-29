@@ -10,15 +10,20 @@ package com.sentinels.robot.commands.armmech.intake;
 
 import com.sentinels.robot.subsystems.intake.Intake;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
-public class IntakeClose extends CommandBase {
+public class IntakePivot extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  
-  private Intake intake;
 
-  public IntakeClose(Intake intake) {
+  private Intake intake;
+  private CommandJoystick operator;
+  private SlewRateLimiter limiter = new SlewRateLimiter(0.5);
+
+  public IntakePivot(Intake intake, CommandJoystick operator) {
     this.intake = intake;
+    this.operator = operator;
     
     addRequirements(intake);
   }
@@ -28,12 +33,19 @@ public class IntakeClose extends CommandBase {
 
   @Override
   public void execute() {
-    intake.intakeClose();
+    //THIS GOT INVERTED AND UNINVERTED MULTIPLE TIMES
+    if (operator.button(6).getAsBoolean()) {
+      intake.intakePivot(limiter.calculate(0.10));
+    } else {
+      intake.intakePivot(limiter.calculate(-0.10));
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    intake.pivotStop();
+  }
 
   // Returns true when the command should end.
   @Override

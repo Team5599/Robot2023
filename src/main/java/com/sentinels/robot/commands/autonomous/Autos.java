@@ -4,13 +4,17 @@
 
 package com.sentinels.robot.commands.autonomous;
 
-//import com.sentinels.robot.constants.Ports.Arm;
 import com.sentinels.robot.subsystems.drive.Drivetrain;
-import com.sentinels.robot.subsystems.odometry.IMU;
 import com.sentinels.robot.subsystems.vision.Limelight;
-import com.sentinels.robot.Robot;
-import com.sentinels.robot.commands.autonomous.Driving.AutonDock;
-import com.sentinels.robot.commands.autonomous.Driving.SeperateDrive.AutonDriveDistance;
+import com.sentinels.robot.commands.armmech.arm.ArmStop;
+import com.sentinels.robot.commands.armmech.arm.AutonTimedArmPivot;
+import com.sentinels.robot.commands.armmech.arm.SetArmAngle;
+import com.sentinels.robot.commands.armmech.intake.IntakeOpen;
+import com.sentinels.robot.commands.autonomous.Docking.AutonDock;
+import com.sentinels.robot.commands.autonomous.Docking.AutonDriveToDock;
+import com.sentinels.robot.commands.autonomous.Driving.AutonDriveDistance;
+import com.sentinels.robot.commands.autonomous.Driving.AutonTimedDrive;
+import com.sentinels.robot.commands.autonomous.Driving.PIDdrive;
 import com.sentinels.robot.subsystems.arm.Arm;
 import com.sentinels.robot.subsystems.intake.Intake;
 import com.sentinels.robot.constants.Settings;
@@ -18,51 +22,115 @@ import com.sentinels.robot.constants.Settings;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
-
-
-// Import all subsystems for auton use
-//import com.sentinels.robot.subsystems.*;
-
 public final class Autos {
-  /** Example static factory for an autonomous command. */
 
-  private final Drivetrain drivetrain;
-  private final Arm arm;
-  private final Intake intake;
-  private final IMU imu;
-  private final Limelight limelight;
-
-  public static CommandBase autonomous(Drivetrain drivetrain, Arm arm, Intake intake, IMU imu, Limelight limelight) {
+  public static CommandBase SimpleTimedDrive(Drivetrain drivetrain, double seconds) {
     return Commands.sequence(
-      new AutonDriveDistance(drivetrain, limelight, 1.5 , false)
+      new AutonTimedDrive(drivetrain, false).withTimeout(seconds)
     );
   }
 
-  //theres an error here that doesnt let me simulate the code
+  public static CommandBase ArmAngleTest(Drivetrain drivetrain, Arm arm, Intake intake) {
+    return Commands.sequence(
+      new SetArmAngle(arm, 25)
+    );
+  }
 
-  // public static CommandBase RamseteTest(Drivetrain drivetrain, Arm arm, IMU imu, Limelight limelight){
-  //   return Commands.sequence(
-  //     new RamseteCommand(
-  //       Robot.trajectory, 
-  //       drivetrain::getPose, 
-  //       new RamseteController(0.5,0.5), //b and zeta, not sure what they are tbh
-  //       new SimpleMotorFeedforward(0, 0, 0),//voltages here 
-  //       Settings.Drivetrain.KINEMATICS, 
-  //       drivetrain::getWheelSpeeds, 
-  //       new PIDController(2, 0, 0),//both of these are arbitrary, set these later 
-  //       new PIDController(2, 0, 0), 
-  //       drivetrain::voltageDrive, 
-  //       drivetrain
-  //     ).andThen(
-  //       () -> drivetrain.voltageDrive(0, 0)
-  //     )
+  public static CommandBase BasicAuton(Drivetrain drivetrain, Arm arm, Intake intake) {
+    return Commands.sequence(
+      // Lower the arm
+      new AutonTimedArmPivot(arm).withTimeout(0.5),
+      // Drop the cube
+      new IntakeOpen(intake),
+      // Drive to community (backwards)
+      //new AutonTimedArmPivot(arm).withTimeout(1),
+      new AutonTimedDrive(drivetrain, true).withTimeout(3.9)
+      // Raise arm
+      //new SetArmAngle(arm, 5)
+    );
+  }
 
-  //   );
-  // }
+  /**
+   * Command that fills in a Ramsete command based on the robot and pre-tuned values for PID, feedforward and Ramsete
+   * @param drivetrain - the drivetrain subsystem
+   * @param trajectory - the trajectory that the robot will drive
+   * @param diagnostic - allow if the Ramsete graph is changed and if the path is displayed in a simulation
+   * @return the command itself
+   */
+  public static CommandBase RamseteDrive(Drivetrain drivetrain, Trajectory trajectory, boolean displayStats) {
+    var RamseteControl = NetworkTableInstance.getDefault().getTable("Ramsete Control");
+    var PIDleftSetpoint = RamseteControl.getEntry("Left setpoint");
+    var leftVel = RamseteControl.getEntry("Left Velocity");
+    var PIDrightSetpoint = RamseteControl.getEntry("Right setpoint");
+    var rightVel = RamseteControl.getEntry("Right Velocity");
+    
+    //original values: 0.2,0.5
+    RamseteController disabled = new RamseteController(2, 0.7);
+    PIDController leftController = new PIDController(10, 0, 0);
+    PIDController rightController = new PIDController(10, 0, 0);
+    disabled.setEnabled(false);
+    
+    return Commands.sequence(
+      new RamseteCommand(
+        trajectory, 
+        drivetrain::getPose,
+        disabled,
+        new SimpleMotorFeedforward(0.15, 2, 1.5),//voltages here, arbitrary numbers here for now
+        Settings.Drivetrain.KINEMATICS, 
+        drivetrain::getWheelSpeeds, 
+        leftController,
+        rightController,
+        (left, right) -> {
+          if (displayStats == false) {
+            drivetrain.voltageDrive(left, right);
+            return;
+          }
+          drivetrain.displayPath(trajectory);
+
+          drivetrain.voltageDrive(left, right);
+          leftVel.setNumber(drivetrain.getLeftVelocity());
+          PIDleftSetpoint.setNumber(leftController.getSetpoint());
+          rightVel.setNumber(drivetrain.getRightVelocity());
+          PIDrightSetpoint.setNumber(rightController.getSetpoint());
+
+          SmartDashboard.putNumber("RAMSETE/Left Velocity",drivetrain.getLeftVelocity());
+          SmartDashboard.putNumber("RAMSETE/Right Velocity",drivetrain.getRightVelocity());
+          SmartDashboard.putNumber("RAMSETE/Left Setpoint", leftController.getSetpoint());
+          SmartDashboard.putNumber("RAMSETE/Right Setpoint", rightController.getSetpoint());
+
+          SmartDashboard.putNumber("RAMSETE/Left Position Error", leftController.getPositionError());          
+          SmartDashboard.putNumber("RAMSETE/Left Velocity Error", leftController.getVelocityError());
+          SmartDashboard.putNumber("RAMSETE/Right Position Error", rightController.getPositionError());          
+          SmartDashboard.putNumber("RAMSETE/Right Velocity Error", rightController.getVelocityError());
+        },
+        drivetrain
+      )
+      .andThen(
+        () -> drivetrain.voltageDrive(0, 0)
+      )
+    );
+  }
+  public static CommandBase DockingTest(Drivetrain drivetrain){
+    return Commands.sequence(
+      new AutonDriveToDock(drivetrain),
+      new AutonDock(drivetrain)
+      );
+  }
+
+  public static CommandBase PIDtest(Drivetrain drivetrain, Limelight limelight) {
+    // Only works with numbers around 3 meters, underneath that must have multiples of .45
+    return Commands.sequence(
+      // new PIDdrive(drivetrain, 10)
+      new AutonDriveDistance(drivetrain, limelight, 4.5 , false)
+    );
+  }
 
   private Autos() {
     throw new UnsupportedOperationException("This is a utility class!");

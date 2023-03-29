@@ -9,11 +9,14 @@
 package com.sentinels.robot.subsystems.arm;
 
 import com.sentinels.robot.constants.Ports;
+import com.sentinels.robot.constants.Settings;
 import com.sentinels.robot.util.RoboRIO;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.ctre.phoenix.sensors.WPI_CANCoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,30 +28,37 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
  * <p>Arm contains:
  * <p>- 1x Falcon 500 Motor on the LEFT side pulley
  * <p>- 1x Falcon 500 Motor on the RIGHT side pulley
- * <p>- 1x Falcon 500 Motor on the arm for cascade (extend, retract)
+ * <p>- 1x NEO Motor on the arm for cascade (extend, retract)
  * 
  * @author Ahmed Osman, Karamat Hasan
  */
 public class Arm extends SubsystemBase {
 
-  private final WPI_TalonFX armPullL = new WPI_TalonFX(Ports.Arm.ARMLEFTPULLEY);
-  private final WPI_TalonFX armPullR = new WPI_TalonFX(Ports.Arm.ARMRIGHTPULLEY);
-  private final WPI_TalonFX armCascade = new WPI_TalonFX(Ports.Arm.ARMCASCADE);
+  private double maxArmPos = 108155;
+  private final WPI_TalonFX armPivotL = new WPI_TalonFX(Ports.Arm.ARMLEFTPULLEY);
+  private final WPI_TalonFX armPivotR = new WPI_TalonFX(Ports.Arm.ARMRIGHTPULLEY);
 
-  private final WPI_CANCoder encoderL = new WPI_CANCoder(Ports.Arm.ARMLEFTPULLEY);
-  private final WPI_CANCoder encoderR = new WPI_CANCoder(Ports.Arm.ARMRIGHTPULLEY);
-  private final WPI_CANCoder encoderCascade = new WPI_CANCoder(Ports.Arm.ARMCASCADE);
+  private final CANSparkMax armCascade = new CANSparkMax(Ports.Arm.ARMCASCADE, MotorType.kBrushless);
+  private final RelativeEncoder cascadeEncoder = armCascade.getEncoder();
 
-  private final MotorControllerGroup armPivotMotors = new MotorControllerGroup(armPullL, armPullR);
+  private final MotorControllerGroup armPivotMotors = new MotorControllerGroup(armPivotL, armPivotR);
 
   public Arm() {
-    armPullL.setNeutralMode(NeutralMode.Brake);
-    armPullR.setNeutralMode(NeutralMode.Brake);
-    armCascade.setNeutralMode(NeutralMode.Brake);
-
     resetEncoders();
-    
-    armPullL.setInverted(true);
+    armPivotL.setNeutralMode(NeutralMode.Brake);
+    armPivotR.setNeutralMode(NeutralMode.Brake);
+    armPivotL.setInverted(true);
+
+    armPivotL.configForwardSoftLimitThreshold(maxArmPos);
+    armPivotL.configForwardSoftLimitEnable(true);
+    armPivotL.configReverseSoftLimitThreshold(0);
+    armPivotL.configReverseSoftLimitEnable(true);
+
+    armPivotR.configForwardSoftLimitThreshold(maxArmPos);
+    armPivotR.configForwardSoftLimitEnable(true);
+    armPivotR.configReverseSoftLimitThreshold(0);
+    armPivotR.configReverseSoftLimitEnable(true);
+
   }
   
   // motor stall is detected by the output current of a motor
@@ -74,55 +84,80 @@ public class Arm extends SubsystemBase {
   }
 
   public void CascadeArm(double speed) {
-    //if (isStalling()) { return; }
     armCascade.set(speed);
   }
 
   public void StopCascade() {
     armCascade.stopMotor();
   }
+  public void resetEncoderPositions(){
+    armPivotL.setSelectedSensorPosition(0);
+    armPivotR.setSelectedSensorPosition(0);
+  }
 
   public void resetEncoders() {
-    encoderL.configFactoryDefault();
-    encoderR.configFactoryDefault();
-    encoderCascade.configFactoryDefault();
+    armPivotL.configFactoryDefault();
+    armPivotR.configFactoryDefault();
+    armCascade.restoreFactoryDefaults();
 
-    encoderL.setPosition(0);
-    encoderR.setPosition(0);
-    encoderCascade.setPosition(0);
+    armPivotL.setSelectedSensorPosition(0);
+    armPivotR.setSelectedSensorPosition(0);
+    cascadeEncoder.setPosition(0);
+  }
+  
+  /**
+   * @return the angle of the arm using the ticks of the Falcons, assuming there are 2048 ticks per rotation
+   * divided by 27 because of the gear ratio
+   */
+  public double getArmPivotAngle(){
+    // return (((armPivotL.getSelectedSensorPosition() % 4096)/4096)/Settings.Arm.kArmPivotGearRatio)*360;
+    double encoderPosition = armPivotL.getSelectedSensorPosition();
+    double angle = (encoderPosition* 360 / (2048  * Settings.Arm.kArmPivotGearRatio));
+    return (angle % 360);
   }
 
   // POSITION METHODS (degrees)
 
   public double getLeftPosition() {
-    return encoderL.getPosition();
+    return armPivotL.getSelectedSensorPosition();
   }
   public double getRightPosition() {
-    return encoderR.getPosition();
+    return armPivotR.getSelectedSensorPosition();
   }
-  public double getCascadePosition() {
-    return encoderCascade.getPosition();
+
+  /**
+   * @return the cascade motor's position
+   */
+  public double getCascadeMotorPosition() {
+    return cascadeEncoder.getPosition();
+  }
+  /**
+   * @return the distance the cascade has extended
+   */
+  public double getCascadeExtensionDist(){
+    return 2*Math.PI*getCascadeMotorPosition();
   }
 
   // VELOCITY METHODS (RPM) (converted deg/sec to rpm)
 
   public double getLeftVelocity() {
-    return (encoderL.getVelocity() * 6.0);
+    return (armPivotL.getSelectedSensorVelocity() * 6.0);
   }
   public double getRightVelocity() {
-    return (encoderR.getVelocity() * 6.0);
+    return (armPivotR.getSelectedSensorVelocity() * 6.0);
   }
+
   public double getCascadeVelocity() {
-    return (encoderCascade.getVelocity() * 6.0);
+    return cascadeEncoder.getVelocity();
   }
 
   // VOLTAGE METHODS (V)
 
   public double getLeftVoltage() {
-    return (armPullL.get() * RoboRIO.getBatteryVoltage());
+    return (armPivotL.get() * RoboRIO.getBatteryVoltage());
   }
   public double getRightVoltage() {
-    return (armPullR.get() * RoboRIO.getBatteryVoltage());
+    return (armPivotR.get() * RoboRIO.getBatteryVoltage());
   }
   public double getCascadeVoltage() {
     return (armCascade.get() * RoboRIO.getBatteryVoltage());
@@ -131,13 +166,13 @@ public class Arm extends SubsystemBase {
   // TEMPERATURE METHODS (C)
 
   public double getLeftTemp() {
-    return armPullL.getTemperature();
+    return armPivotL.getTemperature();
   }
   public double getRightTemp() {
-    return armPullR.getTemperature();
+    return armPivotR.getTemperature();
   }
   public double getCascadeTemp() {
-    return armCascade.getTemperature();
+    return armCascade.getMotorTemperature();
   }
 
   @Override
@@ -148,7 +183,9 @@ public class Arm extends SubsystemBase {
 
     SmartDashboard.putNumber("Arm/Left Motor Position (Degrees)", getLeftPosition());
     SmartDashboard.putNumber("Arm/Right Motor Position (Degrees)", getRightPosition());
-    SmartDashboard.putNumber("Arm/Cascade Motor Position (Degrees)", getCascadePosition());
+    SmartDashboard.putNumber("Arm/Cascade Motor Position (Degrees)", getCascadeMotorPosition());
+    SmartDashboard.putNumber("Arm/Arm Pivot Angle (Degrees)", getArmPivotAngle());    
+    SmartDashboard.putNumber("Arm/Cascade Extension Length", getCascadeExtensionDist());
 
     SmartDashboard.putNumber("Arm/Left Motor Velocity (RPM)", getLeftVelocity());
     SmartDashboard.putNumber("Arm/Right Motor Velocity (RPM)", getRightVelocity());

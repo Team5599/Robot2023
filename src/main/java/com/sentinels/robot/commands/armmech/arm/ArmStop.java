@@ -6,21 +6,21 @@
     Copyright (c) 2023 The Sentinels. All rights reserved.
 ***************************************************************/
 
-package com.sentinels.robot.commands.armmech.intake;
+package com.sentinels.robot.commands.armmech.arm;
 
-import com.sentinels.robot.subsystems.intake.Intake;
+import com.sentinels.robot.subsystems.arm.Arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class IntakeClose extends CommandBase {
+public class ArmStop extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  
-  private Intake intake;
 
-  public IntakeClose(Intake intake) {
-    this.intake = intake;
+  private final Arm arm;
+
+    public ArmStop(Arm arm) {
+    this.arm = arm;
     
-    addRequirements(intake);
+    addRequirements(arm);
   }
 
   @Override
@@ -28,9 +28,9 @@ public class IntakeClose extends CommandBase {
 
   @Override
   public void execute() {
-    intake.intakeClose();
+    arm.StopArm();
   }
-
+    
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {}

@@ -17,18 +17,18 @@
  *  - C = Cascade Motors / Motor Controllers
  *  - FX = TalonFX (Falcon 500) Motor / Motor Controller
  * 
- *       ___   ___   ___   ___
- *      | 1 | | 2 | | 3 | | 4 |
+ *       _|_   ___   ___   ___
+ *      | 8 | | 7 | | 6 | | 5 |
  *      |___| |___| |___| |___|
- *        D     D    A-FX   I
+ *       A-FX   C     D     D
  *            __________
  *  BACK     |   PDP    |        FRONT >>>>
  *           |__________|
  *                                 ________
- *       ___   ___   ___   ___    |        |
- *      | 5 | | 6 | | 7 | | 8 |   |roboRIO |
+ *       _|_   ___   ___   ___    |        |
+ *      | 4 | | 3 | | 2 | | 1 |   |roboRIO |
  *      |___| |___| |___| |___|   |________|
- *        D     D    A-FX  C-FX
+ *       A-FX   I     D     D
  */
 
 package com.sentinels.robot.constants;
@@ -43,14 +43,14 @@ public interface Ports {
     
     public interface Arm {
         // Motors
-        int ARMLEFTPULLEY = 7;
-        int ARMRIGHTPULLEY = 3;
-        int ARMCASCADE = 8;
+        int ARMLEFTPULLEY = 8;
+        int ARMRIGHTPULLEY = 4;
+        int ARMCASCADE = 7;
     }
 
     public interface Intake {
         // Motors
-        int INTAKEPIVOT = 4;
+        int INTAKEPIVOT = 3;
 
         // Solenoids
         int SOLENOIDPUSH = 0;

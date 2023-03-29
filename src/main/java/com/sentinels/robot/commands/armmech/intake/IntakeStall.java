@@ -12,12 +12,12 @@ import com.sentinels.robot.subsystems.intake.Intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class IntakeClose extends CommandBase {
+public class IntakeStall extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  
+
   private Intake intake;
 
-  public IntakeClose(Intake intake) {
+  public IntakeStall(Intake intake) {
     this.intake = intake;
     
     addRequirements(intake);
@@ -28,7 +28,7 @@ public class IntakeClose extends CommandBase {
 
   @Override
   public void execute() {
-    intake.intakeClose();
+    intake.intakePivot(0.08);
   }
 
   // Called once the command ends or is interrupted.

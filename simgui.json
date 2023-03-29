@@ -1,5 +1,42 @@
 {
   "HALProvider": {
+    "Encoders": {
+      "window": {
+        "visible": true
+      }
+    },
+    "Other Devices": {
+      "ADIS16470[0]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Spark Max[1]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Spark Max[2]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Spark Max[5]": {
+        "header": {
+          "open": true
+        }
+      },
+      "Spark Max[6]": {
+        "header": {
+          "open": true
+        }
+      }
+    },
+    "RoboRIO": {
+      "RoboRIO Input": {
+        "open": true
+      }
+    },
     "Timing": {
       "window": {
         "visible": false
@@ -11,28 +48,27 @@
       "/FMSInfo": "FMSInfo",
       "/LiveWindow/Limelight": "Subsystem",
       "/LiveWindow/Ungrouped/DifferentialDrive[1]": "DifferentialDrive",
+      "/LiveWindow/Ungrouped/DigitalInput[26]": "Digital Input",
       "/LiveWindow/Ungrouped/DigitalInput[27]": "Digital Input",
       "/LiveWindow/Ungrouped/MotorControllerGroup[1]": "Motor Controller",
+      "/LiveWindow/Ungrouped/PIDController[10]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[1]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[2]": "PIDController",
       "/LiveWindow/Ungrouped/PIDController[3]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[4]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[5]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[6]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[7]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[8]": "PIDController",
+      "/LiveWindow/Ungrouped/PIDController[9]": "PIDController",
       "/LiveWindow/Ungrouped/Scheduler": "Scheduler",
       "/SmartDashboard/Autonomous": "String Chooser",
       "/SmartDashboard/Control Scheme": "String Chooser",
       "/SmartDashboard/Field": "Field2d",
+      "/SmartDashboard/Selected Autonomous": "String Chooser",
       "/SmartDashboard/SendableChooser[1]": "String Chooser"
     },
     "windows": {
-      "/SmartDashboard/Autonomous": {
-        "window": {
-          "visible": true
-        }
-      },
-      "/SmartDashboard/Control Scheme": {
-        "window": {
-          "visible": true
-        }
-      },
       "/SmartDashboard/Field": {
         "Robot": {
           "arrowColor": [
@@ -45,37 +81,353 @@
           "style": "Line",
           "weight": 3.0
         },
+        "ToCube1": {
+          "arrows": false,
+          "style": "Line"
+        },
+        "ToCube2": {
+          "arrows": false,
+          "style": "Line"
+        },
         "bottom": 544,
         "height": 8.013679504394531,
         "image": "images/2023-field.png",
         "left": 46,
+        "new trajectory": {
+          "arrows": false,
+          "style": "Line"
+        },
         "right": 1088,
+        "simpler trajectory": {
+          "arrows": false,
+          "style": "Line"
+        },
         "top": 36,
-        "units": "inches",
+        "traj": {
+          "arrows": false,
+          "style": "Line"
+        },
+        "units": "meters",
         "width": 16.541748046875,
         "window": {
           "name": "Charged Up 2023 Field Robot Simulation (SmartDashboard)",
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Selected Autonomous": {
+        "window": {
           "visible": true
         }
       }
     }
   },
   "NetworkTables": {
-    "Persistent Values": {
-      "open": false
-    },
-    "Retained Values": {
-      "open": false
-    },
+    "properties": true,
     "transitory": {
+      "Ramsete Control": {
+        "open": true
+      },
       "SmartDashboard": {
         "Drivetrain": {
+          "Relative Encoders": {
+            "open": true
+          },
+          "open": true
+        },
+        "IMU": {
+          "open": true
+        },
+        "PID": {
+          "open": true
+        },
+        "RAMSETE": {
           "open": true
         },
         "SendableChooser[1]": {
           "open": true
         },
         "open": true
+      }
+    }
+  },
+  "NetworkTables Info": {
+    "Server": {
+      "Subscribers": {
+        "open": true
+      },
+      "open": true
+    }
+  },
+  "Plot": {
+    "Plot <0>": {
+      "plots": [
+        {
+          "axis": [
+            {
+              "label": "Meters",
+              "max": 10.0,
+              "min": -10.0
+            }
+          ],
+          "height": 778,
+          "legendHorizontal": true,
+          "legendLocation": 9,
+          "legendOutside": true,
+          "name": "Distance Vs. Time",
+          "series": [
+            {
+              "color": [
+                0.3333333432674408,
+                0.658823549747467,
+                0.4078431725502014,
+                1.0
+              ],
+              "id": "Encoder[1,2] Distance",
+              "name": "Left"
+            },
+            {
+              "color": [
+                0.5098038911819458,
+                0.21491733193397522,
+                0.21491733193397522,
+                1.0
+              ],
+              "id": "Encoder[5,6] Distance",
+              "name": "Right",
+              "weight": 1.0000001192092896
+            },
+            {
+              "color": [
+                0.3333333432674408,
+                0.658823549747467,
+                0.4078431725502014,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/PID/error Left"
+            },
+            {
+              "color": [
+                0.7686275243759155,
+                0.30588236451148987,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/PID/error Right"
+            }
+          ]
+        }
+      ],
+      "window": {
+        "name": "Encoder Distance"
+      }
+    },
+    "Plot <1>": {
+      "plots": [
+        {
+          "axis": [
+            {
+              "max": 1.5,
+              "min": -1.5
+            }
+          ],
+          "height": 778,
+          "series": [
+            {
+              "color": [
+                0.7686275243759155,
+                0.30588236451148987,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "Spark Max[6]-speed"
+            },
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "Spark Max[2]-speed"
+            },
+            {
+              "color": [
+                0.8666667342185974,
+                0.5176470875740051,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "Spark Max[1]-speed"
+            },
+            {
+              "color": [
+                0.3333333432674408,
+                0.658823549747467,
+                0.4078431725502014,
+                1.0
+              ],
+              "id": "Spark Max[5]-speed"
+            }
+          ]
+        }
+      ],
+      "window": {
+        "name": "SparkMAX speeds"
+      }
+    },
+    "Plot <2>": {
+      "plots": [
+        {
+          "axis": [
+            {
+              "max": 2.0,
+              "min": -2.0
+            }
+          ],
+          "height": 188,
+          "series": [
+            {
+              "color": [
+                0.32156869769096375,
+                0.8666667342185974,
+                0.8666667342185974,
+                1.0
+              ],
+              "id": "Joystick[0] Axis[1]",
+              "name": "Left Stick"
+            },
+            {
+              "color": [
+                0.6597461700439453,
+                0.30588236451148987,
+                0.7686275243759155,
+                1.0
+              ],
+              "id": "Joystick[0] Axis[5]",
+              "name": "Right Stick"
+            },
+            {
+              "color": [
+                0.3333333432674408,
+                0.658823549747467,
+                0.4078431725502014,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Drivetrain/Left get:",
+              "name": "Left Mptors"
+            },
+            {
+              "color": [
+                0.9117646813392639,
+                0.1519608050584793,
+                0.17771726846694946,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/Drivetrain/Right get:",
+              "name": "right Motors"
+            }
+          ]
+        }
+      ],
+      "window": {
+        "name": "Inputs Vs. MotorGet()",
+        "visible": false
+      }
+    },
+    "Plot <3>": {
+      "plots": [
+        {
+          "axis": [
+            {
+              "max": 2.0,
+              "min": -2.0
+            }
+          ],
+          "height": 374,
+          "name": "Setpoints vs. Measurements(velocity)",
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/Ramsete Control/Left Velocity"
+            },
+            {
+              "color": [
+                0.3333333432674408,
+                0.658823549747467,
+                0.4078431725502014,
+                1.0
+              ],
+              "id": "NT:/Ramsete Control/Right Velocity"
+            },
+            {
+              "color": [
+                0.8666667342185974,
+                0.5176470875740051,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "NT:/Ramsete Control/Left setpoint"
+            },
+            {
+              "color": [
+                0.7686275243759155,
+                0.30588236451148987,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "NT:/Ramsete Control/Right setpoint"
+            }
+          ]
+        },
+        {
+          "height": 374,
+          "series": [
+            {
+              "color": [
+                0.2980392277240753,
+                0.44705885648727417,
+                0.6901960968971252,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/RAMSETE/Left Velocity Error"
+            },
+            {
+              "color": [
+                0.8666667342185974,
+                0.5176470875740051,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/RAMSETE/Right Velocity"
+            },
+            {
+              "color": [
+                0.3333333432674408,
+                0.658823549747467,
+                0.4078431725502014,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/RAMSETE/Left Position Error"
+            },
+            {
+              "color": [
+                0.7686275243759155,
+                0.30588236451148987,
+                0.32156863808631897,
+                1.0
+              ],
+              "id": "NT:/SmartDashboard/RAMSETE/Right Position Error"
+            }
+          ]
+        }
+      ],
+      "window": {
+        "name": "RAMSETE"
       }
     }
   }

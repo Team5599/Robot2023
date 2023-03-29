@@ -11,15 +11,15 @@ package com.sentinels.robot.commands.armmech.arm;
 import com.sentinels.robot.subsystems.arm.Arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 
 public class ArmPivot extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
   private final Arm arm;
-  private final CommandXboxController operator;
+  private final CommandJoystick operator;
 
-  public ArmPivot(Arm arm, CommandXboxController operator) {
+  public ArmPivot(Arm arm, CommandJoystick operator) {
     this.arm = arm;
     this.operator = operator;
     
@@ -31,7 +31,7 @@ public class ArmPivot extends CommandBase {
 
   @Override
   public void execute() {
-    arm.PivotArm(operator.getLeftY());
+    arm.PivotArm(-operator.getRawAxis(1));
   }
     
   // Called once the command ends or is interrupted.
