@@ -5,8 +5,7 @@
 package com.sentinels.robot.commands.armmech.arm;
 
 import com.sentinels.robot.constants.Settings;
-
-import com.sentinels.robot.constants.Settings.Arm.level;
+import com.sentinels.robot.constants.Settings.Arm.Level;
 import com.sentinels.robot.subsystems.arm.Arm;
 
 import edu.wpi.first.math.MathUtil;
@@ -19,16 +18,18 @@ public class PivotPID extends CommandBase {
 
   public PivotPID(Arm arm, double angle) {
     this.arm = arm;
+
     pivotController = new PIDController(0.5,0,0);
-    pivotController.setSetpoint(27*angle);//using 27 here because thats the gear ratio
+    pivotController.setSetpoint(Settings.Arm.kArmPivotGearRatio * angle);
     //addRequirements(arm); // becuase this is used in a parallel command, using addRequirements may interfere with functionality
   }
 
-  public PivotPID(Arm arm, level height) {
+  public PivotPID(Arm arm, Level height) {
     this.arm = arm;
-    pivotController = new PIDController(0.5,0,0);
 
     double setpoint = 0;
+    pivotController = new PIDController(0.5,0,0);
+    
     switch(height){
       case LOW:
         setpoint = 0;
@@ -66,7 +67,7 @@ public class PivotPID extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(pivotController.atSetpoint() == true){
+    if (pivotController.atSetpoint()) {
       return true;
     }
     return false;

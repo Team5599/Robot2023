@@ -4,12 +4,18 @@
 
 package com.sentinels.robot.commands.armmech.arm;
 
+import com.sentinels.robot.constants.Settings;
 import com.sentinels.robot.subsystems.arm.Arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+/**
+ * Autonomous-Exclusive Command
+ */
 public class AutonTimedArmPivot extends CommandBase {
+
   private final Arm arm;
+
   public AutonTimedArmPivot(Arm arm) {
     this.arm = arm;
     addRequirements(arm);
@@ -22,12 +28,12 @@ public class AutonTimedArmPivot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    arm.PivotArm(0.4);
+    arm.PivotArm(Settings.Arm.kPivotTimedSpeed);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

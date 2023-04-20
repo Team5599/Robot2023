@@ -14,9 +14,10 @@ import com.sentinels.robot.util.RoboRIO;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -90,7 +91,8 @@ public class Arm extends SubsystemBase {
   public void StopCascade() {
     armCascade.stopMotor();
   }
-  public void resetEncoderPositions(){
+
+  public void resetEncoderPositions() {
     armPivotL.setSelectedSensorPosition(0);
     armPivotR.setSelectedSensorPosition(0);
   }
@@ -109,10 +111,10 @@ public class Arm extends SubsystemBase {
    * @return the angle of the arm using the ticks of the Falcons, assuming there are 2048 ticks per rotation
    * divided by 27 because of the gear ratio
    */
-  public double getArmPivotAngle(){
+  public double getArmPivotAngle() {
     // return (((armPivotL.getSelectedSensorPosition() % 4096)/4096)/Settings.Arm.kArmPivotGearRatio)*360;
     double encoderPosition = armPivotL.getSelectedSensorPosition();
-    double angle = (encoderPosition* 360 / (2048  * Settings.Arm.kArmPivotGearRatio));
+    double angle = (encoderPosition * 360 / (2048 * Settings.Arm.kArmPivotGearRatio));
     return (angle % 360);
   }
 
@@ -125,17 +127,15 @@ public class Arm extends SubsystemBase {
     return armPivotR.getSelectedSensorPosition();
   }
 
-  /**
-   * @return the cascade motor's position
-   */
   public double getCascadeMotorPosition() {
     return cascadeEncoder.getPosition();
   }
+
   /**
    * @return the distance the cascade has extended
    */
-  public double getCascadeExtensionDist(){
-    return 2*Math.PI*getCascadeMotorPosition();
+  public double getCascadeExtensionDist() {
+    return (2 * Math.PI * getCascadeMotorPosition());
   }
 
   // VELOCITY METHODS (RPM) (converted deg/sec to rpm)
@@ -154,13 +154,13 @@ public class Arm extends SubsystemBase {
   // VOLTAGE METHODS (V)
 
   public double getLeftVoltage() {
-    return (armPivotL.get() * RoboRIO.getBatteryVoltage());
+    return (-armPivotL.get() * RoboRIO.getBatteryVoltage());
   }
   public double getRightVoltage() {
-    return (armPivotR.get() * RoboRIO.getBatteryVoltage());
+    return (-armPivotR.get() * RoboRIO.getBatteryVoltage());
   }
   public double getCascadeVoltage() {
-    return (armCascade.get() * RoboRIO.getBatteryVoltage());
+    return (-armCascade.get() * RoboRIO.getBatteryVoltage());
   }
 
   // TEMPERATURE METHODS (C)
@@ -184,6 +184,7 @@ public class Arm extends SubsystemBase {
     SmartDashboard.putNumber("Arm/Left Motor Position (Degrees)", getLeftPosition());
     SmartDashboard.putNumber("Arm/Right Motor Position (Degrees)", getRightPosition());
     SmartDashboard.putNumber("Arm/Cascade Motor Position (Degrees)", getCascadeMotorPosition());
+    
     SmartDashboard.putNumber("Arm/Arm Pivot Angle (Degrees)", getArmPivotAngle());    
     SmartDashboard.putNumber("Arm/Cascade Extension Length", getCascadeExtensionDist());
 
@@ -191,9 +192,9 @@ public class Arm extends SubsystemBase {
     SmartDashboard.putNumber("Arm/Right Motor Velocity (RPM)", getRightVelocity());
     SmartDashboard.putNumber("Arm/Cascade Motor Velocity (RPM)", getCascadeVelocity());
 
-    SmartDashboard.putNumber("Arm/Debug/Left Motor Temperature (C)", getLeftTemp());
-    SmartDashboard.putNumber("Arm/Debug/Right Motor Temperature (C)", getRightTemp());
-    SmartDashboard.putNumber("Arm/Debug/Cascade Motor Temperature (C)", getCascadeTemp());
+    SmartDashboard.putNumber("Arm/.Debug/Left Motor Temperature (C)", getLeftTemp());
+    SmartDashboard.putNumber("Arm/.Debug/Right Motor Temperature (C)", getRightTemp());
+    SmartDashboard.putNumber("Arm/.Debug/Cascade Motor Temperature (C)", getCascadeTemp());
   }
 
   @Override

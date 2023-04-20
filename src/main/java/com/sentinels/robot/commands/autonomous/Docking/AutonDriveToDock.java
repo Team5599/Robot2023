@@ -9,7 +9,9 @@ import com.sentinels.robot.subsystems.drive.Drivetrain;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutonDriveToDock extends CommandBase {
+
   private final Drivetrain drivetrain;
+
   public AutonDriveToDock(Drivetrain drivetrain) {
     this.drivetrain = drivetrain;
     addRequirements(drivetrain);
@@ -34,7 +36,7 @@ public class AutonDriveToDock extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(drivetrain.getPitch() != 0){
+    if (drivetrain.getPitch() != 0) {
       return false;
     }
     return false;

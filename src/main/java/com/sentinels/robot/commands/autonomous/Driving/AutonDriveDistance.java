@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class AutonDriveDistance extends CommandBase {
+  
   private final Drivetrain drivetrain;
   private final Limelight limelight;
 
@@ -33,17 +34,17 @@ public class AutonDriveDistance extends CommandBase {
   // https://docs.limelightvision.io/en/latest/getting_started.html
   // https://docs.wpilib.org/en/stable/docs/software/advanced-controls/controllers/pidcontroller.html
 
-
   //can also handle distance measurement with parallax
-
 
   //TODO: real encoders may not actually work
   public AutonDriveDistance(Drivetrain drivetrain, Limelight limelight) {
     this.drivetrain = drivetrain;
     this.limelight = limelight;
+    parallaxEnable = false;
+
     distanceControllerL = new PIDController(0.7,0, .04);
     distanceControllerR = new PIDController(0.7, 0, .04);
-    parallaxEnable = false;
+
     addRequirements(drivetrain);
   }
 
@@ -53,30 +54,33 @@ public class AutonDriveDistance extends CommandBase {
     this.limelight = limelight;
     this.parallaxEnable = parallaxEnable;
     this.setpoint = setpoint;
+
     distanceControllerL = new PIDController(0.7,0, 0.04);
     distanceControllerR = new PIDController(0.7, 0, 0.04);
+
     distanceControllerL.setSetpoint(setpoint + drivetrain.getLeftPosition());
     distanceControllerR.setSetpoint(setpoint + drivetrain.getRightPosition());
+
     addRequirements(drivetrain);
   }
 
   @Override
   public void initialize() {
-    drivetrain.setCoastMode();
+
+    distanceControllerL.setSetpoint(-setpoint - drivetrain.getLeftPosition());
+    distanceControllerR.setSetpoint(-setpoint - drivetrain.getRightPosition());
+
+    distanceControllerL.reset();
+    distanceControllerR.reset();
 
     SmartDashboard.putNumber("PID/error Left", distanceControllerL.getPositionError());
     SmartDashboard.putNumber("PID/error Right", distanceControllerR.getPositionError());
     SmartDashboard.putNumber("PID/Left Setpoint", distanceControllerL.getSetpoint());
     SmartDashboard.putNumber("PID/Right Setpoint", distanceControllerR.getSetpoint());
-    distanceControllerL.setSetpoint(-setpoint - drivetrain.getLeftPosition());
-    distanceControllerR.setSetpoint(-setpoint - drivetrain.getRightPosition());
-    distanceControllerL.reset();
-    distanceControllerR.reset();
 
-    if (parallaxEnable == false){ 
+    if (parallaxEnable == false) { 
       //setpoint = RobotContainer.distance-1;
-    }
-    else{
+    } else {
       //angle1 = limelight.getTx();
     }
     // distanceController.setSetpoint(setpoint);//stop somewhere right before the gamepiece for intake, arbitrary for now
@@ -100,8 +104,10 @@ public class AutonDriveDistance extends CommandBase {
   @Override
   public void end(boolean interrupted) {
     drivetrain.driveStop();
-    if(parallaxEnable == true){
+
+    if (parallaxEnable == true) {
       angle2 = limelight.getTx();
+
       RobotContainer.distance = limelight.ParllaxDistance(angle1, angle2);
     }
 
@@ -111,10 +117,10 @@ public class AutonDriveDistance extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(RobotBase.isSimulation()&& Math.abs(distanceControllerL.getPositionError()) > 10 + distanceControllerL.getSetpoint()){
+    if (RobotBase.isSimulation() && Math.abs(distanceControllerL.getPositionError()) > 10 + distanceControllerL.getSetpoint()) {
       return true;
     }
-    if(distanceControllerL.atSetpoint() || distanceControllerR.atSetpoint()){
+    if (distanceControllerL.atSetpoint() || distanceControllerR.atSetpoint()) {
       return true;
     }
     return false;

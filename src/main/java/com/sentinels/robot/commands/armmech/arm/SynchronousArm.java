@@ -4,7 +4,7 @@
 
 package com.sentinels.robot.commands.armmech.arm;
 
-import com.sentinels.robot.constants.Settings.Arm.level;
+import com.sentinels.robot.constants.Settings.Arm.Level;
 import com.sentinels.robot.subsystems.arm.Arm;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -19,7 +19,7 @@ public class SynchronousArm extends ParallelCommandGroup {
     addCommands(new PivotPID(arm, angle), new CascadePID(arm, length));
   }
 
-  public SynchronousArm(Arm arm, level level){
+  public SynchronousArm(Arm arm, Level level) {
     addCommands(new PivotPID(arm, level), new CascadePID(arm, level));
   }
 }

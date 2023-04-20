@@ -4,16 +4,19 @@
 
 package com.sentinels.robot.commands.armmech.arm;
 
-
 import com.sentinels.robot.constants.Settings;
-import com.sentinels.robot.constants.Settings.Arm.level;
+import com.sentinels.robot.constants.Settings.Arm.Level;
 import com.sentinels.robot.subsystems.arm.Arm;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+/**
+ * Autonomous-Exclusive Command
+ */
 public class CascadePID extends CommandBase {
+
   private final Arm arm;
   private final PIDController cascadeController;
 
@@ -27,6 +30,7 @@ public class CascadePID extends CommandBase {
    */
   public CascadePID(Arm arm, double input) {
     this.arm = arm;
+
     cascadeController = new PIDController(1, 1, 1);
     cascadeController.setSetpoint(input * cascadeLength * gearRatio);
   }
@@ -35,20 +39,22 @@ public class CascadePID extends CommandBase {
    * @param arm the arm subsystem
    * @param level takes enums, use level.LOW, level.MEDIUM or level.TOP
    */
-  public CascadePID(Arm arm, level distance) {
+  public CascadePID(Arm arm, Level distance) {
     this.arm = arm;
-    cascadeController = new PIDController(1, 1, 1);
 
     double setpoint = 0;
+    cascadeController = new PIDController(1, 1, 1);
+
     switch(distance){
       case LOW:
         setpoint = 0;
       case MEDIUM:
-        setpoint = Settings.Arm.kCascadeLength/2;//TODO: change this once we have a system for controlling the cascade
+        setpoint = (Settings.Arm.kCascadeLength / 2); //TODO: change this once we have a system for controlling the cascade
       case TOP:
         setpoint = Settings.Arm.kCascadeLength;
     }
-    cascadeController.setSetpoint(setpoint * gearRatio );
+
+    cascadeController.setSetpoint(setpoint * gearRatio);
   }
 
   @Override

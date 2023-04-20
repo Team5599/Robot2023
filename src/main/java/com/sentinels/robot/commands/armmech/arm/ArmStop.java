@@ -12,12 +12,15 @@ import com.sentinels.robot.subsystems.arm.Arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
+/**
+ * Autonomous-Exclusive Command
+ */
 public class ArmStop extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
 
   private final Arm arm;
 
-    public ArmStop(Arm arm) {
+  public ArmStop(Arm arm) {
     this.arm = arm;
     
     addRequirements(arm);

@@ -49,6 +49,4 @@ public class AutonDock extends CommandBase {
     }
     return false;
   }
-
-
 }

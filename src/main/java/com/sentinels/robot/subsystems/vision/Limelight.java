@@ -1,3 +1,11 @@
+/***************************************************************
+                The Sentinels - FRC Team 5599
+        Benjamin N. Cardozo High School Robotics Team
+
+    This work is licensed under the terms of the MIT license.
+    Copyright (c) 2023 The Sentinels. All rights reserved.
+***************************************************************/
+
 package com.sentinels.robot.subsystems.vision;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,7 +23,7 @@ public class Limelight extends SubsystemBase {
     NetworkTableEntry viewStream = table.getEntry("stream");
     NetworkTableEntry getled = table.getEntry("ledMode");
 
-    public Limelight() { }
+    public Limelight() {}
 
     @Override
     public void periodic() {
@@ -42,15 +50,15 @@ public class Limelight extends SubsystemBase {
         return table.getEntry("ta").getDouble(-200);
     }
 
-    public void blink(){
+    public void blink() {
         table.getEntry("ledMode").setNumber(1); // Set value to 2 for blink
     }
     
-    public void sidestream(){
+    public void sidestream() {
         table.getEntry("stream").setNumber(0);
     }
 
-    public double ParllaxDistance(double angle1, double angle2){
+    public double ParllaxDistance(double angle1, double angle2) {
         double distance = Math.sin(angle1) / Math.sin(angle2 - angle1);
         return distance;
     }

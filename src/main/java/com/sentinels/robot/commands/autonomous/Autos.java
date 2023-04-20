@@ -6,7 +6,6 @@ package com.sentinels.robot.commands.autonomous;
 
 import com.sentinels.robot.subsystems.drive.Drivetrain;
 import com.sentinels.robot.subsystems.vision.Limelight;
-import com.sentinels.robot.commands.armmech.arm.ArmStop;
 import com.sentinels.robot.commands.armmech.arm.AutonTimedArmPivot;
 import com.sentinels.robot.commands.armmech.arm.SetArmAngle;
 import com.sentinels.robot.commands.armmech.intake.IntakeOpen;
@@ -14,7 +13,6 @@ import com.sentinels.robot.commands.autonomous.Docking.AutonDock;
 import com.sentinels.robot.commands.autonomous.Docking.AutonDriveToDock;
 import com.sentinels.robot.commands.autonomous.Driving.AutonDriveDistance;
 import com.sentinels.robot.commands.autonomous.Driving.AutonTimedDrive;
-import com.sentinels.robot.commands.autonomous.Driving.PIDdrive;
 import com.sentinels.robot.subsystems.arm.Arm;
 import com.sentinels.robot.subsystems.intake.Intake;
 import com.sentinels.robot.constants.Settings;
@@ -83,7 +81,7 @@ public final class Autos {
         drivetrain::getPose,
         disabled,
         new SimpleMotorFeedforward(0.15, 2, 1.5),//voltages here, arbitrary numbers here for now
-        Settings.Drivetrain.KINEMATICS, 
+        Settings.Drivetrain.kDriveKinematics, 
         drivetrain::getWheelSpeeds, 
         leftController,
         rightController,
