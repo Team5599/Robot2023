@@ -13,7 +13,6 @@ import com.sentinels.robot.constants.Settings;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -57,18 +56,11 @@ public class DrivetrainDrive extends CommandBase {
       driverRightY = driver.getRightY();
     }
 
-    periodic();
-
     if (arcadeDriveActive) {
       drivetrain.arcadeDrive(driverRightY * Settings.Drivetrain.kDriveSpeedCap, driverLeftX * Settings.Drivetrain.kDriveSpeedCap);
     } else {
       drivetrain.tankDrive(driverLeftY * Settings.Drivetrain.kDriveSpeedCap, driverRightY * Settings.Drivetrain.kDriveSpeedCap);
     }
-  }
-
-  public void periodic() {
-    double[] axes = {driverLeftY,driverRightY};
-    SmartDashboard.putNumberArray("Controller/Inputs (LY,RY):", axes);
   }
 
   @Override

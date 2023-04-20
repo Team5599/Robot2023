@@ -11,14 +11,18 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 //DOES NOT WORK
 public class PIDdrive extends CommandBase {
+
   private final Drivetrain drivetrain;
   private final PIDController controller;
   private final double setpoint;
+
   public PIDdrive(Drivetrain drivetrain, double setpoint) {
     this.drivetrain = drivetrain;
     this.setpoint = setpoint;
+
     controller = new PIDController(2, 0, 1);
     controller.setSetpoint(this.setpoint);
+
     System.out.println(controller.getPeriod());
   }
 
@@ -31,7 +35,7 @@ public class PIDdrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double input = MathUtil.clamp(controller.calculate(drivetrain.getLeftPosition()),-0.7,0.7);
+    double input = MathUtil.clamp(controller.calculate(drivetrain.getLeftPosition()), -0.7, 0.7);
     drivetrain.tankDrive(input, input);
   }
 

@@ -6,7 +6,7 @@
     Copyright (c) 2023 The Sentinels. All rights reserved.
 ***************************************************************/
 
-// Port numbers for controllers/gamepads, subsystem/mechanism motor controllers, solenoids, and sensors are defined in this file.
+// Port numbers for robot devices, controllers/gamepads, subsystem/mechanism motor controllers, solenoids, and sensors are defined in this file.
 
 /**
  * ROBOT MOTOR CONTROL LAYOUT
@@ -34,6 +34,14 @@
 package com.sentinels.robot.constants;
 
 public interface Ports {
+
+    public interface Devices {
+        // Power Distribution Panel (PDP)
+        int PDP = 0;
+
+        // Pneumatics Control Module (PCM)
+        int PCM = 11;
+    }
 
     public interface Controllers {
         // Controllers

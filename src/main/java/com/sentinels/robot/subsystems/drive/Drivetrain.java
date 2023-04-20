@@ -10,14 +10,13 @@ package com.sentinels.robot.subsystems.drive;
 
 import com.sentinels.robot.constants.Ports;
 import com.sentinels.robot.constants.Settings;
-import com.sentinels.robot.constants.Arena;
 import com.sentinels.robot.util.RoboRIO;
 import com.sentinels.robot.util.SparkMAXsim;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
@@ -31,15 +30,14 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.ADIS16448_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.simulation.ADIS16470_IMUSim;
 import edu.wpi.first.wpilibj.simulation.DifferentialDrivetrainSim;
 import edu.wpi.first.wpilibj.simulation.EncoderSim;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 /**
  * Code to allow the robot to move.
@@ -86,41 +84,38 @@ public class Drivetrain extends SubsystemBase {
   
   private Field2d field = new Field2d();
 
-  private DifferentialDrivetrainSim TestDrivetrain;
+  private DifferentialDrivetrainSim SimDrivetrain;
+  
   private final DifferentialDrivePoseEstimator odometry = new DifferentialDrivePoseEstimator(
-    Settings.Drivetrain.KINEMATICS, getHeading(), getLeftPosition(), getRightPosition(), new Pose2d()
+    Settings.Drivetrain.kDriveKinematics, getHeading(), getLeftPosition(), getRightPosition(), new Pose2d()
   );
 
   public Drivetrain() {
-    // Resetting motor settings to default factory settings
     motorFL.restoreFactoryDefaults();
     motorBL.restoreFactoryDefaults();
     motorFR.restoreFactoryDefaults();
     motorBR.restoreFactoryDefaults();
 
+    // Invert the one of the sides so that they rotate synonymously in one direction
+    leftMotors.setInverted(true);
+
     // Set a max output to avoid damage
     setMaxOutput(0.95);
     
-    // Zeroing and calibrating IMU
+    // Zeroing and calibrating IMU, zeroing encoder positions
     zeroIMU();
-
-    // Zeroing encoder positions
     resetEncoders();
 
     // Set velocity and position factors
-
     encoderFL.setPositionConversionFactor(2 * Math.PI * Units.inchesToMeters(3));
     encoderBL.setPositionConversionFactor(2 * Math.PI * Units.inchesToMeters(3));
     encoderFR.setPositionConversionFactor(2 * Math.PI * Units.inchesToMeters(3));
     encoderBR.setPositionConversionFactor(2 * Math.PI * Units.inchesToMeters(3));
-
-    // Invert the one of the sides so that they rotate synonymously in one direction
-    leftMotors.setInverted(true);
     
     simEncoderL.setDistancePerPulse(2 * Math.PI * (Settings.Drivetrain.kWheelDiameter / 2) / 42);
     simEncoderR.setDistancePerPulse(2 * Math.PI * (Settings.Drivetrain.kWheelDiameter / 2) / 42);
 
-    TestDrivetrain = new DifferentialDrivetrainSim(
+    SimDrivetrain = new DifferentialDrivetrainSim(
         DCMotor.getNEO(Settings.Drivetrain.kGearboxMotorCount),
         Settings.Drivetrain.kGearRatio,
         Settings.Drivetrain.kCenterMomentInertia,
@@ -140,72 +135,89 @@ public class Drivetrain extends SubsystemBase {
   }
 
   /**
-   * Drive the robot!
+   * Drive the robot! Uses traditional two Y-axes to move each side.
    * @param leftSpeed - The speed at which the left side motors should be.
    * @param rightSpeed - The speed at which the right side motors should be.
    */
   public void tankDrive(double leftSpeed, double rightSpeed) {
     drivetrain.tankDrive(leftSpeed, rightSpeed);
   }
+  
+  /**
+   * Drive the robot! Uses more modern X/Y-axes to move and turn seperately.
+   * @param xSpeed
+   * @param rotation
+   */
   public void arcadeDrive(double xSpeed, double rotation) {  
     drivetrain.arcadeDrive(xSpeed, rotation);
   }
-  public void voltageDrive(double leftVoltage, double rightVoltage){
-    MathUtil.clamp(leftVoltage, -RoboRIO.getBatteryVoltage() , RoboRIO.getBatteryVoltage());
-    MathUtil.clamp(rightVoltage, -RoboRIO.getBatteryVoltage() , RoboRIO.getBatteryVoltage());
+
+  /**
+   * Drive the robot! Uses fed voltage inputs to move each side.
+   * @param leftVoltage - The voltage at which the left side motors should be.
+   * @param rightVoltage - The voltage at which the right side motors should be.
+   */
+  public void voltageDrive(double leftVoltage, double rightVoltage) {
+    MathUtil.clamp(leftVoltage, -RoboRIO.getBatteryVoltage(), RoboRIO.getBatteryVoltage());
+    MathUtil.clamp(rightVoltage, -RoboRIO.getBatteryVoltage(), RoboRIO.getBatteryVoltage());
+
     leftMotors.setVoltage(-leftVoltage);
     rightMotors.setVoltage(-rightVoltage);
 
     drivetrain.feed();
   }
+
+  /**
+   * Forces the motors to stop moving, stopping the robot.
+   */
   public void driveStop() {
     drivetrain.stopMotor();
   }
+
   /**
-   * Draw a trajectory in the simulation 
-   * @param trajectory - the trajectory to be drawm
-   * 
+   * Draw a trajectory in robot simulation.
+   * @param trajectory - the trajectory to be drawn
    */
-  public void displayPath(Trajectory trajectory){
+  public void displayPath(Trajectory trajectory) {
     field.getObject("new trajectory").setTrajectory(trajectory);
   }
 
   // POSITION FUNCTIONS
 
   public double getLeftPosition() {
-    if(RobotBase.isSimulation()){
+    if (RobotBase.isSimulation()) {
       return simEncoderL.getDistance();
     }
     //real encoders might need to be inverted for PID control
     return Settings.Drivetrain.kWheelCircumference * (-encoderFL.getPosition() + -encoderBL.getPosition() / 2.0);
   }
   public double getRightPosition() {
-    if(RobotBase.isSimulation()){
+    if (RobotBase.isSimulation()) {
       return simEncoderR.getDistance();
     }
     return Settings.Drivetrain.kWheelCircumference * (encoderFR.getPosition() + encoderBR.getPosition() / 2.0);
   }
 
   // VELOCITY FUNCTIONS
+
   public double getLeftVelocity() {
-    if (RobotBase.isSimulation()){
+    if (RobotBase.isSimulation()) {
       return simEncoderL.getRate();
     }
     return -Settings.Drivetrain.kWheelCircumference * (encoderFL.getVelocity() + encoderBL.getVelocity() / 120.0);
   }
   public double getRightVelocity() {
-    // negate so both velocities are positive
-    if (RobotBase.isSimulation()){
+    if (RobotBase.isSimulation()) {
       return simEncoderR.getRate();
     }
     return Settings.Drivetrain.kWheelCircumference * (encoderFR.getVelocity() + encoderBR.getVelocity() / 120.0);
   }
-
-  public DifferentialDriveWheelSpeeds getWheelSpeeds(){
+  public DifferentialDriveWheelSpeeds getWheelSpeeds() {
     // double AvgLeftVel = 0.254 * (getLeftVelocity() * 2 * Math.PI * (Settings.Drivetrain.kWheelDiameter / 2)) / 60;
     double AvgLeftVel = getLeftVelocity();
     double AvgRightVel = getRightVelocity();
-    return new DifferentialDriveWheelSpeeds(AvgLeftVel, AvgRightVel);// in m/s
+
+    return new DifferentialDriveWheelSpeeds(AvgLeftVel, AvgRightVel); // in m/s
   }
 
   // VOLTAGE FUNCTIONS
@@ -216,13 +228,13 @@ public class Drivetrain extends SubsystemBase {
   public double getRightVoltage() {
     return (rightMotors.get() * RoboRIO.getBatteryVoltage());
   }
-  public void setMaxOutput(double maxOutput){
+  public void setMaxOutput(double maxOutput) {
     drivetrain.setMaxOutput(maxOutput);
   }
 
   // RESET ENCODERS
   
-  public void resetEncoders(){
+  public void resetEncoders() {
     encoderFL.setPosition(0);
     encoderBL.setPosition(0);
     encoderFR.setPosition(0);
@@ -250,24 +262,24 @@ public class Drivetrain extends SubsystemBase {
   public double getTurnRate() {
     return -imu.getRate();
   }
-  public void zeroIMU() {
-    imu.reset();
-    imu.calibrate();
-  }
   public Pose2d getPose() {
     return odometry.getEstimatedPosition();
   }
-  public double getPitch(){
-    //Pitching down is positive, so now it is negated
-    imu.setYawAxis(edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis.kX);
-    return -imu.getAngle();
-  }
-
-  public Pose2d getInvertedPose2d(){
+  public Pose2d getInvertedPose2d() {
     return new Pose2d(
       odometry.getEstimatedPosition().getTranslation(),
       odometry.getEstimatedPosition().getRotation().rotateBy(Rotation2d.fromDegrees(180))
     );
+  }
+  public double getPitch() {
+    //Pitching down is positive, so now it is negated
+    imu.setYawAxis(ADIS16470_IMU.IMUAxis.kX);
+    return -imu.getAngle();
+  }
+
+  public void zeroIMU() {
+    imu.reset();
+    imu.calibrate();
   }
 
   @Override
@@ -281,42 +293,35 @@ public class Drivetrain extends SubsystemBase {
     SmartDashboard.putNumber("Drivetrain/Left Motors Velocity (RPM)", getLeftVelocity());
     SmartDashboard.putNumber("Drivetrain/Right Motors Velocity (RPM)", getRightVelocity());
     
-    SmartDashboard.putNumber("Drivetrain/Left get:", leftMotors.get());
-    SmartDashboard.putNumber("Drivetrain/Right get:", rightMotors.get());
+    SmartDashboard.putNumber("Drivetrain/Left Motors Set Speed [-1,1]:", leftMotors.get());
+    SmartDashboard.putNumber("Drivetrain/Right Motors Set Speed [-1,1]", rightMotors.get());
 
-    SmartDashboard.putNumber("IMU/angle",getPitch());
-    SmartDashboard.putString("IMU/yaw axis",imu.getYawAxis().toString());
-    SmartDashboard.putNumber("IMU/x angle",imu.getXFilteredAccelAngle());
-    SmartDashboard.putNumber("IMU/y angle",imu.getYFilteredAccelAngle());
+    SmartDashboard.putNumber("IMU/Pitch", getPitch());
+    SmartDashboard.putString("IMU/Yaw Axis", imu.getYawAxis().toString());
+    SmartDashboard.putNumber("IMU/X Angle", imu.getXFilteredAccelAngle());
+    SmartDashboard.putNumber("IMU/Y Angle", imu.getYFilteredAccelAngle());
 
     // SmartDashboard.putNumberArray("Drivetrain/Pose", poseArray);
     
-    // This will get the simulated sensor readings that we set
-    // in the previous article while in simulation, but will use
-    // real values on the robot itself.
     odometry.update(getHeading(), simEncoderL.getDistance(), simEncoderR.getDistance());
-
-    // odometry.update(getHeading(), )
   }
 
   @Override
   public void simulationPeriodic() {
-    // Set the inputs to the system. Note that we need to convert
-    // the [-1, 1] PWM signal to voltage by multiplying it by the
-    // robot controller voltage.
-    TestDrivetrain.setInputs(leftMotors.get() * RoboRIO.getInputVoltage(), rightMotors.get() * RoboRIO.getInputVoltage());    
-    // Advance the model by 20 ms. Note that if you are running this
-    // subsystem in a separate thread or have changed the nominal timestep
-    // of TimedRobot, this value needs to match it.
-    TestDrivetrain.update(.02);
+    // Converts the [-1, 1] PWM signal to voltage by multiplying it by the robot controller voltage.
+    SimDrivetrain.setInputs(leftMotors.get() * RoboRIO.getInputVoltage(), rightMotors.get() * RoboRIO.getInputVoltage()); 
+
+    // Advance the model by 20 ms.
+    SimDrivetrain.update(.02);
   
     // Update all of our sensors.
-    simEncoderL.setDistance(TestDrivetrain.getLeftPositionMeters());
-    simEncoderL.setRate(TestDrivetrain.getLeftVelocityMetersPerSecond());
-    simEncoderR.setDistance(TestDrivetrain.getRightPositionMeters());
-    simEncoderR.setRate(TestDrivetrain.getRightVelocityMetersPerSecond());
+    simEncoderL.setDistance(SimDrivetrain.getLeftPositionMeters());
+    simEncoderL.setRate(SimDrivetrain.getLeftVelocityMetersPerSecond());
+    simEncoderR.setDistance(SimDrivetrain.getRightPositionMeters());
+    simEncoderR.setRate(SimDrivetrain.getRightVelocityMetersPerSecond());
     
-    imuSim.setGyroAngleX(MathUtil.inputModulus(TestDrivetrain.getHeading().getDegrees(), -180, 180));
-    field.setRobotPose(TestDrivetrain.getPose());
+    imuSim.setGyroAngleX(MathUtil.inputModulus(SimDrivetrain.getHeading().getDegrees(), -180, 180));
+    
+    field.setRobotPose(SimDrivetrain.getPose());
   }
 }

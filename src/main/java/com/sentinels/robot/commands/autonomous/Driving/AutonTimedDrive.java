@@ -5,7 +5,7 @@
 package com.sentinels.robot.commands.autonomous.Driving;
 
 import com.sentinels.robot.subsystems.drive.Drivetrain;
-import com.sentinels.robot.constants.Settings.Drivetrain.Autonomous;
+import com.sentinels.robot.constants.Settings;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
@@ -29,9 +29,9 @@ public class AutonTimedDrive extends CommandBase {
   @Override
   public void execute() {
     if (reverseEnabled) {
-      drivetrain.voltageDrive(-Autonomous.kTimedDriveVoltage, -Autonomous.kTimedDriveVoltage);
+      drivetrain.voltageDrive(-Settings.Drivetrain.kTimedDriveVoltage, -Settings.Drivetrain.kTimedDriveVoltage);
     } else {
-      drivetrain.voltageDrive(Autonomous.kTimedDriveVoltage, Autonomous.kTimedDriveVoltage);
+      drivetrain.voltageDrive(Settings.Drivetrain.kTimedDriveVoltage, Settings.Drivetrain.kTimedDriveVoltage);
     }
   }
 

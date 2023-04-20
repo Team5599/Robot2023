@@ -33,7 +33,6 @@ public class IntakePivot extends CommandBase {
 
   @Override
   public void execute() {
-    //THIS GOT INVERTED AND UNINVERTED MULTIPLE TIMES
     if (operator.button(6).getAsBoolean()) {
       intake.intakePivot(limiter.calculate(0.10));
     } else {

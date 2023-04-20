@@ -30,7 +30,7 @@ public interface Arena {
         // SIMULATION TESTS
         public TrajectoryConfig kConfig = new TrajectoryConfig(
             Units.feetToMeters(3.0), Units.feetToMeters(3.0))
-            .setKinematics(Drivetrain.KINEMATICS
+            .setKinematics(Drivetrain.kDriveKinematics
         );
 
         public Trajectory TestTrajectory = TrajectoryGenerator.generateTrajectory(
@@ -101,7 +101,7 @@ public interface Arena {
             }
         }
     }
-    public interface Keypoints{
+    public interface Keypoints {
         // use this interface to set the coordinates of points around the arena, like the charging dock, gamepieces and human player portal, etc
     }
 }

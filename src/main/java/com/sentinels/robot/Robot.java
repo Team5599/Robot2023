@@ -18,8 +18,6 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
 
-  //private static Compressor compressor = new Compressor(11, PneumaticsModuleType.CTREPCM);
-  // Compressor module is the pcm port currently its 11 (Joey Lam) // 
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -49,14 +47,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {
-    
-  }
+  public void disabledInit() {}
 
   @Override
-  public void disabledPeriodic() {
-
-  }
+  public void disabledPeriodic() {}
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override

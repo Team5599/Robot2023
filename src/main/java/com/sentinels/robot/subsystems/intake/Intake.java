@@ -35,7 +35,7 @@ public class Intake extends SubsystemBase {
   private final RelativeEncoder encoderPivot = motorPivot.getEncoder();
 
   private final DoubleSolenoid solenoid = new DoubleSolenoid(
-    11, PneumaticsModuleType.CTREPCM, Ports.Intake.SOLENOIDPUSH, Ports.Intake.SOLENOIDPULL
+    Ports.Devices.PCM, PneumaticsModuleType.CTREPCM, Ports.Intake.SOLENOIDPUSH, Ports.Intake.SOLENOIDPULL
   );
 
   public Intake() {
