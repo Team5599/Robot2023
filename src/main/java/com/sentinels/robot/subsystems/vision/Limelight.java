@@ -10,6 +10,9 @@ package com.sentinels.robot.subsystems.vision;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+import org.photonvision.PhotonCamera;
+
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -23,7 +26,11 @@ public class Limelight extends SubsystemBase {
     NetworkTableEntry viewStream = table.getEntry("stream");
     NetworkTableEntry getled = table.getEntry("ledMode");
 
-    public Limelight() {}
+    // private PhotonCamera
+
+    public Limelight() {
+
+    }
 
     @Override
     public void periodic() {

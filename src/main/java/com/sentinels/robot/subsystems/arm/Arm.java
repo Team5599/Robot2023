@@ -45,7 +45,12 @@ public class Arm extends SubsystemBase {
   private final MotorControllerGroup armPivotMotors = new MotorControllerGroup(armPivotL, armPivotR);
 
   public Arm() {
-    resetEncoders();
+    // resetEncoders();
+    
+    //TUNING ARM POSITION
+    armPivotL.setSelectedSensorPosition(SmartDashboard.getNumber("Arm/Left Motor Position (Degrees)", getLeftPosition()));
+    armPivotR.setSelectedSensorPosition(SmartDashboard.getNumber("Arm/Right Motor Position (Degrees)", getLeftPosition()));
+
     armPivotL.setNeutralMode(NeutralMode.Brake);
     armPivotR.setNeutralMode(NeutralMode.Brake);
     armPivotL.setInverted(true);
@@ -59,7 +64,6 @@ public class Arm extends SubsystemBase {
     armPivotR.configForwardSoftLimitEnable(true);
     armPivotR.configReverseSoftLimitThreshold(0);
     armPivotR.configReverseSoftLimitEnable(true);
-
   }
   
   // motor stall is detected by the output current of a motor

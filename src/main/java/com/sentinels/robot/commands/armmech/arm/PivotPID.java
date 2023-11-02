@@ -50,7 +50,7 @@ public class PivotPID extends CommandBase {
 
   @Override
   public void execute() {   
-    //TODO: there needs to be a way to detect the start position and also a way to callibrate everything properly
+    //TODO: there needs to be a way to detect the start position and also a way to callibrate everything properly. also setting the set point is important
     // distance may have to be negated
     // if the pivot starts at 0 degrees, then we need to choose the bottom position to be the actual max amount of degrees, but the input should still be normal
     // input should be from 0 to `70 degrees but map to the proper places

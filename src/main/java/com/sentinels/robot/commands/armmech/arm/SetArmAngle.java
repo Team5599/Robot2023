@@ -19,7 +19,7 @@ public class SetArmAngle extends CommandBase {
 
   //input is a real world angle relative to the floor
   public SetArmAngle(Arm arm, double angleOffet) {
-
+    //TODO: this code may need to be rewritten if motor position can be saved
     this.arm = arm;
     this.currentAngle = arm.getArmPivotAngle();
 

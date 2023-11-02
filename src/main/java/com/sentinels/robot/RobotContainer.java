@@ -62,6 +62,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     configureDriverBindings();
     configureOperatorBindings();
+    // configureReset()
   }
 
   private void configureDriverBindings() {
@@ -87,8 +88,11 @@ public class RobotContainer {
     
     operator.button(6).whileTrue(new RepeatCommand(new IntakePivot(intake, operator)));
     operator.button(4).whileTrue(new RepeatCommand(new IntakePivot(intake, operator)));
-  }
 
+    //RESET
+    operator.button(4).and(operator.button(6)).whileTrue(new ResetArm(arm, operator));
+    
+  }
   // COMMAND DEFAULTS
 
   private void configureDefaultCommands() {
